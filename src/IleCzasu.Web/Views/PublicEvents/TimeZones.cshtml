@@ -1,0 +1,22 @@
+﻿@using System.Collections.ObjectModel;
+@model  ReadOnlyCollection<TimeZoneInfo>;
+<div class="window-label" style="padding-top:20px">CZAS NA ŚWIECIE</div>
+
+<table style="width:100%;">
+    <tr>
+        <th style=" color:#827c7c;  padding-left:10px;">STREFA</th>
+        <th style="width:20%; color:#827c7c; text-align:right; padding-right:10px;">CZAS</th>
+      
+    </tr>
+
+    @foreach (var t in @Model)
+    {
+        <tr class="timezone">
+            <td  style="width:80%;padding-left:10px; color: white;">@t.DisplayName</td>
+            <td style="width:20%; color:#827c7c; text-align:right; padding-right:10px;">@TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, t.Id)</td>
+
+        </tr>
+
+
+    }
+    </table>

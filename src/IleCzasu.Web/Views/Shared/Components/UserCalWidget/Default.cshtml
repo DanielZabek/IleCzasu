@@ -1,0 +1,73 @@
+﻿@model IleCzasu.Models.ViewModels.UserCalWidgetViewModel
+
+
+    @for (int i = 0; i < 13; i++)
+    {
+        Model.Today = Model.Today.AddDays(1);
+        <a asp-controller="UserPanel" asp-action="Calendar" asp-route-date=@Model.Today>
+            <div class="user-day ud-@i">
+                <input type="hidden" id="selectedDay" value="" />
+                <div>@Model.Today.ToString("ddd")</div>
+                <div class="day-number" style="color:#E0A22F;">
+                    @Model.Today.Day
+                </div>
+                <div class="day-events">
+                    @foreach (var e in Model.User.UserFollows)
+                {
+                    if (e.Event.Date.Date == Model.Today.Date)
+                    {
+                            @switch (e.Event.CategoryId)
+                        {
+                            case 1:
+                            case 12:
+                            case 13:
+                            case 14:
+                                    <i class="fas fa-film"></i>
+
+                                    break;
+
+                                case 2:
+                                    <i class="icon-theatre"></i>
+
+                                    break;
+                                case 3:
+                                case 15:
+                                case 16:
+                                    <i class="fas fa-music"></i>
+                                    break;
+                                case 4:
+                                    <i class="far fa-grin-squint-tears"></i>
+
+                                    break;
+                                case 5:
+                                    <i class="fas fa-book"></i>
+                                    break;
+                                case 6:
+                                    <i class="fas fa-futbol"></i>
+
+                                    break;
+                                case 7:
+                                case 19:
+                                case 20:
+                                case 21:
+                                case 22:
+                                    <i class="fas fa-laptop"></i>
+                                    break;
+                                case 8:
+                                    <i class="fas fa-certificate"></i>
+                                    break;
+                                case 9:
+                                    <i class="fas fa-archive"></i>
+                                    break;
+
+                                default:
+                                    <i class="fas fa-archive"></i>
+                                    break;
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </a>
+
+    }

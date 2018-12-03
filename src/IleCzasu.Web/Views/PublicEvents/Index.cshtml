@@ -1,0 +1,289 @@
+﻿@{
+    @using System.IO;
+    @using Microsoft.AspNetCore.Http.Extensions
+    ViewData["Title"] = "IleCzasu.pl";
+    ViewData["Image"] = "https://ileczasu.pl/images/ileczasupl.png";
+    ViewData["Description"] = "Najbliższe premiery i wydarzenia z twojej okolicy. Osobisty kalendarz z możliwością powiadomień, oraz przydatne narzędzia. Wejdź i załóż konto lub zaloguj się istniejącym już kontem facebook.";
+    System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("pl-PL");
+    ViewData["ReturnUrl"] = Context.Request.GetDisplayUrl();
+    @model IleCzasu.Models.ViewModels.IndexViewModel;
+}
+
+<div class="header">
+
+    <div class="row most-popular">
+        <div class="mp-phone-label">WYCZEKIWANE</div>
+        <div class="mp-events">
+
+            <div class="mp-cover" id="mp-cover1"><div class="mp-label">WYCZEKIWANE</div></div>
+            <ul class="flexisel-mp">
+                @foreach (var e in Model.MostPopularEvents)
+                {
+                    <li>
+                        <div class="mp-event e1">
+
+                            <div class="mp-top1-label">
+                                <div style="padding-left:5px; margin-left:5px;">
+
+                                  @switch (e.CategoryId)
+                                  {
+                                      case 1:
+                                      case 12:
+                                      case 13:
+                                      case 14:
+                                        <i class="fas fa-film"></i>
+
+                                          break;
+
+                                      case 2:
+                                        <i class="fas fa-theater-masks"></i>
+
+                                          break;
+                                      case 3:
+                                      case 15:
+                                      case 16:
+                                        <i class="fas fa-music"></i>
+                                          break;
+                                      case 4:
+                                        <i class="far fa-grin-squint-tears"></i>
+
+                                          break;
+                                      case 5:
+                                        <i class="fas fa-book"></i>
+                                          break;
+                                      case 6:
+                                        <i class="fas fa-futbol"></i>
+
+                                          break;
+                                      case 7:
+                                      case 19:
+                                      case 20:
+                                      case 21:
+                                      case 22:
+                                        <i class="fas fa-laptop"></i>
+                                          break;
+                                      case 8:
+                                        <i class="fas fa-certificate"></i>
+                                          break;
+                                      case 9:
+                                        <i class="fas fa-archive"></i>
+                                          break;
+
+                                      default:
+                                        <i class="fas fa-archive"></i>
+                                          break;
+                                  }@e.Name
+                                </div>
+
+                            </div>
+                            <div class="mp-img" style="background-image: url('@e.ImagePath')">
+
+
+                            <div class="mp-follows">
+                                <button class="follow-button">
+                                    <i class="far fa-calendar-plus"></i>
+                                    <d>@e.Follows</d>
+                                </button>
+                            </div>
+
+
+
+
+                        </div>
+                    </li>
+                }
+            </ul>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    @foreach (var c in Model.Categories)
+    {
+        if (c.ParentCategory == null)
+        {
+         var catClassName = "category" + c.CategoryId;
+        <div id="@catClassName" class="category">
+            <button>
+                <p><i class="@c.IconClass"></i> @c.Name.ToUpper()<d>@c.NumberOfEvents</d></p>
+            </button>
+            <input id="categoryId" type="hidden" value="@c.CategoryId" />         
+        </div>      
+        }
+    }
+
+</div>
+<div class="subCategories row"></div>
+<div id="categoryName" class="row"><p><i class="fas fa-archive"></i><d> WSZYSTKIE</d></p></div>
+<div class="sort-bar row">  
+    <div class="datepickerRow">
+        <i class="far fa-calendar-alt"></i><input type='text' placeholder="Przedział czasowy.." class="datepicker-here datepickerInput" data-language='pl' data-range="true" data-multiple-dates-separator=" - " data-toggleSelected="true" data-time-format='hh:ii' data-position="bottom right" />
+        <i class="fas fa-map-marker-alt"></i><input id="citiesAutocomplete" placeholder="Miasto..">
+    </div>
+    <div class="view-bar">
+        <button id="sortByFollows"><i class="fas fa-fire"></i></button>
+        <button id="sortByDate" class="icon-active"><i class="fas fa-clock"></i></button>
+        @*<button id="tilesView"><i class="fas fa-th-large"></i></button>*@
+    </div>
+</div>
+
+
+<div class="most-popular-tags"></div>
+<div class="row events list-events" id="events">
+
+
+</div>
+<div id="loading">Ładowanie...</div>
+
+@section Scripts {
+    <script>
+      
+        //sort();
+        jQuery(document).ready(function () { showEvents(); });
+        //getCities(catId);
+        //datepickerHelper(catId);
+
+        $(window).scroll(function () {
+
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                $('#loading').show();
+               showNextEvents();
+           }
+        });
+
+
+        $("#listView").click(function () {
+            $(".events").addClass("list-events");
+            $(".events").find(".event").each(function () {
+                $(this).addClass("list-event");
+            });
+
+        });
+        $("#tilesView").click(function () {
+            $(".events").removeClass("list-events");
+            $(".events").find(".event").each(function () {
+                $(this).removeClass("list-event");
+            });
+
+        });
+
+        $(".category").each(function () {
+            $(this).click(function () {
+                $("button").removeClass('cat-active');
+                $(this).find("button").toggleClass('cat-active');
+                categoryId = $(this).find('#categoryId').val();
+                pageNumber = 1;
+                showEvents();
+                //$('.most-popular-tags').load("/Home/ShowMostPopularTags", { categoryId: catId });
+                $('.subCategories').load("/PublicEvents/ShowSubCategories", { categoryId: categoryId }, function () { 
+                    $('.subCategory').each(function () {
+                        $(this).click(function () {
+                            categoryId = $(this).find('#subCategoryId').val();
+                            pageNumber = 1;
+                            showEvents();
+                            var i = $("#categoryName").find('i');
+                            $("#categoryName").html('<p></p>');
+                            $("#categoryName").find('p').append(i);
+                            $("#categoryName").find('p').append(" " + $(this).find('button').html());
+                        });                
+
+                    });
+                });                             
+            });
+        });
+       
+
+        $(".mp-events").fadeIn("slow");
+        $(".category-iconn").fadeIn("slow");
+
+        $(window).resize(function () {
+            if ($(window).width() <= 640) {
+                $("#mp-cover1").hide();
+                $("#mp-cover2").hide();
+
+            } else {
+                $("#mp-cover2").show();
+                $("#mp-cover1").show();
+                $(".mp-top1-label").hide();
+                $(".header-bar").hide();
+                $(".mp-timer").hide();
+
+            }
+        });
+
+        $("#mp-cover1").hover(
+            function () {
+                $(this).hide();
+            }
+        );
+        $("#mp-cover2").hover(
+            function () {
+
+                $(this).hide();
+            }
+        );
+        $(".mp-events").hover(
+            function () {
+            },
+            function () {
+                if ($(window).width() > 640) {
+                    $("#mp-cover1").show();
+                }
+            }
+        );
+
+        $('.mp-event').hover(
+            function () {
+
+                $(this).find('.mp-top1-label').fadeIn("fast");
+            },
+            function () {
+                if ($(window).width() > 640) {
+
+                    $(this).find('.mp-top1-label').hide();
+                }
+            }
+        );
+
+        $('.flexisel-mp').flexisel({
+            visibleItems: 6,
+            itemsToScroll: 1,
+            animationSpeed: 200,
+            infinite: false,
+            navigationTargetSelector: null,
+            autoPlay: {
+                enable: true,
+                interval: 5000,
+                pauseOnHover: false
+            },
+            responsiveBreakpoints: {
+                phone: {
+                    changePoint: 640,
+                    visibleItems: 3,
+                    itemsToScroll: 1
+                },
+                portrait: {
+                    changePoint: 960,
+                    visibleItems: 4,
+                    itemsToScroll: 12
+                },
+                landscape: {
+                    changePoint: 1280,
+                    visibleItems: 4,
+                    itemsToScroll: 1
+                },
+                tablet: {
+                    changePoint: 1600,
+                    visibleItems: 5,
+                    itemsToScroll: 1
+                }
+            },
+        });
+
+
+
+    </script>
+}

@@ -1,0 +1,246 @@
+﻿
+<div class="window-label" style="padding-top:20px;">LICZNIK INTERWAŁÓW</div>
+<div id="intervalSettings">
+    <div class="intervalS-div1">
+        <label class="interval-label1">LICZBA INTERWAŁÓW</label>
+        <div class="row" style="width:100%; text-align:center;"> <button id="minus">-</button><div id="numberOfIntervals">1</div><button id="plus">+</button></div>
+    </div>
+    <div class="intervalS-div2">
+        <label class="interval-label4">ROZGRZEWKA (s)</label>
+        <input type="text" id="warmTime" placeholder="brak" />
+    </div>
+    <div class="intervalS-div3">
+        <label class="interval-label5">SCHŁADZANIE (s)</label>
+        <input type="text" id="coolTime" placeholder="brak" />
+    </div>
+    <div class="intervalS-div4">
+        <label class="interval-label2">ĆWICZENIE* (s)</label>
+        <input type="text" id="exTime" placeholder="" />
+    </div>
+    <div class="intervalS-div5">
+        <label class="interval-label3">PRZERWA* (s)</label>
+        <input type="text" id="restTime" placeholder="" />
+    </div>
+    <button id="start">START</button>
+</div>
+<div id="interval">
+    <div class="row" id="progressBar1">
+
+        <div id="pb1"></div>
+        <div id="pb2"></div>
+        <div id="pb3"></div>
+    </div>
+
+    <div class="interval-number"></div>
+    <div class="interval-state" id="stateLabel"></div>
+    <div class="interval-time" id="intervalTime"></div>
+    <div id="progressBar2">0%</div>
+    <button id="pauza">PAUZA</button><button id="stop">STOP</button>
+</div>
+<audio id="beep">
+    <source src="~/lib/beep.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<audio id="beepLong">
+    <source src="~/lib/beepLong.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+@section Scripts {
+    <script>
+
+        var isRunning = false;
+        var interv;
+        var beep = document.getElementById("beep");
+        var beepLong = document.getElementById("beepLong");
+        var numberOfIntervals = 1;
+
+
+        $("#start").click(function (e) {
+
+            var exTime = 0;
+            var restTime = 0;
+            var warmTime = 0;
+            var coolTime = 0;
+            var pb1 = document.getElementById("pb1");
+            var pb2 = document.getElementById("pb2");
+            var pb3 = document.getElementById("pb3");
+            var bar2 = document.getElementById("progressBar2");
+            var pbWidth = "0%";
+            var pbPercent = "0%";
+            var stateLabel = document.getElementById("stateLabel");
+            var intervalTime = document.getElementById("intervalTime");
+            var percent = 0;
+            var time = 0;
+            var genTime = 0;
+            var state = "ĆWICZENIE";
+            var d;
+            var number = 1;
+            pb1.style.width = 0;
+            pb2.style.width = 0;
+            pb3.style.width = 0;
+            bar2.style.width = 0;
+            pb1.innerHTML = "";
+            pb2.innerHTML = "";
+            pb3.innerHTML = "";
+            bar2.innerHTML = "";
+            if (parseInt($("#exTime").val()) > 0 && parseInt($("#restTime").val()) > 0) {
+                isRunning = true;
+                exTime = parseInt($("#exTime").val());
+                restTime = parseInt($("#restTime").val());
+                time = exTime;
+                d = exTime;
+                if ($("#warmTime").val() != "") {
+                    warmTime = parseInt($("#warmTime").val());
+                    state = "ROZGRZEWKA"
+                    time = warmTime;
+                    d = warmTime;
+                    number = 0;
+                }
+                if ($("#coolTime").val() != "") {
+                    coolTime = parseInt($("#coolTime").val());
+
+                }
+
+
+                $("#intervalSettings").hide();
+                $("#interval").show();
+                $(".interval-time").html(time);
+                $(".interval-state").html(state);
+                $(".interval-number").html(number + "/" + numberOfIntervals);
+                intervalTime.style.color = "#332B2B";
+                stateLabel.style.backgroundColor = "white";
+
+                interv = setInterval(function () {
+
+                    if (isRunning == true) {
+
+                        if (time == 0 && state == "ROZGRZEWKA") {
+                            time = exTime;
+                            percent = 0;
+                            state = "ĆWICZENIE";
+                            d = exTime;
+                            stateLabel.style.backgroundColor = "#E4572E";
+                            bar2.style.backgroundColor = "#E4572E";
+                            number += 1;
+                        }
+                        else if (time == 0 && number == numberOfIntervals && state == "ODPOCZYNEK" && coolTime == 0) {
+                            time = 0;
+
+
+                        } else if (time == 0 && number == numberOfIntervals && state == "ODPOCZYNEK" && coolTime != 0) {
+                            time = coolTime;
+                            percent = 0;
+                            state = "SCHŁADZANIE";
+                            d = coolTime;
+                            stateLabel.style.backgroundColor = "white";
+                            bar2.style.backgroundColor = "white"
+
+                        }
+                        else if (time == 0 && state == "ĆWICZENIE") {
+                            time = restTime;
+                            percent = 0;
+                            state = "ODPOCZYNEK";
+                            d = restTime;
+                            stateLabel.style.backgroundColor = "#9AD12C";
+                            bar2.style.backgroundColor = "#9AD12C"
+
+                        } else if (time == 0 && state == "ODPOCZYNEK") {
+                            time = exTime;
+                            percent = 0;
+                            state = "ĆWICZENIE";
+                            d = exTime;
+                            number += 1;
+                            stateLabel.style.backgroundColor = "#E4572E";
+                            bar2.style.backgroundColor = "#E4572E"
+
+                        }
+
+
+                        if (number == numberOfIntervals && time == 0 && (state == "SCHŁADZANIE" || state == "ODPOCZYNEK")) {
+                            isRunning = false;
+                            $(".interval-time").html("KONIEC");
+                        } else {
+
+                            if (time <= 6) {
+                                intervalTime.style.color = "#E4572E";
+                                if (time == 1) {
+                                    beepLong.play();
+                                } else {
+                                    beep.play();
+                                }
+
+                            } else {
+                                intervalTime.style.color = "#332B2B";
+                            }
+
+                            time -= 1;
+                            percent += 1;
+                            genTime += 1;
+                            pbWidth = ((genTime / (((exTime + restTime) * numberOfIntervals) + warmTime + coolTime)) * 100 + "%");
+                            pbPercent = "<d>" + Math.round((genTime / (((exTime + restTime) * numberOfIntervals) + warmTime + coolTime)) * 100) + "%" + "</d>";
+                            if (state == "ROZGRZEWKA") {
+                                pb1.style.width = pbWidth;
+                                pb1.innerHTML = pbPercent;
+                            } else if (state == "ĆWICZENIE" || state == "ODPOCZYNEK") {
+                                pb1.innerHTML = "";
+                                pb2.style.width = pbWidth;
+                                pb2.innerHTML = pbPercent;
+
+                            } else {
+                                pb2.innerHTML = "";
+                                pb3.style.width = pbWidth;
+                                pb3.innerHTML = pbPercent;
+
+                            }
+
+                            bar2.style.width = percent / d * 100 + "%";
+                            bar2.innerHTML = Math.round(percent / d * 100) + "%";
+                            $(".interval-time").html(time);
+                            $(".interval-state").html(state);
+                            $(".interval-number").html(number + "/" + numberOfIntervals);
+                        }
+
+
+                    }
+                }, 1000);
+
+
+            }
+            else {
+
+
+            }
+        });
+        $("#stop").click(function (e) {
+            clearInterval(interv);
+            $("#intervalSettings").show();
+            $("#interval").hide();
+
+        });
+        $("#pauza").click(function (e) {
+            if (isRunning == true) {
+                isRunning = false;
+
+                $("#pauza").html("START");
+            }
+            else {
+                isRunning = true;
+
+                $("#pauza").html("PAUZA");
+
+            }
+        });
+        $("#plus").click(function (e) {
+            numberOfIntervals += 1;
+            $("#numberOfIntervals").html(numberOfIntervals);
+        });
+        $("#minus").click(function (e) {
+            if (numberOfIntervals > 1) {
+                numberOfIntervals -= 1;
+                $("#numberOfIntervals").html(numberOfIntervals);
+            }
+        });
+
+    </script>
+}

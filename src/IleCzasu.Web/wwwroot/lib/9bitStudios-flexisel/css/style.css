@@ -1,0 +1,105 @@
+
+
+@font-face {
+    font-family: "FontAwesome";
+    font-weight: normal;
+    font-style: normal;
+    src: url("http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.eot?v=4.3.0");
+    src: url("http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.eot?#iefix&v=4.3.0") format("embedded-opentype"), url("http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.woff2?v=4.3.0") format("woff2"), url("http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.woff?v=4.3.0") format("woff"), url("http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.ttf?v=4.3.0") format("truetype"), url("http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/fonts/fontawesome-webfont.svg?v=4.3.0#fontawesomeregular") format("svg");
+}
+
+.clearout {
+height:20px;
+clear:both;
+}
+
+#flexiselDemo1, #flexiselDemo2, #flexiselDemo3 {
+display:none;
+}
+
+.nbs-flexisel-container {
+    position:relative;
+    max-width:100%;
+}
+.nbs-flexisel-ul {
+    position:relative;
+    width:99999px;
+    margin:0px;
+    padding:0px;
+    list-style-type:none;   
+    text-align:center;  
+    overflow: auto;
+}
+
+.nbs-flexisel-inner {
+    position: relative;
+    overflow: hidden;
+    float:left;
+    width:100%;
+  
+}
+
+.nbs-flexisel-item {
+    float:left;
+    margin:0px;
+    padding:0px;
+    cursor:pointer;
+    position:relative;
+   
+}
+.nbs-flexisel-item img {
+    max-width: 100%;
+    cursor: pointer;
+    position: relative;
+
+}
+
+/*** Navigation ***/
+
+.nbs-flexisel-nav-left,
+.nbs-flexisel-nav-right {          
+    position: absolute;
+    cursor: pointer;
+    z-index: 4;   
+    background: rgba(0,0,0,0.5);
+    color: #fff;  
+    padding:14px !important;
+}
+
+.nbs-flexisel-nav-left {
+    left: 5px;
+}
+
+    .nbs-flexisel-nav-left:before {
+        content: "<";
+        color: #E0A22F;
+        font-weight: 900;
+        position: absolute;
+        bottom: 48%;
+        left: 5px;
+        font-size: 25px
+    }
+
+.nbs-flexisel-nav-left.disabled {
+    opacity: 0.4;
+}
+
+.nbs-flexisel-nav-right {
+    right: 5px;
+   
+}
+
+    .nbs-flexisel-nav-right:before {
+        content: ">";
+     
+        color: #E0A22F;
+        font-weight: 900;
+        position: absolute;
+        bottom: 48%;   
+        right:5px;
+        font-size:25px;
+    }
+
+.nbs-flexisel-nav-right.disabled {
+    opacity: 0.4;
+}

@@ -1,0 +1,9 @@
+{
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {},
+  "resolutions": {
+    "bootstrap": "v4.0.0-beta.3",
+    "jquery": "3.2.1"
+  }
+}

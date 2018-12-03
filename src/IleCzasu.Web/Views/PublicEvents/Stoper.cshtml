@@ -1,0 +1,123 @@
+﻿
+
+<div class="window-label" style="padding-top:20px">STOPER</div>
+<div class="stoper row">
+
+    <div id="hours" class="stoper-unit">00</div>:
+    <div id="minutes" class="stoper-unit">00</div>:
+    <div id="seconds" class="stoper-unit">00</div>:
+    <div id="miliSeconds" class="stoper-unit">0</div>
+
+
+</div>
+<div class="stoper-buttons row">
+
+    <button id="sstart" class="stoper-button col-3">START</button>
+    <button id="sstop" class="stoper-button col-3">STOP</button>
+    <button id="miedzyczas" class="stoper-button col-3">MIĘDZYCZAS</button>
+    <button id="reset" class="stoper-button col-3">RESET</button>
+
+</div>
+
+<table style="list-style:decimal" id="stoperList" class="stoper-miedzyczasy">
+    <tr>
+        <th class="stoper-cell">#</th>
+        <th class="stoper-cell">CZAS</th>
+    </tr>
+
+</table>
+
+
+@section Scripts {
+    <script>
+        jQuery(document).ready(function () {
+            var miliSeconds = 0;
+            var seconds = 0;
+            var minutes = 0;
+            var hours = 0;
+            var h = "00";
+            var m = "00";
+            var s = "00";
+            var table = document.getElementById("stoperList");
+            var isPaused = true;
+            var i = 1;
+            $("#sstart").click(function () {
+                isPaused = false;
+                $("#sstart").prop("disabled", true);
+            });
+            $("#sstop").click(function () {
+                isPaused = true;
+                $("#sstart").prop("disabled", false);
+            });
+            $("#reset").click(function () {
+                isPaused = true;
+                miliSeconds = 0;
+                seconds = 0;
+                minutes = 0;
+               hours = 0;
+                s = "00";
+                m = "00";
+                h = "00";
+                $("#miliSeconds").html(miliSeconds);
+                $("#seconds").html(s);
+                $("#minutes").html(m);
+                $("#hours").html(h);
+                $("#sstart").prop("disabled", false);
+            });
+            $("#miedzyczas").click(function () {
+                var row = table.insertRow(table.rows.length);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                cell1.innerHTML = i;
+                cell2.innerHTML = (h + ":" + m + ":" + s + ":" + miliSeconds);
+                i += 1;
+
+            });
+
+            var stoper = setInterval(function () {
+
+                if (!isPaused) {
+
+
+
+
+                    miliSeconds += 1;
+                    if (miliSeconds == 10) {
+                        miliSeconds = 0;
+                        seconds += 1;
+                    }
+                    if (seconds == 60) {
+                        seconds = 0;
+                        minutes += 1;
+                    }
+                    if (minutes == 60) {
+                        minutes = 0;
+                        hours += 1;
+                    }
+
+                    h = hours;
+                    m = minutes;
+                    s = seconds;
+
+                    if (h < 10) {
+                        h = "0" + hours;
+                    }
+                    if (m < 10) {
+                        m = "0" + minutes;
+                    }
+                    if (s < 10) {
+                        s = "0" + seconds;
+                    }
+
+                    // Display the result
+
+                    $("#miliSeconds").html(miliSeconds);
+                    $("#seconds").html(s);
+                    $("#minutes").html(m);
+                    $("#hours").html(h);
+                }
+
+            }, 100);
+        });
+    </script>
+}

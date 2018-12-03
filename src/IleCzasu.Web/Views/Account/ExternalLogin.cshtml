@@ -1,0 +1,87 @@
+﻿@model ExternalLoginViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+
+
+
+
+
+
+    <div class="create-box">
+        <div class="window-label" style="margin-top:10px !important; margin-bottom:40px">REJESTRACJA</div>
+            <form asp-action="ExternalLoginConfirmation" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" id="email" class="form-control" />
+                    <div class="text-danger" id="emailValidation"></div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Nazwa użytkownika</label>
+                    <input id="name" asp-for="Name" class="form-control" />
+                    <div class="text-danger" id="nameValidation"></div>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <button type="submit" class="create-button">ZAREJESTRUJ</button>
+            </form>
+        </div>
+
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+<script>
+    $('#name').on('input', function () {
+        $.ajax({
+            url: "/Home/NameValidation/",
+            type: 'POST',
+            data: { name: $(this).val() },
+            success: function (result) {
+                if (!result) {
+                    $('#nameValidation').html('Nazwa jest już zajęta.');
+                }
+                else {
+
+                    $('#nameValidation').html('');
+                }
+            },
+            error: function () {
+            },
+            complete: function () {
+
+            }
+        });
+    });
+    $('#email').on('input', function () {
+        var re = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (re.test(String($(this).val()).toLowerCase())) {
+            $.ajax({
+                url: "/Home/EmailValidation/",
+                type: 'POST',
+                data: { email: $(this).val() },
+                success: function (result) {
+                    if (!result) {
+                        $('#emailValidation').html('Email jest już zajęty.');
+                    }
+                    else {
+
+                        $('#emailValidation').html('');
+                    }
+
+                },
+                error: function () {
+                },
+                complete: function () {
+
+                }
+            });
+
+        }
+    });
+
+</script>
+
+   
+}

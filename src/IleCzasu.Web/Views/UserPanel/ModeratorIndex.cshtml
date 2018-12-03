@@ -1,0 +1,32 @@
+﻿@model IleCzasu.Application.Models.PublicEventDTO
+@{ 
+    string lastTagTypeName = "";
+}
+<div style="color:white; width:100%; text-align:center">@Model.Name , @Model.Description
+    @foreach(var e in Model.TagEvents)
+    {
+        if (lastTagTypeName == e.Tag.TagType.Name)
+        {
+             @e.Tag.Value <br>
+        }
+        else
+        {
+            @e.Tag.TagType.Name  @e.Tag.Value
+
+        }
+        lastTagTypeName = e.Tag.TagType.Name;
+
+    }
+
+    </div>
+
+
+@section Scripts {
+    <script>
+      
+
+
+
+    </script>
+
+}

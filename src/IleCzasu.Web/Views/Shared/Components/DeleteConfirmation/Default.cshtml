@@ -1,0 +1,13 @@
+﻿@model PublicEvent
+
+<div class="message-background">
+    <div class="message-box">
+        Czy chcesz usunąć wydarzenie: <d style="color:#E4572E;">@Model.Name</d>, wszyscy czekający na to wydarzenie utracą do niego dostęp.
+        <div class="row" style="position:absolute; bottom:0; left: 0; width:100%">
+            <button class="main-button" id="deleteY">TAK</button>
+            <button class="main-button" id="deleteN">NIE</button>
+            <input type="hidden" id="deleteId" value="@Model.PublicEventId" />
+        </div>
+
+    </div>
+</div>

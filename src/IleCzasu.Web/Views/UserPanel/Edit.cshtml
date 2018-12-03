@@ -1,0 +1,230 @@
+﻿@model IleCzasu.Models.ViewModels.CreateViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="window-label">Edytuj</div>
+
+<hr />
+
+<div class="create-box">
+    <form asp-action="Edit" name="eventForm" id="eventForm" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Event.PrivateEventId" value="@Model.Event.PrivateEventId"/>
+        <input type="hidden" asp-for="Event.ImagePath" value="@Model.Event.ImagePath" />
+        <input type="hidden" asp-for="Event.User" value="@Model.Event.User" />
+        <input type="hidden" asp-for="Event.UserId" value="@Model.Event.UserId" />
+ 
+
+        <div class="form-group">
+            <label>*Nazwa:</label>
+            <input asp-for="Event.Name" id="nameInput" class="form-control" />
+            <span asp-validation-for="Event.Name" class="text-danger"></span>
+            <div class="validation" id="nameV"></div>
+            <div id="similar"></div>
+        </div>
+
+        <div class="form-group">
+            <label>*Krótki opis:</label>
+            <textarea asp-for="Event.Description" id="descriptionInput" style="height:100px; width:100%"></textarea>
+            <div class="validation" id="descriptionV"></div>
+        </div>
+       
+        <div class="row">
+            <div class="form-group" style="margin-right:20px;">
+                <label>*Data:</label>  <br />
+                <input type="text" class="datepicker-here" data-language='pl' data-timepicker="true" data-toggleSelected="true" data-time-format='hh:ii' data-position="bottom left" asp-for="Event.StartDate" id="datetimepicker1" />
+                <div class="validation" id="startDateV"></div>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="endTimeCheckBox">
+                <label>Data zakończenia:</label>  <br />
+                <input type="text" class="datepicker-here" data-language='pl' data-timepicker="true" data-toggleSelected="true" data-time-format='hh:ii' data-position="bottom left" asp-for="Event.EndDate" id="datetimepicker2" disabled />
+                <div class="validation" id="endDateV"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input type="checkbox" id="locCheckBox" style="margin-right:5px"><label>Lokalizacja:</label>  <br />
+            <div id="pac-container">
+                <input id="pac-input" name="Event.Place" disabled type="text"
+                       style="width:200px;" asp-for="Event.Place" value="@Model.Event.Place">
+            </div>
+            <div class="validation" id="localizationV"></div>
+        </div>
+        <div class="form-group">
+            <label>*Zdjęcie</label><br />
+            <input id="imageInput" name="Image" type="file" style="color:white;" accept="image/*" />
+
+        </div>
+       
+
+     
+        <input type="hidden" asp-for="imagePath" id="_imagePath" />
+        <input type="hidden" asp-for="x" id="_xField" />
+        <input type="hidden" asp-for="y" id="_yField" />
+        <input type="hidden" asp-for="width" id="_widthField" />
+        <input type="hidden" asp-for="height" id="_heightField" />
+
+        <button id="addButton" type="button" class="create-button">Zapisz</button>
+
+    </form>
+</div>
+
+<div id="croppImage"></div>
+
+@section Scripts {
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGTB8INUVkFNxK4v0YkaSeA1WIVtaWbDA&libraries=places"></script>
+    <script>
+        function validateName() {
+
+            var name = $("#nameInput").val();
+            if (name == "") {
+                $("#nameV").html("Wpisz nazwę wydarzenia.");
+                return false;
+            } else if (name.length <= 3) {
+                $("#nameV").html("Nazwa musi być dłuższa niż 3.");
+                return false;
+            } else if (name.length > 50) {
+                $("#nameV").html("Nazwa musi być krótsza niż 50.");
+                return false;
+            }
+            return (true);
+        }
+        function validateDescription() {
+            var description = $("#descriptionInput").val();
+            if (description == "") {
+                $("#descriptionV").html("Opisz wydarzenie.");
+                return false;
+            } else if (description.length <= 5) {
+
+                $("#descriptionV").html("Opis musi być dłuższy niż 5 znaków.");
+                return false;
+            } else if (description.length > 1000) {
+                $("#descriptionV").html("Opis musi być krótszy niż 1000 znaków.");
+                return false;
+            }
+            return (true);
+        }
+        function validateStartDate() {
+            var startDate = $("#datetimepicker1").val();
+            var d = new Date(startDate.substring(0, 10));
+            if (startDate == "") {
+                $("#startDateV").html("Wybierz datę wydarzenia.");
+                return false;
+            }
+            if (d < Date.now()) {
+                $("#startDateV").html("Wydarzenie nie może odbywać się wcześniej niż jutro.");
+                return false;
+            }
+
+            return (true);
+        }
+        function validateEndDate() {
+            if ($('#endTimeCheckBox').is(':checked')) {
+                var endDate = $("#datetimepicker1").val();
+                var d = new Date(endDate.substring(0, 10));
+
+                if (endDate == "" ) {
+                    $("#endDateV").html("Wybierz datę wydarzenia.");
+                    return false;
+                }
+                if (d < Date.now()) {
+                    $("#endDateV").html("Wydarzenie nie może odbywać się wcześniej niż jutro.");
+                    return false;
+                }
+            }
+            return (true);
+        }
+
+        $('#nameInput').change(function () {
+            if (validateName()) {
+                $("#nameV").html("");
+            }
+            var i = $('#nameInput').val();
+            $("#similar").load("/UserPanel/CompareNames/", { input: i });
+        });
+
+        $('#descriptionInput').change(function () {
+            if (validateDescription()) {
+                $("#descriptionV").html("");
+            }
+        });
+
+        function validate() {
+            validateStartDate();
+            validateEndDate();
+            validateName();
+            validateDescription();
+        }
+        $("#addButton").click(function () {
+
+            if (!validateStartDate() || !validateEndDate() || !validateName() || !validateDescription()) {
+                validate();
+            } else {
+                $("#startDateV").html("");
+                $("#endDateV").html("");
+                $('#eventForm').submit();
+            }
+        });
+
+        $("document").ready(function () {
+            var imageInput = document.getElementById('imageInput');
+            $('#endTimeCheckBox').change(function () {
+                if (jQuery(this).is(':checked')) {
+                    document.getElementById("datetimepicker2").disabled = false;
+                } else {
+                    document.getElementById("datetimepicker2").disabled = true;
+                }
+            });
+            $('#locCheckBox').change(function () {
+                if (jQuery(this).is(':checked')) {
+                    document.getElementById("pac-input").disabled = false;
+                } else {
+                    document.getElementById("pac-input").disabled = true;
+                }
+            });
+
+            $('#imageInput').change(function () {
+                var formData = new FormData();
+                formData.append('image', $('#imageInput')[0].files[0]); // myFile is the input type="file" control
+                $('#_imagePath').val("a" + $('#imageInput')[0].files[0].name);
+                $.ajax({
+                    url: "/UserPanel/SaveImage/",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false,  // tell jQuery not to set contentType
+                    success: function (result) {
+                        $("#croppImage").show();
+                        $("#croppImage").html(result);
+                    },
+                    error: function (jqXHR) {
+                    },
+                    complete: function (jqXHR, status) {
+
+                    }
+                });
+            });
+
+        });
+
+        var input = document.getElementById('pac-input');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+}

@@ -1,0 +1,704 @@
+﻿@{
+
+    System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("pl-PL");
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107694381-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-107694381-2');
+    </script>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <meta property="og:title" content="@ViewData["Title"]" />
+    <meta property="og:description" content="@ViewData["Description"]" />
+    <meta property="og:image" content="@ViewData["Image"]" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - IleCzasu</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/lib/Jcrop/css/jquery.Jcrop.min.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/9bitStudios-flexisel/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/jquery-ui-1.12.1.custom/jquery-ui.css" type="text/css" />
+    <link rel="stylesheet" href="~/css/site.css" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto:700|Work+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/air-datepicker/dist/css/datepicker.min.css" type="text/css" />
+
+</head>
+<body>
+    <div class="row head" style="height:110px; float:left">
+        <div class="clock-box">
+            <div id="clockSVG" style="width:200px; "></div>
+            <div id="clock"></div>
+        </div>
+
+        <div class="weather-box">
+            <div class="row"><div id="weather-city"></div><div id="weather-temp"></div></div>
+            <div class="row">
+                <div>
+                    <img id="weather-icon" src="" />
+                </div>
+                <div style="margin-left:5px">
+                    <div id="weather-des"></div>
+                    <div id="weather-pres"></div>
+                    <div id="weather-hum"></div>
+                </div>
+            </div>
+        </div>
+        <div class="calendar-box">
+            <div class="calendar-header">
+                <div class="calendar-month">
+                    @DateTime.Now.ToString("MMMM", culture)</>   @DateTime.Now.Year
+                </div>
+            </div>
+            <div class="calendar-day">
+                <d class="calendar-dayNumber">@DateTime.Now.Day</d>
+                <d class="calendar-dayName">@DateTime.Now.ToString("dddd", culture)</d>
+                <div id="imieniny"></div>
+            </div>
+        </div>
+
+        @*<div class="header-ad">
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                 ileczasuHeader
+                <ins class="adsbygoogle"
+                     style="display:inline-block;width:750px;height:100px"
+                     data-ad-client="ca-pub-5178637703920715"
+                     data-ad-slot="5521304081"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>*@
+    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="userCalWidget"></div>
+    }
+    else
+    {
+        <div class="userLogin"></div>
+
+    }
+    <nav class="sticky-top" style="background-color:#332B2B!important; border-bottom: 1px solid #E0A22F">
+        <div class="row">
+            <div class="logo-col">
+                <a asp-controller="Home" asp-action="Index" style="background-color:#332B2B;  "><img class="logo" src="~/images/IleCzasuLogo.png" width="130" style="padding-top: 5px;" /></a>
+            </div>
+            <div class="nav-item dropdown menu-large">
+                <button id="menulink" class="menu-dropdown droplink" data-toggle="dropdown" href="#"><i class="fas fa-chevron-circle-down"></i>  MENU</button>
+                <div class="dropdown-menu megamenu">
+                    <div class="row" style="margin-left:20px">
+                        <div class="megamenu-col" style="position:relative">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="userDropdownSm row">
+
+                                    <div id="userNavWidgetSm"></div>
+                                    <button class="user-widget-alert"><i class="fas fa-bell"></i></button>
+                                    <form>
+                                        <button asp-route="calendar" class="user-widget-cal"><i class="far fa-calendar-alt"></i></button>
+                                    </form>
+                                    <form>
+                                        <button asp-route="create" class="user-widget-add"><i class="fas fa-plus"></i></button>
+                                    </form>                           
+                                </div>
+
+                                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                                    <button class="menu-linkk" type="submit">WYLOGUJ</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-action="Login" asp-controller="Account" asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
+                                    <button id="menulink" class="droplink"><i class="fab fa-facebook"></i>  ZALOGUJ </button>
+                                </form>
+
+                            }
+                            <button id="menulink" class="menu-link">KONTAKT</button>
+                            <form><button class="menu-link" asp-route="privacy" style="font-size:12px;">POLITYKA PRYWATNOŚCI</button></form>
+                            <div class="searchbox">
+                                <i class="fas fa-search" style="color:#E0A22F"></i>  <input class="search-input-mob" type="text" placeholder="Szukaj.." /><button style="display:none" class="search-button"><i class="fas fa-times"></i></button>
+                                <div class="search-results-mob"></div>
+                            </div>
+                            <div class="megamenu-phone">
+                                <h4 style=" margin-top: 50px;">NARZĘDZIA</h4>
+                                <ul style=" list-style-type: none;
+                                    margin: 0;
+                                    padding: 0;">
+                                    <li><form><button asp-route="stopwatch" class="menu-link">STOPER</button></form></li>
+                                    <li><form><button asp-route="interval" class="menu-link">INTERWAŁY</button></form></li>
+                                    <li><form><button asp-route="timezones" class="menu-link">CZAS NA ŚWIECIE</button></form></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="megamenu-col">
+                            <h4>WYDARZENIA</h4>
+                            <ul style=" list-style-type: none;
+                                    margin: 0;
+                                    padding: 0;">
+                                <li>
+                                    <form>
+                                        <button asp-route="categoryView" asp-route-categoryName="wszystkie" id="menulink" class="menu-link"><i class="fas fa-archive"></i>   WSZYSTKIE</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form>
+                                        <button asp-route="categoryView" asp-route-categoryName="film" id="menulink" class="menu-link"><i class="fas fa-film"></i>   FILM</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form>
+                                        <button asp-route="categoryView" asp-route-categoryName="teatr" id="menulink" class="menu-link"><i class="icon-theatre"></i>   TEATR</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form>
+                                        <button asp-route="categoryView" asp-route-categoryName="muzyka" id="menulink" class="menu-link"><i class="fas fa-music"></i>   MUZYKA</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form>
+                                        <button asp-route="categoryView" asp-route-categoryName="komedia" id="menulink" class="menu-link"><i class="far fa-grin-squint-tears"></i>   KOMEDIA</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form>
+                                        <button asp-route="categoryView" asp-route-categoryName="literatura" id="menulink" class="menu-link"><i class="fas fa-book"></i>   LITERATURA</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form>
+                                        <button asp-route="categoryView" asp-route-categoryName="sport" id="menulink" class="menu-link"><i class="fas fa-futbol"></i>   SPORT</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form>
+                                        <button asp-route="categoryView" asp-route-categoryName="gry" id="menulink" class="menu-link"><i class="fas fa-laptop"></i>   GRY</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form>
+                                        <button asp-route="categoryView" asp-route-categoryName="święta" id="menulink" class="menu-link"><i class="fas fa-certificate"></i>   ŚWIĘTA</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form>
+                                        <button asp-route="categoryView" asp-route-categoryName="inne" id="menulink" class="menu-link"><i class="fas fa-archive"></i>   INNE</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="megamenu-col megamenu-tablet">
+                            <h4>NARZĘDZIA</h4>
+                            <ul style=" list-style-type: none;
+                                    margin: 0;
+                                    padding: 0;">
+                                <li><form><button asp-route="stopwatch" class="menu-link">STOPER</button></form></li>
+                                <li><form><button asp-route="interval" class="menu-link">INTERWAŁY</button></form></li>
+                                <li><form><button asp-route="timezones" class="menu-link">CZAS NA ŚWIECIE</button></form></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="menu-col events-nav">
+                <div class="dropdown">
+                    <button id="menulink" class="menu-dropdown" data-toggle="dropdown" href="#"><i class="fas fa-angle-down"></i>  WYDARZENIA</button>
+                    <div class="dropdown-menu events-menu">
+                        <ul style=" list-style-type: none;
+                                    margin: 0;
+
+                                    padding: 0;">
+                            <li>
+                                <form>
+                                    <button asp-route="categoryView" asp-route-categoryName="wszystkie" id="menulink" class="menu-link"><i class="fas fa-archive"></i>   WSZYSTKIE</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form>
+                                    <button asp-route="categoryView" asp-route-categoryName="film" id="menulink" class="menu-link"><i class="fas fa-film"></i>   FILM</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form>
+                                    <button asp-route="categoryView" asp-route-categoryName="teatr" id="menulink" class="menu-link"><i class="icon-theatre"></i>   TEATR</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form>
+                                    <button asp-route="categoryView" asp-route-categoryName="muzyka" id="menulink" class="menu-link"><i class="fas fa-music"></i>   MUZYKA</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form>
+                                    <button asp-route="categoryView" asp-route-categoryName="komedia" id="menulink" class="menu-link"><i class="far fa-grin-squint-tears"></i>   KOMEDIA</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form>
+                                    <button asp-route="categoryView" asp-route-categoryName="literatura" id="menulink" class="menu-link"><i class="fas fa-book"></i>   LITERATURA</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form>
+                                    <button asp-route="categoryView" asp-route-categoryName="sport" id="menulink" class="menu-link"><i class="fas fa-futbol"></i>   SPORT</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form>
+                                    <button asp-route="categoryView" asp-route-categoryName="gry" id="menulink" class="menu-link"><i class="fas fa-laptop"></i>   GRY</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form>
+                                    <button asp-route="categoryView" asp-route-categoryName="święta" id="menulink" class="menu-link"><i class="fas fa-certificate"></i>   ŚWIĘTA</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form>
+                                    <button asp-route="categoryView" asp-route-categoryName="inne" id="menulink" class="menu-link"><i class="fas fa-archive"></i>   INNE</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-col tools">
+                <div class="dropdown">
+                    <button id="menulinkk" class="menu-dropdown" data-toggle="dropdown" href="#"><i class="fas fa-angle-down"></i>  NARZĘDZIA</button>
+                    <div class="dropdown-menu events-menu">
+                        <ul style=" list-style-type: none;
+                                    margin: 0;
+                                    padding: 0;">
+                            <li><form><button asp-route="stopwatch" class="menu-link">STOPER</button></form></li>
+                            <li><form><button asp-route="interval" class="menu-link">INTERWAŁY</button></form></li>
+                            <li><form><button asp-route="timezones" class="menu-link">CZAS NA ŚWIECIE</button></form></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-col">
+                <div class="searchbox">
+                    <input class="search-input" type="text" placeholder="Szukaj.." /><button class="search-button"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="search-results"></div>
+            </div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="userDropdown row">
+
+                    <form asp-route="userPanel">
+                        <button class="clear-button"><div id="userNavWidget"></div></button>
+                    </form>
+                        <button class="user-widget-alert"><i class="fas fa-bell"></i></button>
+                    <form>
+                        <button asp-route="calendar" class="user-widget-cal"><i class="far fa-calendar-alt"></i></button>
+                    </form>
+                        <form>
+                            <button asp-route="create" class="user-widget-add"><i class="fas fa-plus"></i></button>
+                        </form>
+
+                        @*<div class="dropdown-menu events-menu" style="margin-top:10px;">
+                    <ul style=" list-style-type: none;
+                            margin: 0;
+                            padding: 0;">
+                        <li>
+                            <form asp-route="userPanel">
+                                <button class="menu-linkk">PANEL UŻYTKOWNIKA</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form asp-route="calendar">
+                                <button class="menu-linkk">KALENDARZ</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form asp-route="createEvent" method="get">
+                                <button class="menu-linkk">DODAJ</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                                <button class="menu-linkk" type="submit">WYLOGUJ</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>*@
+
+</div>
+
+
+            }
+            else
+            {
+                <div class="menu-col">
+                    <form asp-action="Login" asp-controller="Account" asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
+                        <button id="menulink" class="menu-dropdown"><i class="fab fa-facebook"></i>  ZALOGUJ </button>
+                    </form>
+                </div>
+            }
+        </div>
+
+
+
+
+    </nav>
+    <div class="container-fluid" style="padding-bottom: 100px; padding-left: 0 !important; padding-right: 0 !important; background-color: #231d1d;">
+        @RenderBody()
+    </div>
+    @*<div class="side-nav">
+            <div class="side-btn side-rank"><i class="fas fa-trophy"></i><div class="side-content rank-content"> RANKING</div></div>
+            <div class="side-btn side-fb"><i class="fab fa-facebook"></i><div class="side-content" style="background-color:#3B5998;"><d>  NASZ FACEBOOK</d></div></div>
+            <div class="side-btn side-msg"><i class="fab fa-facebook-messenger"></i><div class="side-content" style="background-color:#0084ff"><d>  NAPISZ DO NAS</d></div></div>
+            <div class="side-btn side-mail"><i class="fas fa-envelope"></i><div class="side-content" style="background-color:grey"><d>  NAPISZ MAILA</d></div></div>
+
+        </div>*@
+    <div class="footer" id="footer">
+        <div class="footer-content">
+            <div class="row">
+                <div class="footer-col1">
+                    <form><button class="footer-link" asp-action="Index" asp-controller="Home">STRONA GŁÓWNA</button></form>
+                    <form><button class="footer-link" asp-route="privacy">POLITYKA PRYWATNOŚCI</button></form>
+                    <form><button class="footer-link" asp-route="privacy">REGULAMIN</button></form>
+                </div>
+
+                <div class="footer-col3" style="text-align:right;">
+                    <form><button class="footer-link footer-fb" asp-action="Index" asp-controller="Home"><i class="fab fa-facebook"></i>  FACEBOOK</button></form>
+                    <form><button class="footer-link footer-msg" asp-route="privacy"><i class="fab fa-facebook-messenger"></i>  NAPISZ DO NAS</button></form>
+                    <form><button class="footer-link footer-mail" asp-route="privacy"><i class="fas fa-envelope"></i>  KONTAKT</button></form>
+                </div>
+            </div>
+        </div>
+        <button id="footerButtonUp"><i class="fas fa-angle-up"></i></button>
+        <button id="footerButtonDown"><i class="fas fa-angle-down"></i></button>
+        <div class="row">
+            <form><button class="footer-link" asp-action="Index" asp-controller="Home" id="contactButton">Regulamin</button></form> <a id="contactSep"> | </a>  <form><button class="footer-link" asp-route="privacy">Polityka prywatności</button></form><a>| </a>
+            &copy; 2018 IleCzasu.pl
+            <i style="position:absolute; right:5px; bottom:5px;" class="fab fa-facebook"></i>
+        </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="~/lib/bootstrap-datetimepicker-master/src/js/bootstrap-datetimepicker.js"></script>
+    <script src="~/lib/Jcrop/js/jquery.Jcrop.js"></script>
+    <script src="~/lib/air-datepicker/dist/js/datepicker.js"></script>
+    <script src="~/lib/air-datepicker/dist/js/i18n/datepicker.pl.js"></script>
+    <script src="~/lib/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/lib/9bitStudios-flexisel/js/jquery.flexisel.js"></script>
+    <script type="text/javascript" src="~/lib/Snap.svg-0.5.1/dist/snap.svg.js"></script>
+    <script type="text/javascript" src="~/lib/imieniny.js"></script>
+    <script type="text/javascript" src="~/js/site.js"></script>
+
+    <script>
+        $('.userCalWidget').load("/UserPanel/ShowUserCalWidget", {});
+        $(".user-day").click(function (e) {
+            calDate = $(this).find('#selectedDay').val();
+        });
+                $('.search-input').on('input', function () {
+                    $('.search-results').fadeIn();
+                    var input = $(this).val();
+                    if (input.length >= 3) {
+                        $('.search-results').load("/Home/GetSearchResults", { input: input.trim()  }, function () {
+                        $(this).find('.search-name').each(function () {
+                            var name = $(this).html();
+                            var rx = RegExp(input, 'ig');
+                            name = name.replace(rx, "<mark>" + input + "</mark>");
+                            $(this).html(name);
+                        });
+
+                        });
+                    } else {
+                        $('.search-results').html("");
+
+                    }
+
+                });
+                $(".search-button").click(function () {
+                    $('.searchbox').removeClass('search-mob');
+                    $('.search-results-mob').html("");
+                    $(this).hide();
+                });
+                $('.search-input').focusout(function () {
+                    $('.search-results').fadeOut();
+                    $(this).val("");
+                });
+                $('.search-input-mob').on('input', function () {
+                    $(".search-button").show();
+                    $('.searchbox').addClass('search-mob');
+                    $('.search-results-mob').fadeIn();
+                    var input = $(this).val();
+                    if (input.trim() != "") {
+                        $('.search-results-mob').load("/Home/GetSearchResults", { input: input.trim() }, function () {
+                            $(this).find('.search-name').each(function () {
+                                var name = $(this).html();
+                                var rx = RegExp(input, 'ig');
+                                name = name.replace(rx, "<mark>" + input + "</mark>");
+                                $(this).html(name);
+                            });
+
+                        });
+                    } else {
+                        $('.search-results-mob').html("");
+
+                    }
+
+                });
+                $('.search-input-mob').focusout(function () {
+                    $('.search-results-mob').fadeOut();
+                    $(this).val("");
+                });
+
+                jQuery(document).ready(function () {
+                    $('.rank-content').load("/Home/ShowUsersRanking", function () {
+                    });
+            $('#userNavWidget').load("/UserPanel/ShowUserNavWidget", function () {
+            });
+            $('#userNavWidgetSm').load("/UserPanel/ShowUserNavWidget", function () {
+            });
+            $('.side-nav').find('.side-btn').each(function () {
+                $(this).hover(
+                    function () {
+                        $('.side-content', this).stop().fadeIn("fast")
+
+                    },
+                    function () {
+                        $('.side-content', this).stop().fadeOut("fast");
+
+
+                    });
+            });
+            var interv;
+            if ($(window).width() <= 640) {
+                $(".weather-box").hide();
+                var i = 0;
+                interv = setInterval(function () {
+                    switch (i) {
+                        case 0:
+                            $(".calendar-box").hide();
+                            $(".weather-box").show();
+                            i++;
+                            break;
+                        case 1:
+                            $(".weather-box").hide();
+                            $(".calendar-box").show();
+                            i=0;
+                            break;
+
+                    }
+                }, 5000);
+            }
+            $(window).resize(function () {
+                if ($(window).width() > 640) {
+                    $(".weather-box").show();
+                    $(".calendar-box").show();
+                    clearInterval(interv);
+                } else {
+                    clearInterval(interv);
+                    $(".weather-box").hide();
+                    $(".calendar-box").show();
+                    var i = 0;
+                    interv = setInterval(function () {
+                        switch (i) {
+                            case 0:
+                                $(".calendar-box").hide();
+                                $(".weather-box").show();
+                                i++;
+                                break;
+                            case 1:
+                                $(".weather-box").hide();
+                                $(".calendar-box").show();
+                                i = 0;
+                                break;
+                        }
+                    }, 5000);
+
+                }
+
+            });
+            $(".events-nav").hover(
+                function () {
+                    $('.dropdown-menu', this).stop().fadeIn("fast")
+
+                },
+                function () {
+                    $('.dropdown-menu', this).stop().fadeOut("fast");
+
+
+                });
+            $(".userDropdown").hover(
+                function () {
+                    $('.dropdown-menu', this).stop().fadeIn("fast")
+
+                },
+                function () {
+                    $('.dropdown-menu', this).stop().fadeOut("fast");
+
+
+                });
+            $(".tools").hover(
+                function () {
+                    $('.dropdown-menu', this).stop().fadeIn("fast")
+
+                },
+                function () {
+                    $('.dropdown-menu', this).stop().fadeOut("fast");
+
+
+                });
+            $(".footer").hover(
+                function () {
+                    $('.footer-content', this).stop().fadeIn("slow")
+                    $("#footerButtonUp").hide();
+                    $("#footerButtonDown").show();
+                },
+                function () {
+                    $('.footer-content', this).stop().fadeOut("fast");
+                    $("#footerButtonDown").hide();
+                    $("#footerButtonUp").show();
+
+                });
+
+            $("#footerButtonUp").click(function () {
+                $(this).hide();
+                $("#footerButtonDown").show();
+                $(".footer-content").show();
+            });
+
+            $("#footerButtonDown").click(function () {
+                $(this).hide();
+                $("#footerButtonUp").show();
+                $(".footer-content").hide();
+            });
+
+            getLocation();
+
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(getWeather);
+
+                } else {
+                    alert("Twoja przeglądarka nie obsługuje funkcji geolokacji.");
+                }
+
+                }
+
+            function getWeather(position) {
+
+                $.getJSON('@Url.Content("~/")' + "PublicEvents/GetWeather", { lat: position.coords.latitude, lon: position.coords.longitude }, function(w) {
+                    $("#weather-city").html(w.name);
+                    $("#weather-des").html(w.weather[0].description);
+                    document.getElementById("weather-icon").src = "/images/pogoda/" + w.weather[0].icon + ".svg";
+                    $("#weather-temp").html(Math.round(w.main.temp) + '&#8451');
+                    $("#weather-pres").html(w.main.pressure + " hPa");
+                    $("#weather-hum").html('<i class="fas fa-tint"></i>  ' + w.main.humidity + "%");
+
+                });
+            }
+
+        });
+        window.onload = function () {
+
+            var s = Snap("#clockSVG");
+            Snap.load("/images/clock.svg", function (f) {
+                //Add SVG elements
+                second = f.select("#wSec");
+                minute = f.select("#wMin");
+                hour = f.select("#wHour");
+                //Run animation function for the first time
+                animateTime();
+                //Append SVG to DIV
+                s.append(f);
+
+            });
+
+            $("#imieniny").html(WypiszImieniny());
+        };
+        setInterval(function () {
+            var now = new Date();
+            var h = now.getHours();
+            var m = now.getMinutes();
+            var s = now.getSeconds();
+            if (h < 10) {
+                h = "0" + h;
+            }
+            if (m < 10) {
+                m = "0" + m;
+            }
+            if (s < 10) {
+                s = "0" + s;
+            }
+            $("#clock").html(h + " : " + m + " : " + s);
+        }, 1000);
+        function animateTime() {
+            //Get the current time
+            var timeNow = new Date();
+            var hours = timeNow.getHours();
+            var minutes = timeNow.getMinutes();
+            var seconds = timeNow.getSeconds();
+            //Move second needle halfway
+            second.transform('r' + (seconds * 6) + ',100,100');
+            //Animate the second needle the rest of the way
+
+            //Move minute needle
+            minute.transform('r' + (minutes * 6) + ',100,100');
+            //Only animate the minute needle when the minute changes
+            if (seconds == 0) {
+                minute.transform('r' + (minutes * 6) + ',100,100');
+
+            }
+            //Allow the hour needle to move accordingly when the minutes change
+            hour.transform('r' + ((hours * 30) + (minutes / 2)) + ',100,100');
+            //Repeat this entire function every 1 second
+            setTimeout("animateTime()", 1000);
+        }
+        $(window).resize(function () {
+
+
+        });
+        function AutoTopBar(interv) {
+            var i = 0
+            if ($(window).width() <= 820) {
+
+            } else {
+                clearInterval(interv);
+
+            }
+        }
+    </script>
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>*@
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

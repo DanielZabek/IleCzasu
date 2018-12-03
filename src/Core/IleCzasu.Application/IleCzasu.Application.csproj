@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\" />
+    <Folder Include="Validators\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="5.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\IleCzasu.Infrastructure\IleCzasu.Infrastructure.csproj" />
+    <ProjectReference Include="..\IleCzasu.Domain\IleCzasu.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

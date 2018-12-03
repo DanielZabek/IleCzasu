@@ -1,0 +1,108 @@
+﻿
+@{
+
+    ViewData["Title"] = "Kalendarz Wydarzeń";
+    System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("pl-PL");
+
+}
+
+
+<div class="user-calendar row">
+    <div class="user-calendar-bar">
+        <button id="prevMonth"><</button>
+
+        <button id="nextMonth">></button>
+    </div>
+
+    <div id="calendarDays" class="row" style="width:100%;"></div>
+
+</div>
+<div id="privateEvents" class="events list-events row">
+</div>
+<div id="events" class="events list-events row" ></div>
+<input type="hidden" value="@ViewData["calDate"]" id="widgetDate" />
+
+@section Scripts {
+
+    <script>
+       var monthsToAdd = 0;
+        $("#calendarDays").load("/UserPanel/ShowCalendar/", { monthsToAdd: monthsToAdd }, function () {
+            var widgetDate = $('#widgetDate').val();
+            if (widgetDate != "") {
+                var curDate = $('#widgetDate').val();
+            }
+            else {
+                var curDate = $(".currentDay").val();
+            }
+           
+            $(".select-day-label").html(curDate.substring(0, 10));
+           
+                showUserEvents(curDate);
+         
+            UserDayClick();
+        });
+
+        $("#prevMonth").click(function (e) {
+            monthsToAdd -= 1;
+            $("#calendarDays").load("/UserPanel/ShowCalendar/", { monthsToAdd: monthsToAdd }, function () {
+
+                UserDayClick();
+            });
+        });
+        $("#nextMonth").click(function (e) {
+            monthsToAdd += 1;
+            $("#calendarDays").load("/UserPanel/ShowCalendar/", { monthsToAdd: monthsToAdd }, function () {
+
+                UserDayClick();
+            });
+        });
+
+        function UserDayClick() {
+            $(".user-day").click(function (e) {
+                $(".user-day").removeClass("selected-day");
+                $(this).addClass("selected-day");
+                calDate = $(this).find('#selectedDay').val();
+                $(".select-day-label").html(calDate.substring(0, 10));
+                showUserEvents(calDate);
+                showUserPrivateEvents(calDate);
+            });
+
+        }
+        function showUserEvents(calDate) {
+            $.ajax({
+                url: "/UserPanel/ShowUserEvents/",
+                type: 'POST',
+                data: { date: calDate.substring(0, 10) },
+                success: function (result) {
+                    $("#events").html(result);
+                },
+                error: function () {
+                },
+                complete: function () {
+                    countdown();                  
+                }
+            });
+        }
+        function showUserPrivateEvents(calDate) {
+            $.ajax({
+                url: "/UserPanel/ShowUserPrivateEvents/",
+                type: 'POST',
+                data: { date: calDate.substring(0, 10) },
+                success: function (result) {
+                    $("#privateEvents").html(result);
+                },
+                error: function () {
+                },
+                complete: function () {
+                    countdown();
+
+                }
+            });
+        }
+
+
+
+
+
+    </script>
+}

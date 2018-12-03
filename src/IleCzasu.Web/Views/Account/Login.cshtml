@@ -1,0 +1,75 @@
+﻿@using System.Collections.Generic
+@using System.Linq
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+@model LoginViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+
+
+
+
+<div class="row">
+    <div class="create-box" style="margin-top:40px">
+        <div class="window-label" style="margin-top:10px !important; margin-bottom:40px">ZALOGUJ</div>
+        <section>
+            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Hasło:</label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="RememberMe" />
+                            Zapamiętaj
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="create-button">ZALOGUJ</button>
+
+
+            </form>
+            @{
+                var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+                <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                    <div>
+                     
+                            @foreach (var provider in loginProviders)
+                            {
+                                <button type="submit" class="create-button" name="provider" value="Facebook" title="Zaloguj się swoim kontem Facebook"><i class="fab fa-facebook"></i>  FACEBOOK</button>
+                            }
+                   
+                    </div>
+                </form>
+
+            }
+           <form><button type="submit" class="create-button" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">ZAREJESTRUJ</button></form> 
+           
+            
+            <div class="form-group" style="margin-top:10px;">
+               
+                    <a asp-action="ForgotPassword">Zapomniałeś hasła?</a>
+                
+                   
+               
+            </div>
+        </section>
+
+
+
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

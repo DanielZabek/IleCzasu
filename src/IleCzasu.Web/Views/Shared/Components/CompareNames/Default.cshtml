@@ -1,0 +1,9 @@
+﻿@model List<PublicEvent>
+<d style="color:white">
+    Potencjalne duplikaty: 
+</d>
+    @foreach(var e in Model)
+    {
+        <d style="color:white">@e.Name, </d>
+
+    }

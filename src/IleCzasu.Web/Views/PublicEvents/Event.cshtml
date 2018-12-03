@@ -1,0 +1,519 @@
+﻿@using System.Security.Claims;
+@model IleCzasu.Models.ViewModels.EventViewModel
+@{
+
+    TimeSpan daysLeft = Model.PublicEvent.Date - DateTime.Now;
+    string lastTagTypeName = "";
+    ViewData["Image"] = Model.PublicEvent.ImagePath;
+    ViewData["Title"] = Html.Raw(Model.PublicEvent.Name);
+    ViewData["Description"] = "Zostało: " + daysLeft.Days + " DNI | " + daysLeft.Hours + " GODZIN |  " + daysLeft.Minutes + " MINUT |  " + " " + Html.Raw(Model.PublicEvent.Description);
+}
+<div class="event-details">
+    <input id="date" type="hidden" value="@Model.PublicEvent.Date.Subtract(new DateTime(1970, 1,1)).TotalMilliseconds" />
+    <div class="eventd-img">
+        <span style=" display: inline-block;
+    height: 100%;
+    vertical-align: middle;">
+        </span>
+        <img style="width:100%; height:auto" src="@Model.PublicEvent.ImagePath" />
+    </div>
+    <div class="eventd-info">
+        <div class="eventd-name">
+            @switch (Model.PublicEvent.CategoryId)
+            {
+                case 1:
+                case 12:
+                case 13:
+                case 14:
+                    <i class="fas fa-film"></i>
+
+                    break;
+
+                case 2:
+                    <i class="icon-theatre"></i>
+
+                    break;
+                case 3:
+                case 15:
+                case 16:
+                    <i class="fas fa-music"></i>
+                    break;
+                case 4:
+                    <i class="far fa-grin-squint-tears"></i>
+
+                    break;
+                case 5:
+                    <i class="fas fa-book"></i>
+                    break;
+                case 6:
+                    <i class="fas fa-futbol"></i>
+
+                    break;
+                case 7:
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                    <i class="fas fa-laptop"></i>
+                    break;
+                case 8:
+                    <i class="fas fa-certificate"></i>
+                    break;
+                case 9:
+                    <i class="fas fa-archive"></i>
+                    break;
+
+                default:
+                    <i class="fas fa-archive"></i>
+                    break;
+            }@Model.PublicEvent.Name
+        </div>
+        <div class="eventd-info-col">
+            <div class="event-detail event-date" style=""><i class="far fa-calendar-alt"></i>  @Model.PublicEvent.Date.ToString("dd MMM, yyyy")</div>
+
+            @if (!string.IsNullOrEmpty(Model.PublicEvent.Place))
+            {
+                <div class="event-detail">
+                    <a id="placeName" target="_blank" href="https://www.google.com/maps/search/?api=1&query= @Model.PublicEvent.Place" class="event-detail"><i class="fas fa-map-marker-alt"></i>  @Model.PublicEvent.Place</a>
+                    <a id="cityName" style="display:none" target="_blank" href="https://www.google.com/maps/search/?api=1&query= @Model.PublicEvent.Place" class="event-detail"><i class="fas fa-map-marker-alt"></i>  @*@Model.PublicEvent.City*@</a>
+                </div>
+            }
+
+                    @if (!String.IsNullOrEmpty(Model.PublicEvent.Url))
+                    {
+                        <div class="event-detail">
+                            <a class="event-detail" target="_blank" href="@Model.PublicEvent.Url">
+                                <i class="fas fa-link"></i> LINK
+                            </a>
+                        </div>
+                    }
+
+                    @if (Model.PublicEvent.Promotor.Equals("KupBilecik") || Model.PublicEvent.Promotor.Equals("Empik"))
+                    {
+                        <div class="event-detail">
+                            <a target="_blank" href="@Model.PublicEvent.Url">
+                                <i class="fas fa-ticket-alt"></i> <d>@Model.PublicEvent.Price zł</d>
+                            </a>
+                            <form style="display:inline-block" action="@Model.PublicEvent.Url"><button type="submit"> BILETY </button></form>
+                        </div>
+                    }
+    
+              
+    </div>
+    <div class="eventd-info-col">
+        <div class="eventd-info-col">
+            @foreach (var e in Model.PublicEvent.TagEvents)
+            {
+                if (lastTagTypeName == e.Tag.TagType.Name)
+                {
+                    <d class="tag-value"> | @e.Tag.Value</d>
+                }
+                else
+                {
+                    <br /><d class="tag-name">@e.Tag.TagType.Name: </d><d class="tag-value">@e.Tag.Value</d>
+                }
+                lastTagTypeName = e.Tag.TagType.Name;
+            }
+        </div>
+
+    </div>
+</div>
+
+<div class="eventd-description">
+    <h4>Opis:</h4>
+    @Html.Raw(Model.PublicEvent.Description)
+</div>
+<div class="eventd-bar row">
+    @if (Model.PublicEvent.IsFollowed)
+    {
+        <button class="followd-button shared-button" style="display:none;">
+            <i class="far fa-calendar-plus"></i>
+            <d>@Model.PublicEvent.Follows</d>
+        </button>
+            <button class="unfollowd-button shared-button" style="display:initial">
+                <i class="far fa-calendar-minus"></i>
+                <d>@Model.PublicEvent.Follows</d>
+            </button>
+
+    }
+    else
+    {
+        <button class="followd-button shared-button">
+            <i class="far fa-calendar-plus"></i>
+            <d>@Model.PublicEvent.Follows</d>
+        </button>
+            <button class="unfollowd-button shared-button">
+                <i class="far fa-calendar-minus"></i>
+                <d>@Model.PublicEvent.Follows</d>
+            </button>
+
+    }
+    <div class="shared-button">
+        <a class="fb-share" href="https://www.facebook.com/share.php?u=@Context.Request.Host@Url.Action("Event", "Home", new { id = Model.PublicEvent.PublicEventId, name = Model.PublicEvent.Name } )">
+            <i class="fab fa-facebook-square "></i>
+        </a>
+    </div>
+    <div class="shared-button google-share">
+        <a>
+            <i class="fab fa-google-plus-square"></i>
+        </a>
+    </div>
+    <div class="shared-button tweeter-share">
+        <a>
+            <i class="fab fa-twitter-square"></i>
+        </a>
+    </div>
+    <div class="shared-button whatsapp-share" style="border:none">
+        <a>
+            <i class="fab fa-whatsapp-square"></i>
+        </a>
+    </div>
+</div>
+
+<div class="eventd-timer">
+    <div class="row">
+        <div id="dayDiv" class="col-3">-</div>
+        <div id="hoursDiv" class="col-3">-</div>
+        <div id="minDiv" class="col-3">-</div>
+        <div id="secDiv" class="col-3">-</div>
+    </div>
+    <div class="row timer-params">
+        <div class="col-3">DNI</div>
+        <div class="col-3">GODZINY</div>
+        <div class="col-3">MINUTY</div>
+        <div class="col-3">SEKUNDY</div>
+    </div>
+</div>
+</div>
+<div class="eventd-similar">
+    <h4>PODOBNE WYDARZENIA</h4>
+    @foreach (var e in Model.SimilarEvents)
+    {
+        <a asp-action="Event" asp-controller="Home" asp-route-id="@e.PublicEventId" asp-route-name="@e.Name">
+            <div class="similar-event">
+                <img src="@e.ImagePath" />
+                <div>
+                    <p>@e.Name</p>
+                    <d>@e.Date.ToString("dd MMM, yyyy")</d>
+                </div>
+            </div>
+        </a>
+
+    }
+</div>
+<d class="similar-label">PODOBNE WYDARZENIA</d>
+<ul class="flexible-similar">
+
+    @foreach (var e in Model.SimilarEvents)
+    {
+
+        <li class="similar-event">
+            <a asp-action="Event" asp-controller="Home" asp-route-id="@e.PublicEventId" asp-route-name="@e.Name">
+                <img src="@e.ImagePath" />
+                <div>
+                    <p>@e.Name</p>
+                    <d>@e.Date.ToString("dd MMM, yyyy")</d>
+                </div>
+            </a>
+        </li>
+
+
+    }
+</ul>
+<div class="comments" id="comments">
+    <d style="color:#E0A22F">SKOMENTUJ:</d>
+    <div class="row">
+        <textarea placeholder="Zaloguj się by dodać komentarz.." id="commentContent" class="comment-input"></textarea>
+        <button id="commentButton">WYŚLIJ</button>
+    </div>
+    <d style="color:#E0A22F;">KOMENTARZE:</d>
+    @foreach (var c in Model.PublicEvent.Comments)
+    {
+        <div class="comment">
+            <input type="hidden" id="commentId" value="@c.CommentId" />
+            <div class="comment-avatar"><img src="~/images/avatars/@c.User.Avatar" /></div>
+            <div class="comment-date">@c.TimeAgo</div>
+            <div class="comment-user">@c.User.UserName</div>
+            <div class="comment-content">@c.Content</div>
+            <div class="comment-points">
+                <button id="cancelReplyButton">ANULUJ</button>
+                @if (c.UserId == this.User.FindFirstValue(ClaimTypes.NameIdentifier))
+                {
+                    <button id="deleteButton" class="main-button2"><i class="fas fa-trash-alt"></i></button>
+                    <button id="editButton" class="main-button2"><i class="fas fa-edit"></i></button>
+                }
+                <button id="replyButton">ODPOWIEDZ</button>
+                <button id="commentMinus">-</button>@c.Points<button id="commentPlus">+</button>
+            </div>
+            <div class="comment-reply">
+                <div class="row">
+                    <textarea id="commentReplyContent" class="comment-reply-content"></textarea>
+                    <button id="commentReplyButton">WYŚLIJ</button>
+                </div>
+            </div>
+            <div class="comment-edit">
+                <div class="row">
+                    <textarea id="commentEditContent" class="comment-reply-content"></textarea>
+                    <button id="commentEditButton">WYŚLIJ</button>
+                </div>
+            </div>
+            <div class="replies">
+                @foreach (var r in c.Replies)
+                {
+                    <div class="comment">
+                        <input type="hidden" id="commentId" value="@r.CommentId" />
+                        <div class="comment-avatar"><img src="~/images/avatars/@r.User.Avatar" /></div>
+                        <div class="comment-date">@r.TimeAgo</div>
+                        <div class="comment-user">@r.User.UserName</div>
+                        <div class="comment-content">@r.Content</div>
+                        <div class="comment-points">
+                            @if (c.UserId == this.User.FindFirstValue(ClaimTypes.NameIdentifier))
+                            {
+                                <button id="deleteButton" class="main-button2"><i class="fas fa-trash-alt"></i></button>
+                                <button id="editButton" class="main-button2"><i class="fas fa-edit"></i></button>
+                            }
+                            <button id="commentMinus">-</button>@r.Points<button id="commentPlus">+</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    }
+</div>
+@section Scripts {
+    <script>
+        if ($(window).width() <= 740) {
+            $('.flexible-similar').flexisel({
+                visibleItems: 1,
+                itemsToScroll: 1,
+                animationSpeed: 200,
+                infinite: true,
+                navigationTargetSelector: null,
+                autoPlay: {
+                    enable: true,
+                    interval: 5000,
+                    pauseOnHover: false
+                },
+            });
+        }
+        $('#commentButton').click(function () {
+          $.ajax({
+              url: "/UserPanel/AddComment/",
+              type: 'POST',
+              data: { eventId: @Model.PublicEvent.PublicEventId, content: $('#commentContent').val() },
+              success: function (result) {
+                  var c = document.createElement("div");
+                  c.className = "comment";
+                  document.getElementById('comments').appendChild(c);
+
+                  var html = '<input type="hidden" id="commentId" value="result.commentId" />';
+                  html += '<div class="comment-avatar"><img src="/images/avatars/' + result.user.avatar + '" /></div>';
+                  html += ' <div class="comment-date">' + result.timeAgo + ' </div>';
+                  html += '<div class="comment-user">' + result.user.userName + ' </div>';
+                  html += '<div class="comment-content">' + result.content + '</div>';
+
+                  c.innerHTML = html;
+              },
+              error: function () {
+              },
+              complete: function () {
+
+              }
+            });
+
+        });
+      $(".comment").each(function () {
+          var comment = $(this);
+          $(this).find("#replyButton").click(function () {
+              comment.find('.comment-reply').show();
+              comment.find('#replyButton').hide();
+              comment.find('#cancelReplyButton').show();
+              comment.find('#cancelReplyButton').click(function () {
+                  comment.find('.comment-reply').hide();
+                  comment.find('#replyButton').show();
+                  comment.find('#cancelReplyButton').hide();
+              });
+              comment.find('#commentReplyButton').click(function () {
+                    $.ajax({
+                          url: "/UserPanel/AddComment/",
+                          type: 'POST',
+                          data: { eventId: @Model.PublicEvent.PublicEventId, content: comment.find('#commentReplyContent').val(), replyToId: comment.find('#commentId').val() },
+                          success: function (result) {
+
+                          },
+                          error: function () {
+                          },
+                          complete: function () {
+
+                          }
+                      });
+
+              });
+
+          });
+
+          $(this).find("#deleteButton").click(function () {
+               $.ajax({
+                          url: "/UserPanel/DeleteComment/",
+                          type: 'POST',
+                          data: {  commentId: comment.find('#commentId').val() },
+                          success: function (result) {
+
+                          },
+                          error: function () {
+                          },
+                          complete: function () {
+
+                          }
+                      });
+          });
+
+          $(this).find("#editButton").click(function () {
+              comment.find('.comment-edit').show();
+              comment.find('#commentEditContent').html(comment.find('.comment-content').html());
+               comment.find('#commentEditButton').click(function () {
+                      $.ajax({
+                          url: "/UserPanel/EditComment/",
+                          type: 'POST',
+                          data: { commentId: comment.find('#commentId').val(), commentContent: comment.find('#commentEditContent').val()},
+                          success: function (result) {
+
+                          },
+                          error: function () {
+                          },
+                          complete: function () {
+
+                          }
+                      });
+
+              });
+
+
+
+          });
+
+
+      });
+
+            $(".followd-button").click(function () {
+                $.ajax({
+                    url: "/UserPanel/FollowEvent/",
+                    type: 'POST',
+                    data: { eventId: @Model.PublicEvent.PublicEventId },
+                    success: function (result) {
+                        $(".followd-button").hide();
+                        $(".unfollowd-button").show(0, function () {
+                            $(this).find("d").html(result);
+                        });
+                    },
+                    error: function () {
+                    },
+                    complete: function () {
+
+                    }
+                });
+
+            });
+            $(".unfollowd-button").click(function () {
+                $.ajax({
+                    url: "/UserPanel/UnfollowEvent/",
+                    type: 'POST',
+                    data: { eventId: @Model.PublicEvent.PublicEventId },
+                    success: function (result) {
+                       $(".unfollowd-button").hide();
+                        $(".followd-button").show(0, function () {
+                            $(this).find("d").html(result);
+                        });
+                    },
+                    error: function () {
+                    },
+                    complete: function () {
+                    }
+                });
+            });
+
+      $(".event-place").hover(
+          function () {
+              $("#googleMapsInfo").show('slide', { direction: 'left' }, 300);
+          },
+          function () {
+              $("#googleMapsInfo").hide('slide', { direction: 'left' }, 300);
+          }
+      )
+        var timer = $(".event-details").children()[5];
+        var units = timer.children[0];
+        var date = $(".event-details").children()[1];
+        setInterval(function () {
+            var countDownDate = $("#date").val();
+
+            // Update the count down every 1 second
+
+
+            // Get todays date and time
+            var now = new Date().getTime() - (new Date().getTimezoneOffset() * 60 * 1000);
+
+            // Find the distance between now an the count down date
+            var distance = countDownDate - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            var dateNow = new Date();
+
+            if (days == -1 && (hours + dateNow.getHours()) < -1) {
+                units.style.color = "white";
+                units.children[0].innerHTML = "<d>WCZORAJ</d>";
+
+            }
+            else if (days == -1 && (hours + dateNow.getHours()) == -1) {
+
+                units.style.color = "#E4572E";
+                units.children[0].innerHTML = "<d>DZISIAJ</d>";
+                units.children[1].innerHTML = "-";
+                units.children[2].innerHTML = "-";
+                units.children[3].innerHTML = "-";
+            }
+            else if ((days == 0) && ((hours + dateNow.getHours()) < 23) && ((hours + dateNow.getHours()) > -2)) {
+                if (hours < 0) {
+                    units.style.color = "#E4572E";
+                    units.children[0].innerHTML = "<d>DZISIAJ</d>";
+                    units.children[1].innerHTML = "-";
+                    units.children[2].innerHTML = "-";
+                    units.children[3].innerHTML = "-";
+                } else {
+                    units.style.color = "#E4572E";
+                    units.children[0].innerHTML = "<d>DZISIAJ</d>";
+                    units.children[1].innerHTML = hours;
+                    units.children[2].innerHTML = minutes;
+                    units.children[3].innerHTML = seconds;
+                }
+            }
+            else if (days == 0) {
+                timer.style.backgroundColor = "#E4572E";
+                units.children[0].innerHTML = "<d>JUTRO</d>";
+                units.children[1].innerHTML = hours;
+                units.children[2].innerHTML = minutes;
+                units.children[3].innerHTML = seconds;
+            }
+            else if (days == 1 && (hours + dateNow.getHours()) < 23) {
+                timer.style.backgroundColor = "#E4572E";
+                units.children[0].innerHTML = "<d>JUTRO</d>";
+                units.children[1].innerHTML = hours + 24;
+                units.children[2].innerHTML = minutes;
+                units.children[3].innerHTML = seconds;
+            }
+
+            else {
+                units.children[0].innerHTML = days;
+                units.children[1].innerHTML = hours;
+                units.children[2].innerHTML = minutes;
+                units.children[3].innerHTML = seconds;
+            }
+
+
+        }, 1000);
+    </script>
+}

@@ -1,0 +1,74 @@
+﻿@model string
+
+<div  style="text-align:center; margin-top:20px; margin-bottom:20px;">
+    @if(Model != ""){   
+    <div class="category-label" style="margin-bottom:20px">PRZYTNIJ ZDJĘCIE</div>
+    <img ID="img" src="~/images/temp/@Model" />
+    <input type="hidden" id="name" value="@Model" />
+    } else {
+    <h3 style="color:#E4572E;">Tylko zdjęcia w formacie JPG lub PNG.</h3>
+    }
+
+
+    <button class="create-button" style="margin-top:20px;margin-bottom:60px; width: 50%;" id="cropButton">ZATWIERDŹ</button>
+</div>
+
+<script type="text/javascript">
+    $("#cropButton").click(function (e) {
+        $("#croppImage").hide();
+    });
+
+        jQuery(function ($) {
+            if ($(window).width() < 420) {
+                $('#img').Jcrop({
+                    setSelect: [10, 10, 400, 300],
+                    onSelect: showCoords,
+                    onChange: showCoords,
+                    aspectRatio: 100 / 100,
+                    minSize: [100, 100],
+                    boxWidth: 320,
+                    boxHeight: 320
+                });
+            } else if ($(window).width() < 640) {
+                $('#img').Jcrop({
+                    setSelect: [10, 10, 400, 300],
+                    onSelect: showCoords,
+                    onChange: showCoords,
+                    aspectRatio: 100 / 100,
+                    minSize: [100, 100],
+                    boxWidth: 420,
+                    boxHeight: 420
+                });
+            } else if ($(window).width() < 960) {
+                $('#img').Jcrop({
+                    setSelect: [10, 10, 400, 300],
+                    onSelect: showCoords,
+                    onChange: showCoords,
+                    aspectRatio: 100 / 100,
+                    minSize: [100, 100],
+                    boxWidth: 640,
+                    boxHeight: 640
+                });
+            } else if ($(window).width() >= 960) {
+                $('#img').Jcrop({
+                    setSelect: [10, 10, 400, 300],
+                    onSelect: showCoords,
+                    onChange: showCoords,
+                    aspectRatio: 100 / 100,
+                    minSize: [100, 100],
+                    boxWidth: 960,
+                    boxHeight: 960
+                });
+            }
+        function showCoords(c) {
+            // variables can be accessed here as
+            // c.x, c.y, c.x2, c.y2, c.w, c.h
+            $('#x').val(parseInt(c.x));
+            $('#y').val(parseInt(c.y));
+            $('#width').val(parseInt(c.w));
+            $('#height').val(parseInt(c.h));
+            $('#imageName').val($('#name').val());
+         
+        };
+    });
+</script>

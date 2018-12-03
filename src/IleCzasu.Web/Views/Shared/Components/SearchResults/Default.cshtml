@@ -1,0 +1,15 @@
+﻿@model List<PublicEvent>
+
+
+@foreach (var e in Model)
+{
+    <a asp-action="Event" asp-controller="Home" asp-route-id="@e.PublicEventId" asp-route-name="@e.Name" style="text-decoration:none; color:transparent">
+        <div class="search-event row">
+            <div class="search-img"><img src="@e.ImagePath" /></div>
+            <div class="search-info">
+                <div class="search-name">@e.Name</div>
+                <div class="search-place">@e.Place</div>
+            </div>
+        </div>
+        </a>
+        }

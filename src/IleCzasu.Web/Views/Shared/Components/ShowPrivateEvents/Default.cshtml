@@ -1,0 +1,49 @@
+﻿@model List<PrivateEvent>
+    <div class="category-label">PRYWATNE</div>
+    @foreach (var e in Model)
+    {
+        <div class="event list-event private-event">
+            <input type="hidden" value="@e.PrivateEventId" id="eventId" />
+            <input type="hidden" value="@e.StartDate.Subtract(new DateTime(1970, 1,1)).TotalMilliseconds" />
+            <a asp-action="Event" asp-controller="Home" asp-route-id="@e.PrivateEventId" asp-route-name="@e.Name">
+                <div class="event-img" style="background-image: url('@e.ImagePath')" />
+            </a>
+            <div class="event-label">
+                <a asp-action="Event" asp-controller="Home" asp-route-id="@e.PrivateEventId" asp-route-name="@e.Name">
+                    <div class="event-name">
+                        <i class="fas fa-calendar" style="color:#E4572E"></i> <d>@e.Name</d>
+                    </div>
+                </a>
+                <a asp-action="Event" asp-controller="Home" asp-route-id="@e.PrivateEventId" asp-route-name="@e.Name" style="line-height:1">
+                    <div class="event-description">
+                   
+                        <d style="font-size:15px; margin-left:-5px"><i class="far fa-clock"></i>  @e.StartDate.ToString("HH:mm") </d> <br />
+                        @if (String.IsNullOrEmpty(e.Description))
+                        {
+                            <d>Brak opisu.</d>
+
+                        }
+                        @Html.Raw(e.Description)
+                    </div>
+                </a>
+            </div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div class="event-timer">
+                <div class="row">
+                    <div id="dayDiv" class="dayDiv col-3">-</div>
+                    <div id="hoursDiv" class="col-3">-</div>
+                    <div id="minDiv" class="col-3">-</div>
+                    <div id="secDiv" class="col-3 mob-sec" style=" border:none">-</div>
+                </div>
+                <div class="row timer-params">
+                    <div class="col-3">DNI</div>
+                    <div class="col-3">GODZINY</div>
+                    <div class="col-3">MINUTY</div>
+                    <div class="col-3 mob-sec" style=" border: none">SEKUNDY</div>
+                </div>
+            </div>
+        </div>
+    }
