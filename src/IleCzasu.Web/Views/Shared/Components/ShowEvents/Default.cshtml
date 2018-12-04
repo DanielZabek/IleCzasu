@@ -26,8 +26,8 @@
                     </div>
                 </a>
                 <div class="event-details row">
-                    <div class="event-detail"><i class="far fa-calendar-alt"></i>  @e.Date.ToString("dd MMM, yyyy")</div>
-                    <div class="event-detail">
+                    <div class="event-detail detail-date"><i class="far fa-calendar-alt"></i>  @e.Date.ToString("dd MMM, yyyy")</div>
+                    <div class="event-detail detail-time">
                         <i class="far fa-clock"></i>
                         @if (e.Date.ToLongTimeString().Equals("00:00:00"))
                     {
@@ -41,7 +41,7 @@
                     </div>
                     @if (!String.IsNullOrEmpty(e.Place))
                     {
-                    <div class="event-detail"><a id="cityName" target="_blank" href="https://www.google.com/maps/search/?api=1&query= @e.Place" class="event-detail"><i class="fas fa-map-marker-alt"></i>  @e.City</a></div>
+                    <div class="event-detail detail-place"><a id="cityName" target="_blank" href="https://www.google.com/maps/search/?api=1&query= @e.Place" class="event-detail"><i class="fas fa-map-marker-alt"></i>  @e.City</a></div>
                     }
                 </div>
 
@@ -91,13 +91,11 @@
                         <div id="dayDiv" class="dayDiv col-4">-</div>
                         <div id="hoursDiv" class="col-4">-</div>
                         <div id="minDiv" class="col-4" style=" border: none">-</div>
-
                     </div>
                     <div class="row timer-params">
                         <div class="col-4">DNI</div>
                         <div class="col-4">GODZINY</div>
                         <div class="col-4" style=" border: none">MINUTY</div>
-
                     </div>
                 </div>
             </div>

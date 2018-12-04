@@ -1233,12 +1233,15 @@ line-height: 18px !important;
 .list-event .event-tags {
     padding: 5px;
     padding-left: 7px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height:135px;
 }
 .list-event .event-info {
     position: absolute !important;
     overflow: hidden;
     text-overflow: ellipsis;
-    right: 80px;
+    right: 65px;
     left: 55%;
     bottom: 0px;
     top: 0px;
@@ -1263,7 +1266,7 @@ line-height: 18px !important;
         position: absolute !important;       
         right: 0 !important;
         top: 0px;
-        width: 80px;
+        width: 65px;
         background-color:unset;
     
     }
@@ -3573,10 +3576,7 @@ button {
     }
 
     .list-event .event-timer {
-        right: 35px;
-        width: 39% !important;
         font-size: 18px;
-        bottom: 5px;
     }
     .private-event .event-timer {
         right: 10px;
@@ -3742,8 +3742,19 @@ button {
     .logo-col {
         width: 49%;
     }
+    .sort-bar {
+        width:100%;
+    }
+    .list-events {
+        width: 100%;
+    }
+    .list-events{
+        margin-top:0px !important;
+    }
 
-
+    .list-events {
+        margin-left: 0px !important;
+    }
 
 
     .category {
@@ -3776,10 +3787,7 @@ button {
         margin-top: -2px;
     }
 
-    .list-events {
-        width: 100%;
-    }
-
+   
     .logo {
         width: 120px;
         padding-bottom: 5px;
@@ -3915,14 +3923,8 @@ button {
     @media (max-width: 640px) {
         .event-label {
             right:3px !important;
-        }
-        .list-events {
-            margin-left: 0px !important;
-        }
-  
-        .event-info .event-additional-info {
-           display:none;
-        }
+        }  
+      
    
         .shared-button d {
             font-size:12px;
@@ -3989,14 +3991,77 @@ button {
             cursor: pointer;
             margin-bottom: 40px;
         }
+        .event-info {
+            top:50px !important;
+        }
+        .event-timer {
+            padding-top: 3px;
+        }
+        .event-timer .col-4 {
+            padding-bottom: 2px;
+        }
+        .event-timer .timer-params .col-4 {
+            padding-bottom: 6px!important;
+        }
+        .list-event .event-tags {
+            display: none;
+        }
+        .list-event .event-buttons {
+            left: 0;
+            right: 0;
+            width: 100%;
+            bottom: -40px;
+            height: 40px;
+            top: unset;
+            background-color: rgb(51, 43, 43);
+            font-size: 0px;
+            border-top: 1px solid #231d1d;
+        }
+        .list-event .follow-buttons {
+            height: 40px !important;
+            display: inline-block;
+            width: 25%;
+            text-align: center;
+        }
+        .list-event .follow-button, .unfollow-button {
+         font-size:20px !important;
+            width: 100%;
+         
+        }
+        .comments-number {
+            height: 40px !important;
+            width: 25% !important;
+            border-top: none !important;
+            border-left: 1px solid #231d1d;
+            border-right: 1px solid #231d1d;
+        }
+            .list-event .follow-button div, .unfollow-button div {
+                font-size: 12px;
+                display:inline;
+            }
+        .share-button {
+            vertical-align: top;
+            line-height: 40px !important;
+            height: 40px !important;
+            display: inline-block;
+            width: 25%;
+            font-size: 20px !important;
+            border-top: none !important;
+            border-left: 1px solid #231d1d;
+        }
 
+        .list-event .event-info {
+            left: 80px;
+            right: 0px;
+            bottom: 0px;
+        }
             .list-event .event-img {
                 height: 106px;
                 width: 80px;
             }
 
             .list-event .event-label {
-                left: 85px;
+                left: 80px;
                 line-height: 1 !important;
             }
 
@@ -4275,7 +4340,33 @@ button {
     @media (max-width: 480px) {
         #categoryName {
         }
-
+        .event-details {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            padding-top: 4px !important;
+            padding-bottom: 4px !important;
+            padding-left:2px !important;
+        }
+        .event-detail a{
+           
+        }
+        .detail-place{
+            width:40%;
+        }
+        .detail-time {
+            width: auto;
+        }
+        .detail-date {
+            width: auto;
+        }
+        .event-detail {
+       
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: 11px !important;
+        }
         .event-img {
             height: 300px;
         }
