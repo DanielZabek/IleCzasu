@@ -12,7 +12,7 @@
             <input type="hidden" value="@e.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds" />
             <div class="event-img" style="background-image: url('@e.ImagePath')" />
             <div class="event-label">
-                <a asp-action="Event" asp-controller="Home" asp-route-id="@e.PublicEventId" asp-route-name="@e.Name">
+                <a asp-route="event" asp-route-id="@e.PublicEventId" asp-route-name="@e.Name.Trim().Replace("\n", String.Empty).Replace("\t", String.Empty).Replace("\r", String.Empty)">
                     <div class="event-name">
                         @if (!string.IsNullOrEmpty(e.Category.IconClass))
                         {
@@ -27,6 +27,7 @@
                 </a>
                 <div class="event-details row">
                     <div class="event-detail detail-date"><i class="far fa-calendar-alt"></i>  @e.Date.ToString("dd MMM, yyyy")</div>
+                    <div class="event-detail detail-mobdate" style="display: none"><i class="far fa-calendar-alt"></i>  @e.Date.ToString("dd.MM.yyyy")</div>
                     <div class="event-detail detail-time">
                         <i class="far fa-clock"></i>
                         @if (e.Date.ToLongTimeString().Equals("00:00:00"))

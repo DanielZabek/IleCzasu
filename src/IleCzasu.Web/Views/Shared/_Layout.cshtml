@@ -104,7 +104,7 @@
     <nav class="sticky-top" style="background-color:#332B2B!important; border-bottom: 1px solid #E0A22F">
         <div class="row">
             <div class="logo-col">
-                <a asp-controller="Home" asp-action="Index" style="background-color:#332B2B;  "><img class="logo" src="~/images/IleCzasuLogo.png" width="130" style="padding-top: 5px;" /></a>
+                <a asp-controller="PublicEvents" asp-action="Index" style="background-color:#332B2B;  "><img class="logo" src="~/images/IleCzasuLogo.png" width="130" style="padding-top: 5px;" /></a>
             </div>
             <div class="nav-item dropdown menu-large">
                 <button id="menulink" class="menu-dropdown droplink" data-toggle="dropdown" href="#"><i class="fas fa-chevron-circle-down"></i>  MENU</button>
@@ -381,13 +381,13 @@
         <div class="footer-content">
             <div class="row">
                 <div class="footer-col1">
-                    <form><button class="footer-link" asp-action="Index" asp-controller="Home">STRONA GŁÓWNA</button></form>
+                    <form><button class="footer-link" asp-action="Index" asp-controller="PublicEvents">STRONA GŁÓWNA</button></form>
                     <form><button class="footer-link" asp-route="privacy">POLITYKA PRYWATNOŚCI</button></form>
                     <form><button class="footer-link" asp-route="privacy">REGULAMIN</button></form>
                 </div>
 
                 <div class="footer-col3" style="text-align:right;">
-                    <form><button class="footer-link footer-fb" asp-action="Index" asp-controller="Home"><i class="fab fa-facebook"></i>  FACEBOOK</button></form>
+                    <form><button class="footer-link footer-fb" asp-action="Index" asp-controller="PublicEvents"><i class="fab fa-facebook"></i>  FACEBOOK</button></form>
                     <form><button class="footer-link footer-msg" asp-route="privacy"><i class="fab fa-facebook-messenger"></i>  NAPISZ DO NAS</button></form>
                     <form><button class="footer-link footer-mail" asp-route="privacy"><i class="fas fa-envelope"></i>  KONTAKT</button></form>
                 </div>
@@ -396,7 +396,7 @@
         <button id="footerButtonUp"><i class="fas fa-angle-up"></i></button>
         <button id="footerButtonDown"><i class="fas fa-angle-down"></i></button>
         <div class="row">
-            <form><button class="footer-link" asp-action="Index" asp-controller="Home" id="contactButton">Regulamin</button></form> <a id="contactSep"> | </a>  <form><button class="footer-link" asp-route="privacy">Polityka prywatności</button></form><a>| </a>
+            <form><button class="footer-link" asp-action="Index" asp-controller="PublicEvents" id="contactButton">Regulamin</button></form> <a id="contactSep"> | </a>  <form><button class="footer-link" asp-route="privacy">Polityka prywatności</button></form><a>| </a>
             &copy; 2018 IleCzasu.pl
             <i style="position:absolute; right:5px; bottom:5px;" class="fab fa-facebook"></i>
         </div>
@@ -428,7 +428,7 @@
                     $('.search-results').fadeIn();
                     var input = $(this).val();
                     if (input.length >= 3) {
-                        $('.search-results').load("/Home/GetSearchResults", { input: input.trim()  }, function () {
+                        $('.search-results').load("/PublicEvents/GetSearchResults", { input: input.trim()  }, function () {
                         $(this).find('.search-name').each(function () {
                             var name = $(this).html();
                             var rx = RegExp(input, 'ig');
@@ -458,7 +458,7 @@
                     $('.search-results-mob').fadeIn();
                     var input = $(this).val();
                     if (input.trim() != "") {
-                        $('.search-results-mob').load("/Home/GetSearchResults", { input: input.trim() }, function () {
+                        $('.search-results-mob').load("/PublicEvents/GetSearchResults", { input: input.trim() }, function () {
                             $(this).find('.search-name').each(function () {
                                 var name = $(this).html();
                                 var rx = RegExp(input, 'ig');
@@ -479,7 +479,7 @@
                 });
 
                 jQuery(document).ready(function () {
-                    $('.rank-content').load("/Home/ShowUsersRanking", function () {
+                    $('.rank-content').load("/PublicEvents/ShowUsersRanking", function () {
                     });
             $('#userNavWidget').load("/UserPanel/ShowUserNavWidget", function () {
             });

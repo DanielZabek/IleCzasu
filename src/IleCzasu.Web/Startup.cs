@@ -120,22 +120,22 @@ namespace IleCzasu
                 routes.MapRoute(
                   name: "privacy",
                   template: "PolitykaPrywatnosci",
-                   defaults: new { controller = "Home", action = "PolitykaPrywatnosci" });
+                   defaults: new { controller = "PublicEvents", action = "PolitykaPrywatnosci" });
 
                 routes.MapRoute(
                 name: "categoryView",
                 template: "Kategoria/{categoryName}",
-                 defaults: new { controller = "Home", action = "CategoryView" });
+                 defaults: new { controller = "PublicEvents", action = "CategoryView" });
 
                 routes.MapRoute(
                 name: "interval",
                 template: "Interwaly",
-                 defaults: new { controller = "Home", action = "IntervalTimer" });
+                 defaults: new { controller = "PublicEvents", action = "IntervalTimer" });
 
                 routes.MapRoute(
                 name: "stopwatch",
                 template: "Stoper",
-                 defaults: new { controller = "Home", action = "Stoper" });
+                 defaults: new { controller = "PublicEvents", action = "Stoper" });
 
                 routes.MapRoute(
                 name: "userPanel",
@@ -152,10 +152,15 @@ namespace IleCzasu
                template: "Dodaj",
                 defaults: new { controller = "UserPanel", action = "Create" });
 
-                 routes.MapRoute(
+               routes.MapRoute(
                name: "timezones",
                template: "StrefyCzasowe",
-                defaults: new { controller = "Home", action = "TimeZones" });
+                defaults: new { controller = "PublicEvents", action = "TimeZones" });
+
+                routes.MapRoute(
+                name: "event",
+                template: "{id}/{name}",
+                defaults: new { controller = "PublicEvents", action = "Event" });
 
 
             });

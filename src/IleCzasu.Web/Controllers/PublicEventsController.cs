@@ -47,7 +47,7 @@ namespace IleCzasu.Controllers
             return View(model);
         }
         // GET: 5/event-name
-        [HttpGet]
+       
         public async Task<IActionResult> Event(int id, string name)
         {                  
             string friendlyTitle = FriendlyUrlHelper.GetFriendlyTitle(name);

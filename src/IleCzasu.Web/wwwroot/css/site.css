@@ -4056,8 +4056,8 @@ button {
             bottom: 0px;
         }
             .list-event .event-img {
-                height: 106px;
-                width: 80px;
+                height: 120px;
+                width: 90px;
             }
 
             .list-event .event-label {
@@ -4352,16 +4352,19 @@ button {
            
         }
         .detail-place{
-            width:40%;
+            width:45%;
         }
         .detail-time {
             width: auto;
         }
         .detail-date {
             width: auto;
+            display:none;
         }
+        .detail-mobdate{
+            display:initial !important;
+        } 
         .event-detail {
-       
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;

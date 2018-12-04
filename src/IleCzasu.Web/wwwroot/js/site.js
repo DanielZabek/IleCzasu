@@ -87,55 +87,45 @@ function countdown() {
             minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             seconds = Math.floor((distance % (1000 * 60)) / 1000);
             var dateNow = new Date();
-
-        
-            if (days === -1 && (hours + dateNow.getHours()) === -1) {
-              
+     
+            if (days === -1 && (hours + dateNow.getHours()) >= -1) {              
                 units.style.color = "#E4572E";
                 units.children[0].innerHTML = "<d>DZISIAJ</d>";
                 units.children[1].innerHTML = "-";
-                units.children[2].innerHTML = "-";
-             
+                units.children[2].innerHTML = "-";            
             }
             else if (days <= -1) {
                 units.style.color = "white";
                 units.children[0].innerHTML = "<d>WCZORAJ</d>";
             }
-            else if ((days === 0) && ((hours + dateNow.getHours()) < 23) && ((hours + dateNow.getHours()) > -2)) {
+            else if ((days === 0) && ((hours + dateNow.getHours()) < 23) && ((hours + dateNow.getHours()) > -1)) {
                 if (hours < 0) {
                     units.style.color = "#E4572E";
                     units.children[0].innerHTML = "<d>DZISIAJ</d>";
                     units.children[1].innerHTML = "-";
-                    units.children[2].innerHTML = "-";
-            
-                } else {
-                    units.style.color = "#E4572E";
+                    units.children[2].innerHTML = "-";           
+                }
+                else {
+                units.style.color = "#E4572E";
                 units.children[0].innerHTML = "<d>DZISIAJ</d>";      
                 units.children[1].innerHTML = hours;
-                units.children[2].innerHTML = minutes;
-    
+                units.children[2].innerHTML = minutes;   
                 }
             }
-            else if (days === 0) {
-                timer.style.backgroundColor = "#E4572E";
+            else if (days === 0) {           
                 units.children[0].innerHTML = "<d>JUTRO</d>";
                 units.children[1].innerHTML = hours;
-                units.children[2].innerHTML = minutes;
-         
+                units.children[2].innerHTML = minutes;         
             }
-            else if (days === 1 && (hours + dateNow.getHours()) < 23) {
-                timer.style.backgroundColor = "#E4572E";
+            else if (days === 1 && (hours + dateNow.getHours()) < 23) {              
                 units.children[0].innerHTML = "<d>JUTRO</d>";
                 units.children[1].innerHTML = hours + 24;
-                units.children[2].innerHTML = minutes;
-        
-            }
-                
+                units.children[2].innerHTML = minutes;        
+            }               
             else {
                 units.children[0].innerHTML = days;
                 units.children[1].innerHTML = hours;
-                units.children[2].innerHTML = minutes;
-              
+                units.children[2].innerHTML = minutes;             
             }
             interval = 30000; 
         }, interval);
