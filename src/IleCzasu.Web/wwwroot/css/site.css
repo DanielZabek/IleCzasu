@@ -1252,6 +1252,38 @@ line-height: 18px !important;
     font-size: 14px !important;
     background-color: unset !important;
 }
+.list-event .event-links {
+    color: #E4572E;
+    position:absolute;
+    left: 50%;
+    right: 0;
+    top: 10px;
+    font-size: 0px;
+}
+.event-links .order-row d {
+    width: 33%;
+    font-size: 16px;
+    line-height: 30px;
+}
+.order-row div {
+    display: inline-block;
+    width: 33%;
+    vertical-align: middle;
+    padding: 2px;
+}
+.order-row {
+    border: 1px solid #231d1d;
+ 
+}
+    .order-row button {
+        font-size: 14px;
+        width: 33%;
+        border: none;
+        background-color: transparent;
+        color: #E0A22F;
+        float: right;
+        height: 30px;
+    }
     .list-event .event-date {
       width:200px;
     }
@@ -3923,9 +3955,27 @@ button {
     @media (max-width: 640px) {
         .event-label {
             right:3px !important;
-        }  
-      
-   
+        }
+        .event-name i {
+            font-size: 16px;
+            position:relative;
+            bottom: -1px;
+        }
+
+        .event-name {
+            padding:0px;
+            padding-left:4px;
+            font-size: 14px;
+        }
+        .event-details {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            padding-top: 2px !important;
+            padding-bottom: 2px !important;
+            padding-left: 4px !important;
+            margin-top:2px !important;
+        }
         .shared-button d {
             font-size:12px;
         }
@@ -3995,14 +4045,17 @@ button {
             top:50px !important;
         }
         .event-timer {
-            padding-top: 3px;
+            padding-top: 0px;
         }
-        .event-timer .col-4 {
-            padding-bottom: 2px;
-        }
-        .event-timer .timer-params .col-4 {
-            padding-bottom: 6px!important;
-        }
+            .event-timer .col-4 {
+                padding-bottom: 0px;
+                padding-top: 2px !important;
+                font-size: 14px;
+            }
+            .event-timer .timer-params .col-4 {
+                padding-bottom: 4px !important;
+                font-size: 10px;
+            }
         .list-event .event-tags {
             display: none;
         }
@@ -4010,48 +4063,63 @@ button {
             left: 0;
             right: 0;
             width: 100%;
-            bottom: -40px;
-            height: 40px;
+            bottom: -30px;
+            height: 30px;
             top: unset;
             background-color: rgb(51, 43, 43);
             font-size: 0px;
             border-top: 1px solid #231d1d;
         }
         .list-event .follow-buttons {
-            height: 40px !important;
+            height: 30px !important;
+            position: absolute;
             display: inline-block;
-            width: 25%;
+            left: 90px;
+            right: 0px;  
+            width:auto;
             text-align: center;
+            font-size: unset !important;
+            bottom:0px;
         }
         .list-event .follow-button, .unfollow-button {
-         font-size:20px !important;
-            width: 100%;
-         
+            font-size: 0px !important;
+            width: 33.33%;
+
         }
         .comments-number {
-            height: 40px !important;
-            width: 25% !important;
+            height: 30px !important;
+            width: 90px !important;
             border-top: none !important;
-            border-left: 1px solid #231d1d;
+          
             border-right: 1px solid #231d1d;
         }
-            .list-event .follow-button div, .unfollow-button div {
-                font-size: 12px;
-                display:inline;
-            }
+        .list-event .follow-button div, .unfollow-button div {
+            font-size: 12px;
+            display: inline-block;
+            width:auto;
+            line-height:30px;
+    
+        }
+        .list-event .follow-button i, .unfollow-button i {
+            position:relative;
+            bottom:-3px;
+            font-size: 22px;
+            display: inline-block;
+            margin-right:4px;
+        }
         .share-button {
             vertical-align: top;
-            line-height: 40px !important;
-            height: 40px !important;
+            line-height: 30px !important;
+            height: 30px !important;
             display: inline-block;
-            width: 25%;
+            width: 33.33%;
             font-size: 20px !important;
             border-top: none !important;
-            border-left: 1px solid #231d1d;
+            border-right: 1px solid #231d1d;
         }
 
         .list-event .event-info {
-            left: 80px;
+            left: 90px;
             right: 0px;
             bottom: 0px;
         }
@@ -4061,12 +4129,14 @@ button {
             }
 
             .list-event .event-label {
-                left: 80px;
+                left: 90px;
                 line-height: 1 !important;
             }
 
                 .list-event .event-label .event-description {
-                    display: none;
+                height:38px;
+                font-size:12px;
+                padding-top:2px;
                 }         
 
 
@@ -4340,14 +4410,7 @@ button {
     @media (max-width: 480px) {
         #categoryName {
         }
-        .event-details {
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-            padding-top: 4px !important;
-            padding-bottom: 4px !important;
-            padding-left:2px !important;
-        }
+ 
         .event-detail a{
            
         }
@@ -4458,7 +4521,8 @@ button {
 
     @media (max-width: 460px) {
         .list-event .event-description {
-            display: none !important;
+           font-size:11px;
+           padding-left:4px !important;
         }
         .userDropdownSm button {
             width: 40px !important;

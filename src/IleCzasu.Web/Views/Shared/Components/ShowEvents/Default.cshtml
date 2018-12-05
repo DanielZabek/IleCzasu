@@ -32,24 +32,24 @@
                         <i class="far fa-clock"></i>
                         @if (e.Date.ToLongTimeString().Equals("00:00:00"))
                     {
-                        <d>Cały dzień</d>
+                            <d>Cały dzień</d>
                         }
                         else
                         {
-                        <d>@e.Date.ToShortTimeString()</d>
+                            <d>@e.Date.ToShortTimeString()</d>
 
                         }
                     </div>
                     @if (!String.IsNullOrEmpty(e.Place))
                     {
-                    <div class="event-detail detail-place"><a id="cityName" target="_blank" href="https://www.google.com/maps/search/?api=1&query= @e.Place" class="event-detail"><i class="fas fa-map-marker-alt"></i>  @e.City</a></div>
+                        <div class="event-detail detail-place"><a id="cityName" target="_blank" href="https://www.google.com/maps/search/?api=1&query= @e.Place" class="event-detail"><i class="fas fa-map-marker-alt"></i>  @e.City</a></div>
                     }
                 </div>
 
                 <div class="event-description">
                     @if (String.IsNullOrEmpty(e.Description))
                     {
-                    <d>Brak opisu.</d>
+                        <d>Brak opisu.</d>
                     }
                     @Html.Raw(e.Description)
                 </div>
@@ -60,22 +60,22 @@
                 <div class="event-tags">
                     @if (e.TagEvents != null)
                     {
-                    @foreach (var t in e.TagEvents)
+                        @foreach (var t in e.TagEvents)
                         {
                             try
                             {
                                 if (lastTagTypeName == t.Tag.TagType.Name)
                                 {
-                    <d class="tag-value"> | @t.Tag.Value</d>
+                                    <d class="tag-value"> | @t.Tag.Value</d>
                                 }
                                 else
                                 {
                                     if (!string.IsNullOrEmpty(lastTagTypeName))
                                     {
-                    <br />
+                                        <br />
                                     }
 
-                    <d class="tag-name">@t.Tag.TagType.Name: </d><d class="tag-value">@t.Tag.Value</d>
+                                    <d class="tag-name">@t.Tag.TagType.Name: </d><d class="tag-value">@t.Tag.Value</d>
                                 }
                                 lastTagTypeName = t.Tag.TagType.Name;
                             }
@@ -86,7 +86,19 @@
                         lastTagTypeName = "";
                     }
                 </div>
-
+                <div class="event-links">
+                    @if (e.Promotor.Equals("Empik"))
+                    {
+                        <div class="order-row">
+                            <div>
+                                <d>@e.Price zł</d>
+                            </div>
+                               
+                            <div style="text-align:center; border-left: 1px solid #231d1d;border-right: 1px solid #231d1d;" ><img src="~/images/avatars/empik.png" height="28" /></div>
+                            <button class="order-button">ZAMÓW</button>
+                        </div>
+                    }
+                </div>
                 <div class="event-timer">
                     <div class="row">
                         <div id="dayDiv" class="dayDiv col-4">-</div>
@@ -101,7 +113,24 @@
                 </div>
             </div>
             <div class="event-buttons">
+                <button class="follow-button comments-number">
+                    <i class="fas fa-comments"></i>
+                    <div>   @e.Follows</div>
+                </button>
+
                 <div class="follow-buttons">
+                    <div class="share-button">
+                        <i class="fas fa-share-alt"></i>
+                        @*<a target="_blank" class="share" href="https://www.facebook.com/share.php?u=@Context.Request.Host@Url.Action("Event", "Home", new { id = e.PublicEventId, name = e.Name } )">
+
+                            </a>*@
+                    </div>
+                    <div class="share-button">
+                        <i class="fas fa-share-alt"></i>
+                        @*<a target="_blank" class="share" href="https://www.facebook.com/share.php?u=@Context.Request.Host@Url.Action("Event", "Home", new { id = e.PublicEventId, name = e.Name } )">
+
+                            </a>*@
+                    </div>
                     @if (e.IsFollowed)
                     {
                         <button class="follow-button" style="display:none;">
@@ -127,17 +156,9 @@
                     }
 
                 </div>
-              
-                <div class="share-button">
-                    <i class="fas fa-share-alt"></i>
-                    @*<a target="_blank" class="share" href="https://www.facebook.com/share.php?u=@Context.Request.Host@Url.Action("Event", "Home", new { id = e.PublicEventId, name = e.Name } )">
-                    
-                    </a>*@
-                </div>
-                <button class="follow-button comments-number">
-                    <i class="fas fa-comments"></i>
-                    <div>   @e.Follows</div>
-                </button>
+
+
+
             </div>
         </div>
 
