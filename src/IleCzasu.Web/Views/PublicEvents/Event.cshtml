@@ -8,7 +8,7 @@
     ViewData["Title"] = Html.Raw(Model.PublicEvent.Name);
     ViewData["Description"] = "Zostało: " + daysLeft.Days + " DNI | " + daysLeft.Hours + " GODZIN |  " + daysLeft.Minutes + " MINUT |  " + " " + Html.Raw(Model.PublicEvent.Description);
 }
-<div class="event-details">
+<div class="eventd">
     <input id="date" type="hidden" value="@Model.PublicEvent.Date.Subtract(new DateTime(1970, 1,1)).TotalMilliseconds" />
     <div class="eventd-img">
         <span style=" display: inline-block;
@@ -19,54 +19,8 @@
     </div>
     <div class="eventd-info">
         <div class="eventd-name">
-            @switch (Model.PublicEvent.CategoryId)
-            {
-                case 1:
-                case 12:
-                case 13:
-                case 14:
-                    <i class="fas fa-film"></i>
-
-                    break;
-
-                case 2:
-                    <i class="icon-theatre"></i>
-
-                    break;
-                case 3:
-                case 15:
-                case 16:
-                    <i class="fas fa-music"></i>
-                    break;
-                case 4:
-                    <i class="far fa-grin-squint-tears"></i>
-
-                    break;
-                case 5:
-                    <i class="fas fa-book"></i>
-                    break;
-                case 6:
-                    <i class="fas fa-futbol"></i>
-
-                    break;
-                case 7:
-                case 19:
-                case 20:
-                case 21:
-                case 22:
-                    <i class="fas fa-laptop"></i>
-                    break;
-                case 8:
-                    <i class="fas fa-certificate"></i>
-                    break;
-                case 9:
-                    <i class="fas fa-archive"></i>
-                    break;
-
-                default:
-                    <i class="fas fa-archive"></i>
-                    break;
-            }@Model.PublicEvent.Name
+            <i class="@Model.PublicEvent.Category.IconClass"></i>
+            @Model.PublicEvent.Name
         </div>
         <div class="eventd-info-col">
             <div class="event-detail event-date" style=""><i class="far fa-calendar-alt"></i>  @Model.PublicEvent.Date.ToString("dd MMM, yyyy")</div>
@@ -79,117 +33,117 @@
                 </div>
             }
 
-                    @if (!String.IsNullOrEmpty(Model.PublicEvent.Url))
-                    {
-                        <div class="event-detail">
-                            <a class="event-detail" target="_blank" href="@Model.PublicEvent.Url">
-                                <i class="fas fa-link"></i> LINK
-                            </a>
-                        </div>
-                    }
+            @if (!String.IsNullOrEmpty(Model.PublicEvent.Url))
+            {
+                <div class="event-detail">
+                    <a class="event-detail" target="_blank" href="@Model.PublicEvent.Url">
+                        <i class="fas fa-link"></i> LINK
+                    </a>
+                </div>
+            }
 
-                    @if (Model.PublicEvent.Promotor.Equals("KupBilecik") || Model.PublicEvent.Promotor.Equals("Empik"))
-                    {
-                        <div class="event-detail">
-                            <a target="_blank" href="@Model.PublicEvent.Url">
-                                <i class="fas fa-ticket-alt"></i> <d>@Model.PublicEvent.Price zł</d>
-                            </a>
-                            <form style="display:inline-block" action="@Model.PublicEvent.Url"><button type="submit"> BILETY </button></form>
-                        </div>
-                    }
-    
-              
-    </div>
-    <div class="eventd-info-col">
+            @if (Model.PublicEvent.Promotor.Equals("KupBilecik") || Model.PublicEvent.Promotor.Equals("Empik"))
+            {
+                <div class="event-detail">
+                    <a target="_blank" href="@Model.PublicEvent.Url">
+                        <i class="fas fa-ticket-alt"></i> <d>@Model.PublicEvent.Price zł</d>
+                    </a>
+                    <form style="display:inline-block" action="@Model.PublicEvent.Url"><button type="submit"> BILETY </button></form>
+                </div>
+            }
+
+
+        </div>
         <div class="eventd-info-col">
-            @foreach (var e in Model.PublicEvent.TagEvents)
+            <div class="eventd-info-col">
+                @foreach (var e in Model.PublicEvent.TagEvents)
             {
                 if (lastTagTypeName == e.Tag.TagType.Name)
                 {
-                    <d class="tag-value"> | @e.Tag.Value</d>
+                        <d class="tag-value"> | @e.Tag.Value</d>
+                    }
+                    else
+                    {
+                        <br /><d class="tag-name">@e.Tag.TagType.Name: </d><d class="tag-value">@e.Tag.Value</d>
+                    }
+                    lastTagTypeName = e.Tag.TagType.Name;
                 }
-                else
-                {
-                    <br /><d class="tag-name">@e.Tag.TagType.Name: </d><d class="tag-value">@e.Tag.Value</d>
-                }
-                lastTagTypeName = e.Tag.TagType.Name;
-            }
+            </div>
+
         </div>
-
     </div>
-</div>
 
-<div class="eventd-description">
-    <h4>Opis:</h4>
-    @Html.Raw(Model.PublicEvent.Description)
-</div>
-<div class="eventd-bar row">
-    @if (Model.PublicEvent.IsFollowed)
-    {
-        <button class="followd-button shared-button" style="display:none;">
-            <i class="far fa-calendar-plus"></i>
-            <d>@Model.PublicEvent.Follows</d>
-        </button>
+    <div class="eventd-description">
+        <h4>Opis:</h4>
+        @Html.Raw(Model.PublicEvent.Description)
+    </div>
+    <div class="eventd-bar row">
+        @if (Model.PublicEvent.IsFollowed)
+        {
+            <button class="followd-button shared-button" style="display:none;">
+                <i class="far fa-calendar-plus"></i>
+                <d>@Model.PublicEvent.Follows</d>
+            </button>
             <button class="unfollowd-button shared-button" style="display:initial">
                 <i class="far fa-calendar-minus"></i>
                 <d>@Model.PublicEvent.Follows</d>
             </button>
 
-    }
-    else
-    {
-        <button class="followd-button shared-button">
-            <i class="far fa-calendar-plus"></i>
-            <d>@Model.PublicEvent.Follows</d>
-        </button>
+        }
+        else
+        {
+            <button class="followd-button shared-button">
+                <i class="far fa-calendar-plus"></i>
+                <d>@Model.PublicEvent.Follows</d>
+            </button>
             <button class="unfollowd-button shared-button">
                 <i class="far fa-calendar-minus"></i>
                 <d>@Model.PublicEvent.Follows</d>
             </button>
 
-    }
-    <div class="shared-button">
-        <a class="fb-share" href="https://www.facebook.com/share.php?u=@Context.Request.Host@Url.Action("Event", "Home", new { id = Model.PublicEvent.PublicEventId, name = Model.PublicEvent.Name } )">
-            <i class="fab fa-facebook-square "></i>
-        </a>
+        }
+        <div class="shared-button">
+            <a class="fb-share" href="https://www.facebook.com/share.php?u=@Context.Request.Host@Url.Action("Event", "Home", new { id = Model.PublicEvent.PublicEventId, name = Model.PublicEvent.Name } )">
+                <i class="fab fa-facebook-square "></i>
+            </a>
+        </div>
+        <div class="shared-button google-share">
+            <a>
+                <i class="fab fa-google-plus-square"></i>
+            </a>
+        </div>
+        <div class="shared-button tweeter-share">
+            <a>
+                <i class="fab fa-twitter-square"></i>
+            </a>
+        </div>
+        <div class="shared-button whatsapp-share" style="border:none">
+            <a>
+                <i class="fab fa-whatsapp-square"></i>
+            </a>
+        </div>
     </div>
-    <div class="shared-button google-share">
-        <a>
-            <i class="fab fa-google-plus-square"></i>
-        </a>
-    </div>
-    <div class="shared-button tweeter-share">
-        <a>
-            <i class="fab fa-twitter-square"></i>
-        </a>
-    </div>
-    <div class="shared-button whatsapp-share" style="border:none">
-        <a>
-            <i class="fab fa-whatsapp-square"></i>
-        </a>
-    </div>
-</div>
 
-<div class="eventd-timer">
-    <div class="row">
-        <div id="dayDiv" class="col-3">-</div>
-        <div id="hoursDiv" class="col-3">-</div>
-        <div id="minDiv" class="col-3">-</div>
-        <div id="secDiv" class="col-3">-</div>
+    <div class="eventd-timer">
+        <div class="row">
+            <div id="dayDiv" class="col-3">-</div>
+            <div id="hoursDiv" class="col-3">-</div>
+            <div id="minDiv" class="col-3">-</div>
+            <div id="secDiv" class="col-3">-</div>
+        </div>
+        <div class="row timer-params">
+            <div class="col-3">DNI</div>
+            <div class="col-3">GODZINY</div>
+            <div class="col-3">MINUTY</div>
+            <div class="col-3">SEKUNDY</div>
+        </div>
     </div>
-    <div class="row timer-params">
-        <div class="col-3">DNI</div>
-        <div class="col-3">GODZINY</div>
-        <div class="col-3">MINUTY</div>
-        <div class="col-3">SEKUNDY</div>
-    </div>
-</div>
 </div>
 <div class="eventd-similar">
     <h4>PODOBNE WYDARZENIA</h4>
     @foreach (var e in Model.SimilarEvents)
     {
-        <a asp-action="Event" asp-controller="Home" asp-route-id="@e.PublicEventId" asp-route-name="@e.Name">
+        <a asp-route="event" asp-route-id="@e.PublicEventId" asp-route-name="@e.Name.Trim().Replace("\n", String.Empty).Replace("\t", String.Empty).Replace("\r", String.Empty).Replace("/", " ")">
             <div class="similar-event">
                 <img src="@e.ImagePath" />
                 <div>
@@ -441,8 +395,8 @@
               $("#googleMapsInfo").hide('slide', { direction: 'left' }, 300);
           }
       )
-        var timer = $(".event-details").children()[5];
-        var units = timer.children[0];
+        var timer = $(".eventd-timer");
+        var units = timer.children()[0];
         var date = $(".event-details").children()[1];
         setInterval(function () {
             var countDownDate = $("#date").val();

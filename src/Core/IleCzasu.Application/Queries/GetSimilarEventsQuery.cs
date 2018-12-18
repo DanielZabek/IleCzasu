@@ -29,7 +29,7 @@ namespace IleCzasu.Application.Queries
             var tagIdList = _context.TagEvents.Where(te => te.PublicEventId == request.PublicEventId).Select(te => te.TagId).ToList();
             var similarEvents = _context.TagEvents
                 .Include(p => p.Event)
-                .Where(t => tagIdList.Contains(t.TagId) && t.PublicEventId != request.PublicEventId).Select(e => e.Event)
+                .Where(t => tagIdList.Contains(t.TagId) && t.PublicEventId != request.PublicEventId && t.Event.Date >= DateTime.Today).Select(e => e.Event)
                 .GroupBy(pe => pe)
                 .Select(s => new SimilarEventModel
                 {

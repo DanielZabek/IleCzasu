@@ -55,8 +55,9 @@ namespace IleCzasu.Controllers
             {             
                 return RedirectToRoute("event", new { id = id, name = friendlyTitle });
             }
-
+            
             var model = new EventViewModel();
+            model.SimilarEvents = await _mediator.Send(new GetSimilarEventsQuery { PublicEventId = id });
             if (User.Identity.IsAuthenticated)
             {
                 model.PublicEvent = await _mediator.Send(new GetPublicEventByIdQuery { PublicEventId = id, UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) });
@@ -72,7 +73,14 @@ namespace IleCzasu.Controllers
   
         public async Task<IActionResult> ShowEvents(int categoryId = 0, string sortBy = "date", string date = "", string city = "", int pageNumber = 1, int pageSize = 25)
         {
-            return ViewComponent("ShowEvents", await _mediator.Send(new GetPublicEventsQuery { SortBy = sortBy, CategoryId = categoryId, Date = date, City = city, PageNumber = pageNumber, PageSize = pageSize }));
+            if (User.Identity.IsAuthenticated)
+            {
+                return ViewComponent("ShowEvents", await _mediator.Send(new GetPublicEventsQuery { SortBy = sortBy, CategoryId = categoryId, Date = date, City = city, PageNumber = pageNumber, PageSize = pageSize, UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) }));
+            }
+            else
+            {
+                return ViewComponent("ShowEvents", await _mediator.Send(new GetPublicEventsQuery { SortBy = sortBy, CategoryId = categoryId, Date = date, City = city, PageNumber = pageNumber, PageSize = pageSize }));
+            }
         }
 
         public IActionResult ShowMostPopularTags(int categoryId)
