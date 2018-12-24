@@ -5,7 +5,6 @@ let sortBy = 'date';
 let pageNumber = '1';
 let pageSize = '25';
 
-
 function showEvents() {
    
     $.ajax({
@@ -30,6 +29,7 @@ function countdown() {
     $('.events').find('.event').each(function () {
         var date = $(this).children()[1];
         var id = $(this).find("#eventId").val();
+        var name = $(this).find(".event-name").children()[1].innerHTML;
         var units = $(this).find('.event-timer').children()[0];
         var event = $(this);
         var countDownDate = date.value;
@@ -40,8 +40,14 @@ function countdown() {
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
         var interval = 1000;       
-
-        $(this).find(".follow-button").click(function () {
+        $(this).click(function () {               
+            window.location.href = "https://localhost:44350/" + id + "/" + name;       
+        });
+        $(".shop-list").click(function (evnt) {
+            evnt.stopPropagation();
+        });
+        $(this).find(".follow-button").click(function (evnt) {
+            evnt.stopPropagation();
             $.ajax({
                 url: "/UserPanel/FollowEvent/",
                 type: 'POST',
@@ -60,7 +66,8 @@ function countdown() {
             });
 
         });
-        $(this).find(".unfollow-button").click(function () {
+        $(this).find(".unfollow-button").click(function (evnt) {
+            evnt.stopPropagation();
             $.ajax({
                 url: "/UserPanel/UnfollowEvent/",
                 type: 'POST',

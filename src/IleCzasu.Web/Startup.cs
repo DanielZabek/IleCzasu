@@ -159,7 +159,7 @@ namespace IleCzasu
 
                 routes.MapRoute(
                 name: "event",
-                template: "{id}/{name}",
+                template: "wydarzenie/{id}/{name}",
                 defaults: new { controller = "PublicEvents", action = "Event" });
 
 

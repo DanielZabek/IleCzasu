@@ -247,7 +247,7 @@ namespace IleCzasu.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(PublicEventsController.Index), "Home");
+            return RedirectToAction(nameof(PublicEventsController.Index), "PublicEvents");
         }
 
         [HttpPost]
@@ -458,7 +458,7 @@ namespace IleCzasu.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(PublicEventsController.Index), "Home");
+                return RedirectToAction("Index", "PublicEvents");
             }
         }
 

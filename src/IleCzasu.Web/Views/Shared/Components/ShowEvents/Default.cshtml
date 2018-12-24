@@ -7,170 +7,170 @@
 
     @foreach (var e in Model)
     {
-     
-            <div class="event list-event">
-                <input type="hidden" value="@e.PublicEventId" id="eventId" />
-                <input type="hidden" value="@e.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds" />
-                <div class="event-img" style="background-image: url('@e.ImagePath')" />
-                <a asp-route="event" asp-route-id="@e.PublicEventId" asp-route-name="@e.Name.Trim().Replace("\n", String.Empty).Replace("\t", String.Empty).Replace("\r", String.Empty)">
-                    <div class="event-label">
 
-                        <div class="event-name">
-                            @if (!string.IsNullOrEmpty(e.Category.IconClass))
-                            {
-                                <i class="@e.Category.IconClass"></i>
+        <div class="event list-event">
+            <input type="hidden" value="@e.PublicEventId" id="eventId" />
+            <input type="hidden" value="@e.Date.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds" />
+            <div class="event-img" style="background-image: url('@e.ImagePath')" />
+            @*<a asp-route="event" asp-route-id="@e.PublicEventId" asp-route-name="@e.Name.Trim().Replace("\n", String.Empty).Replace("\t", String.Empty).Replace("\r", String.Empty)">*@
+                <div class="event-label">
+                    <div class="event-name">
+                        @if (!string.IsNullOrEmpty(e.Category.IconClass))
+                        {
+                            <i class="@e.Category.IconClass"></i>
+                        }
+                        else
+                        {
+                            <i class="@e.Category.ParentCategory.IconClass"></i>
+                        }
+                        <d>@e.Name</d>
+                    </div>
+
+                    <div class="event-details row">
+                        <div class="event-detail detail-date"><i class="far fa-calendar-alt"></i>  @e.Date.ToString("dd MMM, yyyy")</div>
+                        <div class="event-detail detail-mobdate" style="display: none"><i class="far fa-calendar-alt"></i>  @e.Date.ToString("dd.MM.yyyy")</div>
+                        <div class="event-detail detail-time">
+                            <i class="far fa-clock"></i>
+                            @if (e.Date.ToLongTimeString().Equals("00:00:00"))
+                    {
+                                <d>Cały dzień</d>
                             }
                             else
                             {
-                                <i class="@e.Category.ParentCategory.IconClass"></i>
-                            }
-                            <d>@e.Name</d>
-                        </div>
+                                <d>@e.Date.ToShortTimeString()</d>
 
-                        <div class="event-details row">
-                            <div class="event-detail detail-date"><i class="far fa-calendar-alt"></i>  @e.Date.ToString("dd MMM, yyyy")</div>
-                            <div class="event-detail detail-mobdate" style="display: none"><i class="far fa-calendar-alt"></i>  @e.Date.ToString("dd.MM.yyyy")</div>
-                            <div class="event-detail detail-time">
-                                <i class="far fa-clock"></i>
-                                @if (e.Date.ToLongTimeString().Equals("00:00:00"))
-                    {
-                                    <d>Cały dzień</d>
-                                }
-                                else
-                                {
-                                    <d>@e.Date.ToShortTimeString()</d>
-
-                                }
-                            </div>
-                            @if (!String.IsNullOrEmpty(e.Place))
-                    {
-                                <div class="event-detail detail-place"><a id="cityName" target="_blank" href="https://www.google.com/maps/search/?api=1&query= @e.Place" class="event-detail"><i class="fas fa-map-marker-alt"></i>  @e.City</a></div>
                             }
                         </div>
-
-                        <div class="event-description">
-                            @if (String.IsNullOrEmpty(e.Description))
+                        @if (!String.IsNullOrEmpty(e.Place))
                     {
-                                <d>Brak opisu.</d>
-                            }
-                            @Html.Raw(e.Description)
-                        </div>
+                            <div class="event-detail detail-place"><i class="fas fa-map-marker-alt"></i>  @e.City</div>
+                            @*<a id="cityName" target="_blank" href="https://www.google.com/maps/search/?api=1&query= @e.Place" class="event-detail"></a>*@
+                        }
+                                </div>
 
-                    </div>
-                    </a>
-                    <div class="event-info" style="">
-                        <div class="event-tags">
-                            @if (e.TagEvents != null)
+                                <div class="event-description">
+                                    @if (String.IsNullOrEmpty(e.Description))
+                                    {
+                                        <d>Brak opisu.</d>
+                                    }
+                                    @Html.Raw(e.Description)
+                                </div>
+
+                </div>
+                            @*</a>*@
+            <div class="event-info" style="">
+                <div class="event-tags">
+                    @if (e.TagEvents != null)
                     {
-                                @foreach (var t in e.TagEvents)
+                        @foreach (var t in e.TagEvents)
                         {
                             try
                             {
                                 if (lastTagTypeName == t.Tag.TagType.Name)
                                 {
-                                            <d class="tag-value"> | @t.Tag.Value</d>
-                                        }
-                                        else
-                                        {
-                                            if (!string.IsNullOrEmpty(lastTagTypeName))
-                                            {
-                                                <br />
-                                            }
-
-                                            <d class="tag-name">@t.Tag.TagType.Name: </d><d class="tag-value">@t.Tag.Value</d>
-                                        }
-                                        lastTagTypeName = t.Tag.TagType.Name;
-                                    }
-                                    catch
-                                    {
-                                    }
+                                    <d class="tag-value"> | @t.Tag.Value</d>
                                 }
-                                lastTagTypeName = "";
+                                else
+                                {
+                                    if (!string.IsNullOrEmpty(lastTagTypeName))
+                                    {
+                                        <br />
+                                    }
+
+                                    <d class="tag-name">@t.Tag.TagType.Name: </d><d class="tag-value">@t.Tag.Value</d>
+                                }
+                                lastTagTypeName = t.Tag.TagType.Name;
                             }
-                        </div>
-                        @*<div class="event-links">
-                    @if (e.Promotor.Equals("Empik"))
-                    {
-                        <div class="order-row">
-                            <div style="text-align:center; "><img src="~/images/avatars/empik.png" height="28" /></div>
-                            <div class="order-price">
-                                <d>@e.Price zł</d>
-                            </div>
-                            <button class="order-button"><i class="fas fa-shopping-cart"></i></button>
-                        </div>
+                            catch
+                            {
+                            }
+                        }
+                        lastTagTypeName = "";
                     }
-                </div>*@
-                        <div class="event-timer">
-                            <div class="row">
-                                <div id="dayDiv" class="dayDiv col-4">-</div>
-                                <div id="hoursDiv" class="col-4">-</div>
-                                <div id="minDiv" class="col-4" style=" border: none">-</div>
+                </div>
+                @*<div class="event-links">
+                        @if (e.Promotor.Equals("Empik"))
+                        {
+                            <div class="order-row">
+                                <div style="text-align:center; "><img src="~/images/avatars/empik.png" height="28" /></div>
+                                <div class="order-price">
+                                    <d>@e.Price zł</d>
+                                </div>
+                                <button class="order-button"><i class="fas fa-shopping-cart"></i></button>
                             </div>
-                            <div class="row timer-params">
-                                <div class="col-4">DNI</div>
-                                <div class="col-4">GODZINY</div>
-                                <div class="col-4" style=" border: none">MINUTY</div>
-                            </div>
-                        </div>
+                        }
+                    </div>*@
+                <div class="event-timer">
+                    <div class="row">
+                        <div id="dayDiv" class="dayDiv col-4">-</div>
+                        <div id="hoursDiv" class="col-4">-</div>
+                        <div id="minDiv" class="col-4" style=" border: none">-</div>
                     </div>
-                    <div class="event-buttons">
-                        <div class="follow-buttons">
-                            @if (e.IsFollowed)
+                    <div class="row timer-params">
+                        <div class="col-4">DNI</div>
+                        <div class="col-4">GODZINY</div>
+                        <div class="col-4" style=" border: none">MINUTY</div>
+                    </div>
+                </div>
+            </div>
+            <div class="event-buttons">
+                <div class="follow-buttons">
+                    @if (e.IsFollowed)
                     {
-                                <button class="follow-button" style="display:none;">
-                                    <i class="far fa-calendar-plus"> </i>
-                                    <div>   @e.Follows</div>
-                                </button>
+                        <button class="follow-button" style="display:none;">
+                            <i class="far fa-calendar-plus"> </i>
+                            <div>   @e.Follows</div>
+                        </button>
                                 <button class="unfollow-button" style="display:initial">
                                     <i class="far fa-calendar-minus"> </i>
                                     <div>   @e.Follows</div>
                                 </button>
 
-                            }
-                            else
-                            {
-                                <button class="follow-button">
-                                    <i class="far fa-calendar-plus"> </i>
-                                    <div>   @e.Follows</div>
-                                </button>
+                    }
+                    else
+                    {
+                        <button class="follow-button">
+                            <i class="far fa-calendar-plus"> </i>
+                            <div>   @e.Follows</div>
+                        </button>
                                 <button class="unfollow-button">
                                     <i class="far fa-calendar-minus"> </i>
                                     <div>   @e.Follows</div>
                                 </button>
 
-                            }
+                    }
 
 
-                            @if (e.Price != 0)
+                    @if (e.Price != 0)
                     {
-                                <form action="@e.Url" target="_blank">
-                                    <button class="shop-list">
-                                        <i class="fas fa-shopping-cart"></i>
-                                        <div>@e.Price zł</div>
-                                    </button>
-                                </form>
-                            }
-                            else
-                            {
-                                    <form action="@e.Url" target="_blank">
-                                        <button class="shop-list">
-                                            <i class="fas fa-link"></i>
-                                        </button>
-                                    </form>
-                                    }
-                                    <div class="share-button">
-                                        <i class="fas fa-share-alt"></i>
-                                        @*<a target="_blank" class="share" href="https://www.facebook.com/share.php?u=@Context.Request.Host@Url.Action("Event", "Home", new { id = e.PublicEventId, name = e.Name } )">
+                        <form action="@e.Url" target="_blank">
+                            <button class="shop-list">
+                                <i class="fas fa-shopping-cart"></i>
+                                <div>@e.Price zł</div>
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form action="@e.Url" target="_blank">
+                            <button class="shop-list">
+                                <i class="fas fa-link"></i>
+                            </button>
+                        </form>
+                    }
+                    <div class="share-button">
+                        <i class="fas fa-share-alt"></i>
+                        @*<a target="_blank" class="share" href="https://www.facebook.com/share.php?u=@Context.Request.Host@Url.Action("Event", "Home", new { id = e.PublicEventId, name = e.Name } )">
 
-                                            </a>*@
-                                    </div>
-</div>
-                        <button class="comments-number">
-                            <i class="fas fa-comments"></i>
-                            <div>   @e.Follows</div>
-                        </button>
+                            </a>*@
                     </div>
-</div>
+                </div>
+                <button class="comments-number">
+                    <i class="fas fa-comments"></i>
+                    <div>   @e.Follows</div>
+                </button>
+            </div>
+        </div>
 
     }
 }

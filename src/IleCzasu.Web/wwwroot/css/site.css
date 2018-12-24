@@ -3809,13 +3809,13 @@ button {
     }
     .sort-bar {
         width:100%;
+        margin-left: 0px !important;
     }
     .list-events {
         width: 100%;
+        margin-top: -15px !important;
     }
-    .list-events{
-        margin-top:0px !important;
-    }
+  
 
     .list-events {
         margin-left: 0px !important;
@@ -3986,6 +3986,7 @@ button {
     }
 
     @media (max-width: 640px) {
+ 
         .event-label {
             right:0px !important;
         }
@@ -4066,9 +4067,9 @@ button {
         .mp-img {
             height: 150px;
         }
-
+  
         .list-event {
-            margin-top: 30px;
+            margin-top: 20px;
             cursor: pointer;
             margin-bottom: 40px;
             margin-left: 0px !important;
@@ -4087,8 +4088,8 @@ button {
                 font-size: 14px;
             }
             .event-timer .timer-params .col-4 {
-                padding-bottom: 4px !important;
-                font-size: 10px;
+                padding-bottom: 3px !important;
+                font-size: 9px;
             }
         .list-event .event-tags {
             display: none;
@@ -4123,6 +4124,7 @@ button {
         }
         .shop-list {           
             border-right: 1px solid #231d1d;
+            width:100% !important;
         }
         .follow-button, .unfollow-button {
             border-right: 1px solid #231d1d;
@@ -4156,7 +4158,10 @@ button {
             border-top: none !important;
             border-right: 1px solid #231d1d;
         }
-
+        .follow-buttons form {
+            display: inline-block;
+            width: 33.33%;
+        }
         .list-event .event-info {
             left: 90px;
             right: 0px;

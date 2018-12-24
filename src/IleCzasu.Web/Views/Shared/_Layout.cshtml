@@ -132,7 +132,7 @@
                             else
                             {
                                 <form asp-action="Login" asp-controller="Account" asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
-                                    <button id="menulink" class="droplink"><i class="fab fa-facebook"></i>  ZALOGUJ </button>
+                                    <button id="menulink" class="droplink loginButton"><i class="fab fa-facebook"></i>  ZALOGUJ </button>
                                 </form>
 
                             }
@@ -447,6 +447,9 @@
                     $('.searchbox').removeClass('search-mob');
                     $('.search-results-mob').html("");
                     $(this).hide();
+                });
+                $(".loginButton").click(function () {
+                   
                 });
                 $('.search-input').focusout(function () {
                     $('.search-results').fadeOut();
