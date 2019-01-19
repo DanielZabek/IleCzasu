@@ -1,4 +1,4 @@
-﻿using IleCzasu.Domain.Entities;
+﻿using IleCzasu.Data.Entities;
 using IleCzasu.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;

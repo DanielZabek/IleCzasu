@@ -3,7 +3,7 @@ using MediatR;
 using IleCzasu.Application.Models;
 using System.Threading;
 using System.Threading.Tasks;
-using IleCzasu.Infrastructure;
+using IleCzasu.Data;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 

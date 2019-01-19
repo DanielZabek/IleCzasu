@@ -1,5 +1,5 @@
 ﻿using IleCzasu.Application.Models;
-using IleCzasu.Infrastructure;
+using IleCzasu.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;

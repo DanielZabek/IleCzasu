@@ -1,12 +1,9 @@
-﻿using IleCzasu.Infrastructure;
-using IleCzasu.Models;
-using IleCzasu.Domain.Entities;
+﻿using IleCzasu.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using IleCzasu.Data;
 
 namespace IleCzasu.ViewComponents
 {

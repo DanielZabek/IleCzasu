@@ -1,6 +1,6 @@
 ﻿using IleCzasu.Application.Models;
-using IleCzasu.Domain.Entities;
-using IleCzasu.Infrastructure;
+using IleCzasu.Data.Entities;
+using IleCzasu.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;

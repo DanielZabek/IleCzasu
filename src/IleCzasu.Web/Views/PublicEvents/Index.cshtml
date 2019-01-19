@@ -19,60 +19,14 @@
             <ul class="flexisel-mp">
                 @foreach (var e in Model.MostPopularEvents)
                 {
+                  
                     <li>
-                        <div class="mp-event e1">
-
+                        <div class="mp-event">
+                            <input type="hidden" id="mpEventId" value="@e.PublicEventId" />
+                            <input type="hidden"  id="mpEventName" value="@e.Name.Replace('/','|')" />
                             <div class="mp-top1-label">
-                                <div style="padding-left:5px; margin-left:5px;">
-
-                                  @switch (e.CategoryId)
-                                  {
-                                      case 1:
-                                      case 12:
-                                      case 13:
-                                      case 14:
-                                        <i class="fas fa-film"></i>
-
-                                          break;
-
-                                      case 2:
-                                        <i class="fas fa-theater-masks"></i>
-
-                                          break;
-                                      case 3:
-                                      case 15:
-                                      case 16:
-                                        <i class="fas fa-music"></i>
-                                          break;
-                                      case 4:
-                                        <i class="far fa-grin-squint-tears"></i>
-
-                                          break;
-                                      case 5:
-                                        <i class="fas fa-book"></i>
-                                          break;
-                                      case 6:
-                                        <i class="fas fa-futbol"></i>
-
-                                          break;
-                                      case 7:
-                                      case 19:
-                                      case 20:
-                                      case 21:
-                                      case 22:
-                                        <i class="fas fa-laptop"></i>
-                                          break;
-                                      case 8:
-                                        <i class="fas fa-certificate"></i>
-                                          break;
-                                      case 9:
-                                        <i class="fas fa-archive"></i>
-                                          break;
-
-                                      default:
-                                        <i class="fas fa-archive"></i>
-                                          break;
-                                  }@e.Name
+                                <div style="padding-left:5px; margin-left:5px;">                                
+                                        <i class="@e.Category.IconClass"></i>  @e.Name
                                 </div>
 
                             </div>
@@ -80,16 +34,13 @@
 
 
                             <div class="mp-follows">
-                                <button class="follow-button">
+                                
                                     <i class="far fa-calendar-plus"></i>
                                     <d>@e.Follows</d>
-                                </button>
+                                
                             </div>
-
-
-
-
                         </div>
+                            </div>
                     </li>
                 }
             </ul>
@@ -143,7 +94,7 @@
       
         //sort();
         jQuery(document).ready(function () { showEvents(); });
-        //getCities(catId);
+        getCities();
         //datepickerHelper(catId);
 
         $(window).scroll(function () {
@@ -174,6 +125,7 @@
             $(this).click(function () {
                 $("button").removeClass('cat-active');
                 $(this).find("button").toggleClass('cat-active');
+                $("#categoryName").find('p').html("<d> " + $(this).find('button').find('p').html() + "</d>");
                 categoryId = $(this).find('#categoryId').val();
                 pageNumber = 1;
                 showEvents();
@@ -187,9 +139,8 @@
                             var i = $("#categoryName").find('i');
                             $("#categoryName").html('<p></p>');
                             $("#categoryName").find('p').append(i);
-                            $("#categoryName").find('p').append(" " + $(this).find('button').html());
+                            $("#categoryName").find('p').append("<d> " + $(this).find('button').html() + "</d>");
                         });                
-
                     });
                 });                             
             });
@@ -217,6 +168,7 @@
         $("#mp-cover1").hover(
             function () {
                 $(this).hide();
+                $('.mp-follows').hide();
             }
         );
         $("#mp-cover2").hover(
@@ -231,9 +183,16 @@
             function () {
                 if ($(window).width() > 640) {
                     $("#mp-cover1").show();
+                    $('.mp-follows').show();
                 }
             }
         );
+       
+        $('.mp-events').find('.mp-event').each(function () {
+            $(this).click(function () {
+                window.location.assign(window.location.protocol + '//' + window.location.host + "/wydarzenie/" + $(this).find('#mpEventId').val() + "/" + $(this).find('#mpEventName').val());
+            });
+        });
 
         $('.mp-event').hover(
             function () {

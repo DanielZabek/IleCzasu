@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IleCzasu.Infrastructure;
-using IleCzasu.Domain.Entities;
+using IleCzasu.Data.Entities;
 namespace IleCzasu.Services
 {
     public class InfoService : IInfoService

@@ -15,11 +15,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Hangfire;
 using IleCzasu.Controllers;
-using IleCzasu.Domain.Entities;
+using IleCzasu.Data.Entities;
 using IleCzasu.Infrastructure;
 using MediatR;
 using System.Reflection;
 using IleCzasu.Application.Events.Queries;
+using IleCzasu.Application.Services;
+using IleCzasu.Application.Interfaces;
 
 namespace IleCzasu
 {
@@ -88,11 +90,12 @@ namespace IleCzasu
             services.AddScoped<IInfoService, InfoService>();
             services.AddScoped<IEventsUpdater, EventsUpdater>();
             services.AddTransient<IEmailSender, EmailSender>();
-          
+            services.AddScoped<IPublicEventService, PublicEventService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IStatisticsUpdater statisticsUpdater, IReminder reminder, IInfoService infoService, IEventsUpdater eventsUpdater, IEmailSender emailSender)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IStatisticsUpdater statisticsUpdater, IReminder reminder, IInfoService infoService, IEventsUpdater eventsUpdater, IEmailSender emailSender, IPublicEventService publicEventService)
         {
             var options = new RewriteOptions()
             .AddRedirectToHttps();
@@ -124,7 +127,7 @@ namespace IleCzasu
 
                 routes.MapRoute(
                 name: "categoryView",
-                template: "Kategoria/{categoryName}",
+                template: "Kategoria/{categoryId}/{categoryName}",
                  defaults: new { controller = "PublicEvents", action = "CategoryView" });
 
                 routes.MapRoute(

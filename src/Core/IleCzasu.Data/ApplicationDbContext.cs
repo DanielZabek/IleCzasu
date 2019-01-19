@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using IleCzasu.Domain.Entities;
+using IleCzasu.Data.Entities;
 
-namespace IleCzasu.Infrastructure
+namespace IleCzasu.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

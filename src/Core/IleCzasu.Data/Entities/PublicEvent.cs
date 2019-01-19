@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace IleCzasu.Domain.Entities
+namespace IleCzasu.Data.Entities
 {
     public class PublicEvent
     {

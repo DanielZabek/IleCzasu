@@ -1,21 +1,21 @@
-﻿@model List<Category>
+﻿@model List<IleCzasu.Data.Entities.Category>
 
     @foreach (var c in Model)
     {
         if (c.ParentCategoryId == 1)
         {
 
-            <div class="col-@(12/Model.Count) subCategory" style=" border-bottom: 0px solid #ffd966"><input id="subCategoryId" type="hidden" value="@c.CategoryId" /><button style="color:#ffd966">@c.Name</button></div>
+            <div class="col-@(12/Model.Count) subCategory" style=" border-bottom: 0px solid #ffd966; border-top: 1px solid #231d1d"><input id="subCategoryId" type="hidden" value="@c.CategoryId" /><button style="color:#ffd966">@c.Name</button></div>
         }
         if (c.ParentCategoryId == 3)
         {
 
-            <div class="col-@(12/Model.Count) subCategory" style=" border-bottom: 0px solid #66d1ff" ><input id="subCategoryId" type="hidden" value="@c.CategoryId" /><button style="color:#66d1ff">@c.Name</button></div>
+            <div class="col-@(12/Model.Count) subCategory" style=" border-bottom: 0px solid #66d1ff;border-top: 1px solid #231d1d"><input id="subCategoryId" type="hidden" value="@c.CategoryId" /><button style="color:#66d1ff">@c.Name</button></div>
         }
         if (c.ParentCategoryId == 7)
         {
 
-            <div class="col-@(12/Model.Count) subCategory" style="border-bottom: 0px solid #9c66ff; "><input id="subCategoryId" type="hidden" value="@c.CategoryId" /><button style="color:#9c66ff">@c.Name</button></div>
+            <div class="col-@(12/Model.Count) subCategory" style="border-bottom: 0px solid #9c66ff; border-top: 1px solid #231d1d"><input id="subCategoryId" type="hidden" value="@c.CategoryId" /><button style="color:#9c66ff">@c.Name</button></div>
         }
 
     }

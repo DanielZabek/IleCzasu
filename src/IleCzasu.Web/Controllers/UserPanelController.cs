@@ -1,31 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using IleCzasu.Domain.Entities;
-using IleCzasu.Infrastructure;
+using IleCzasu.Data.Entities;
 using IleCzasu.Models.ViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using SixLabors.ImageSharp;
 using SixLabors.Primitives;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Formats.Png;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using IleCzasu.Extensions;
 using System.Security.Claims;
-using System.Net;
-using HtmlAgilityPack;
-using System.Text;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using MediatR;
-using IleCzasu.Application.Models;
 using IleCzasu.Application.Events.Queries;
+using IleCzasu.Data;
 
 namespace IleCzasu.Controllers
 {

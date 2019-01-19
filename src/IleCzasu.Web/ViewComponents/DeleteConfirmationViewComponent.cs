@@ -1,4 +1,4 @@
-﻿using IleCzasu.Domain.Entities;
+﻿using IleCzasu.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

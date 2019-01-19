@@ -1486,21 +1486,15 @@ line-height: 18px !important;
     }
 
 #loading {
-    display: none;
-    width: 200px;
-    height:120px;
-    background-color: rgba(51, 43, 43, 0.9);
-    color: #E0A22F;
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
+    margin-left: 10px !important;
+    margin-right: 320px !important;
+    width: auto;
+    background-color: none;
+    color: #b2b2b2;
     z-index: 99;
     padding: 50px;
     text-align: center;
-
+    font-size: 25px;
 }
 .mp-events {
     display: none;
@@ -1520,7 +1514,7 @@ line-height: 18px !important;
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0,0,0,0.7);
     z-index: 3;
 }
 
@@ -2738,7 +2732,7 @@ line-height: 18px !important;
         background-color: #332B2B;
         text-transform: uppercase;
         color: white !important;
-        height: 30px;
+        height: 40px;
         cursor: pointer;
     }
     .subCategories div {
@@ -3069,13 +3063,17 @@ button {
 #category10 {
     background-color: white;
 }
-.mp-follows{
-   width: 100%;
-    position:absolute;
-    bottom:0;
-    left:0;
-    right:0;
-    margin:auto;
+.mp-follows {
+  
+    position: absolute;
+    top: 0;
+    left: 10px;
+   text-align:left;
+    background-color: none;
+    font-size: 20px;
+    color: #E4572E;
+    z-index: 4;
+   
 }
     .mp-follows .follow-button {
        background-color: rgba(51, 43, 43, 0.8) !important;
@@ -3762,6 +3760,10 @@ button {
     .userDropdown{
         display:none;
     }
+    .eventd {
+        margin-right: 310px;
+       
+    }
     .eventd-similar{
         width:240px;
     } 
@@ -3907,6 +3909,10 @@ button {
         }
     }
     @media (max-width: 720px) {
+        .eventd {
+            margin-right: 0px;
+            margin-left: 0px;
+        }
         .eventd-similar{
             display:none;
         }
@@ -4293,7 +4299,7 @@ button {
         #commentButton {
             font-size: 12px;
         }
-
+  
         .eventd-img {
             width: 100%;
             order: 1;
@@ -4449,9 +4455,13 @@ button {
         .create-box {
             width: 100%;
         }
+    
     }
 
     @media (max-width: 480px) {
+        .subCategories button {
+            font-size: 11px !important;
+        }
         #categoryName {
         }
  

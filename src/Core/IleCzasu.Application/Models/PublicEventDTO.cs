@@ -1,5 +1,5 @@
 ﻿using IleCzasu.Application.Models;
-using IleCzasu.Domain.Entities;
+using IleCzasu.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -48,14 +48,14 @@
                     <a target="_blank" href="@Model.PublicEvent.Url">
                         <i class="fas fa-ticket-alt"></i> <d>@Model.PublicEvent.Price zł</d>
                     </a>
-                    <form style="display:inline-block" action="@Model.PublicEvent.Url"><button type="submit"> BILETY </button></form>
+                    <form style="display:inline-block" action="@Model.PublicEvent.Url"><button type="submit"> ZAMÓW </button></form>
                 </div>
             }
 
 
         </div>
         <div class="eventd-info-col">
-            <div class="eventd-info-col">
+          
                 @foreach (var e in Model.PublicEvent.TagEvents)
             {
                 if (lastTagTypeName == e.Tag.TagType.Name)
@@ -68,7 +68,7 @@
                     }
                     lastTagTypeName = e.Tag.TagType.Name;
                 }
-            </div>
+          
 
         </div>
     </div>

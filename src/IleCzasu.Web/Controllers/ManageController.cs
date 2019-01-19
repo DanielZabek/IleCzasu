@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using IleCzasu.Domain.Entities;
+using IleCzasu.Data.Entities;
 using IleCzasu.Models.ManageViewModels;
 using IleCzasu.Services;
 

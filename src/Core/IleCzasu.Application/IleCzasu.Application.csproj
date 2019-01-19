@@ -14,8 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IleCzasu.Infrastructure\IleCzasu.Infrastructure.csproj" />
-    <ProjectReference Include="..\IleCzasu.Domain\IleCzasu.Domain.csproj" />
+    <ProjectReference Include="..\IleCzasu.Data\IleCzasu.Data.csproj" />
   </ItemGroup>
 
 </Project>

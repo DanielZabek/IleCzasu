@@ -1,136 +1,62 @@
-﻿@model List<PublicEvent>
+﻿@model IleCzasu.Data.Entities.Category
 
-<div class="subcategories"></div>
-    <div class="sort-bar row">
-        <div class="row sortRow">
-            <i class="fas fa-sort-amount-up"></i>
-            <i class="fas fa-sort" id="sortIcon"></i>
-            <select id="orderType" class="custom-select">
-                <option value="date">Data</option>
-                <option value="name">Nazwa</option>
-                <option value="popularity">Popularność</option>
-            </select>
-            <button id="desc">
-                <i class="fas fa-angle-down"></i>
-            </button>
-            <button id="notDesc" class="active">
-                <i class="fas fa-angle-up"></i>
-            </button>
-        </div>
-
-        <div id="catName" class="row">
-            <p>
-                @switch (ViewData["CategoryId"])
-                {
-                    case 1:
-                        <i class="fas fa-film"></i>
-
-                        break;
-                    case 2:
-                        <i class="icon-theatre"></i>
-
-                        break;
-                    case 3:
-                        <i class="fas fa-music"></i>
-                        break;
-                    case 4:
-                        <i class="far fa-grin-squint-tears"></i>
-
-                        break;
-                    case 5:
-                        <i class="fas fa-book"></i>
-                        break;
-                    case 6:
-                        <i class="fas fa-futbol"></i>
-
-                        break;
-                    case 7:
-                        <i class="fas fa-laptop"></i>
-                        break;
-                    case 8:
-                        <i class="fas fa-certificate"></i>
-                        break;
-                    case 9:
-                        <i class="fas fa-archive"></i>
-                        break;
-
-                    default:
-                        <i class="fas fa-archive"></i>
-                        break;
-                }
-                @ViewData["CategoryName"]
-            </p>
-        </div>
-        <div class="datepickerRow">
-            <i class="far fa-calendar-alt"></i><input type='text' placeholder="Przedział czasowy.." class="datepicker-here datepickerInput" data-language='pl' data-range="true" data-multiple-dates-separator=" - " data-toggleSelected="true" data-time-format='hh:ii' data-position="bottom right" />
-            <i class="fas fa-map-marker-alt"></i><input id="citiesAutocomplete" placeholder="Miasto..">
-        </div>
-        <div class="view-bar">
-            <button id="listView"><i class="fas fa-th-list"></i></button>
-            <button id="tilesView"><i class="fas fa-th-large"></i></button>
-        </div>
+<div class="subCategories row"></div>
+<div id="categoryName" class="row"><p><i class="@Model.IconClass"></i><d> @Model.Name</d></p></div>
+<div class="sort-bar row">
+    <div class="datepickerRow">
+        <i class="far fa-calendar-alt"></i><input type='text' placeholder="Przedział czasowy.." class="datepicker-here datepickerInput" data-language='pl' data-range="true" data-multiple-dates-separator=" - " data-toggleSelected="true" data-time-format='hh:ii' data-position="bottom right" />
+        <i class="fas fa-map-marker-alt"></i><input id="citiesAutocomplete" placeholder="Miasto..">
     </div>
+    <div class="view-bar">
+        <button id="sortByFollows"><i class="fas fa-fire"></i></button>
+        <button id="sortByDate" class="icon-active"><i class="fas fa-clock"></i></button>
+        @*<button id="tilesView"><i class="fas fa-th-large"></i></button>*@
+    </div>
+</div>
+
+
 <div class="most-popular-tags"></div>
-    <div class="row events list-events" id="events">
-    </div>
-    @section Scripts {
-        <script>
-        $("#listView").click(function () {
-            $(".events").addClass("list-events");
-            $(".events").find(".event").each(function () {
-                $(this).addClass("list-event");
-            });
-
-        });
-        $("#tilesView").click(function () {
-            $(".events").removeClass("list-events");
-            $(".events").find(".event").each(function () {
-                $(this).removeClass("list-event");
-            });
-
-        });
-        var catId = @ViewData["CategoryId"];
-        datepickerHelper(catId);
-        getCities(catId);
-        sort(catId);
-        showEvents(catId);
-        $('.most-popular-tags').load("/Home/ShowMostPopularTags", { categoryId: catId });
-        $.ajax({
-            url: "/Home/ShowSubcategories/",
-            type: 'POST',
-            data: {
-                categoryId: catId
-            },
-            success: function (result) {
-                $(".subcategories").html(result);
-            },
-            error: function () {
-
-            },
-            complete: function () {
-                $('.subCat').each(function () {
+<div class="row events list-events" id="events">
 
 
-                    $(this).click(function () {
+</div>
+<div id="loading">Ładowanie...</div>
 
-                        catId = $(this).find('#subCatId').val();
-                        $('.most-popular-tags').load("/Home/ShowMostPopularTags", { categoryId: catId });
-                        showEvents({ sortType: $("#orderType").val() + desc, categoryId: catId });
-                        var i = $("#catName").find('i');
-                        $("#catName").html('<p></p>');
-                        $("#catName").find('p').append(i);
-                        $("#catName").find('p').append(" " + $(this).find('button').html());
+@section Scripts {
+    <script>
+
+      categoryId = @Model.CategoryId;
+      showEvents();
+
+     $(window).scroll(function () {
+        if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+            $('#loading').show();
+            showNextEvents();
+        }
+     });
+     $('.most-popular-tags').load("/PublicEvents/ShowMostPopularTags", { categoryId: categoryId });
+     $.ajax({
+        url: "/PublicEvents/ShowSubcategories/",
+        type: 'POST',
+        data: { categoryId: categoryId },
+        success: function (result) {
+            $(".subCategories").html(result);
+        },
+        error: function () { },
+        complete: function () {
+            $('.subCategory').each(function () {
+                $(this).click(function () {
+                    categoryId = $(this).find('#subCategoryId').val();
+                        $('.most-popular-tags').load("/PublicEvents/ShowMostPopularTags", { categoryId: categoryId });
+                        showEvents();
+                        var i = $("#categoryName").find('i');
+                        $("#categoryName").html('<p></p>');
+                        $("#categoryName").find('p').append(i);
+                        $("#categoryName").find('p').append("<d> " + $(this).find('button').html() + "</d>");
                         shown = 30;
                     });
                 });
             }
         });
-
-        jQuery(document).ready(function () {
-
-
-         });
-
-
-        </script>
-    }
+    </script>
+}

@@ -33,8 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\IleCzasu.Application\IleCzasu.Application.csproj" />
-    <ProjectReference Include="..\Core\IleCzasu.Domain\IleCzasu.Domain.csproj" />
-    <ProjectReference Include="..\IleCzasu.Infrastructure\IleCzasu.Infrastructure.csproj" />
+    <ProjectReference Include="..\Core\IleCzasu.Data\IleCzasu.Data.csproj" />
   </ItemGroup>
 
 </Project>

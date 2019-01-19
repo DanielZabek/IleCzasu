@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IleCzasu.Domain.Entities;
+﻿using System.Collections.Generic;
 using IleCzasu.Application.Models;
+using IleCzasu.Data.Entities;
 
 namespace IleCzasu.Models.ViewModels
 {
     public class EventViewModel
     {
         public PublicEventDTO PublicEvent { get; set; }
-        public List<SimilarEventModel> SimilarEvents { get; set; }
+        public IEnumerable<SimilarEventModel> SimilarEvents { get; set; }
     }
 }

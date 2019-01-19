@@ -1,6 +1,6 @@
 using System;
 
-namespace IleCzasu.Domain.Entities
+namespace IleCzasu.Data.Entities
 {
     public class ErrorViewModel
     {

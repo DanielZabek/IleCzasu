@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace IleCzasu.Domain.Entities
+namespace IleCzasu.Data.Entities
 {
     public class Comment
     {

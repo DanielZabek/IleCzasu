@@ -1,4 +1,4 @@
-﻿using IleCzasu.Domain.Entities;
+﻿using IleCzasu.Data.Entities;
 using System;
 using System.Linq.Expressions;
 

@@ -6,22 +6,23 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using IleCzasu.Data;
 
 namespace IleCzasu.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181130004128_AddedIconClassToCategory")]
-    partial class AddedIconClassToCategory
+    [Migration("20181124122228_AddedNumberOfEventtoCategory")]
+    partial class AddedNumberOfEventtoCategory
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.2.0-preview3-35497")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -76,13 +77,11 @@ namespace IleCzasu.Infrastructure.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.Category", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.Category", b =>
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("IconClass");
 
                     b.Property<string>("Name");
 
@@ -97,7 +96,7 @@ namespace IleCzasu.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.City", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.City", b =>
                 {
                     b.Property<int>("CityId")
                         .ValueGeneratedOnAdd()
@@ -112,7 +111,7 @@ namespace IleCzasu.Infrastructure.Migrations
                     b.ToTable("Cities");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.Comment", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.Comment", b =>
                 {
                     b.Property<int>("CommentId")
                         .ValueGeneratedOnAdd()
@@ -122,9 +121,9 @@ namespace IleCzasu.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreationDate");
 
-                    b.Property<int>("Points");
+                    b.Property<int>("EventId");
 
-                    b.Property<int>("PublicEventId");
+                    b.Property<int>("Points");
 
                     b.Property<int?>("ReplyToId");
 
@@ -132,7 +131,7 @@ namespace IleCzasu.Infrastructure.Migrations
 
                     b.HasKey("CommentId");
 
-                    b.HasIndex("PublicEventId");
+                    b.HasIndex("EventId");
 
                     b.HasIndex("ReplyToId");
 
@@ -141,7 +140,7 @@ namespace IleCzasu.Infrastructure.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.CommentLike", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.CommentLike", b =>
                 {
                     b.Property<int>("CommentLikeId")
                         .ValueGeneratedOnAdd()
@@ -162,26 +161,56 @@ namespace IleCzasu.Infrastructure.Migrations
                     b.ToTable("CommentLikes");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.Follow", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.Event", b =>
+                {
+                    b.Property<int>("EventId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
+                    b.Property<DateTime>("EndDate");
+
+                    b.Property<string>("ImagePath");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Place");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("EventId");
+
+                    b.ToTable("Events");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Event");
+                });
+
+            modelBuilder.Entity("IleCzasu.Data.Entities.Follow", b =>
                 {
                     b.Property<int>("FollowId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("PublicEventId");
+                    b.Property<int>("EventId");
 
                     b.Property<string>("UserId");
 
                     b.HasKey("FollowId");
 
-                    b.HasIndex("PublicEventId");
+                    b.HasIndex("EventId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Follows");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.InfoCategory", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.InfoCategory", b =>
                 {
                     b.Property<int>("InfoCategoryId")
                         .ValueGeneratedOnAdd()
@@ -194,7 +223,7 @@ namespace IleCzasu.Infrastructure.Migrations
                     b.ToTable("InfoCategories");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.InfoForModerators", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.InfoForModerators", b =>
                 {
                     b.Property<int>("InfoForModeratorsId")
                         .ValueGeneratedOnAdd()
@@ -211,7 +240,7 @@ namespace IleCzasu.Infrastructure.Migrations
                     b.ToTable("InfoForModerators");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.Note", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.Note", b =>
                 {
                     b.Property<int>("NoteId")
                         .ValueGeneratedOnAdd()
@@ -230,69 +259,7 @@ namespace IleCzasu.Infrastructure.Migrations
                     b.ToTable("Notes");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.PrivateEvent", b =>
-                {
-                    b.Property<int>("PrivateEventId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description");
-
-                    b.Property<DateTime>("EndDate");
-
-                    b.Property<string>("ImagePath");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Place");
-
-                    b.Property<int>("Repeatable");
-
-                    b.Property<DateTime>("StartDate");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("PrivateEventId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PrivateEvents");
-                });
-
-            modelBuilder.Entity("IleCzasu.Domain.Entities.PublicEvent", b =>
-                {
-                    b.Property<int>("PublicEventId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CategoryId");
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<string>("Description");
-
-                    b.Property<int>("Follows");
-
-                    b.Property<string>("ImagePath");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Place");
-
-                    b.Property<double>("Price");
-
-                    b.Property<string>("Promotor");
-
-                    b.Property<string>("Url");
-
-                    b.HasKey("PublicEventId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("PublicEvents");
-                });
-
-            modelBuilder.Entity("IleCzasu.Domain.Entities.ReminderSetting", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.ReminderSetting", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -313,7 +280,7 @@ namespace IleCzasu.Infrastructure.Migrations
                     b.ToTable("ReminderSettings");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.Statistic", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.Statistic", b =>
                 {
                     b.Property<int>("StatisticId")
                         .ValueGeneratedOnAdd()
@@ -328,7 +295,7 @@ namespace IleCzasu.Infrastructure.Migrations
                     b.ToTable("Statistics");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.Tag", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.Tag", b =>
                 {
                     b.Property<int>("TagId")
                         .ValueGeneratedOnAdd()
@@ -347,26 +314,26 @@ namespace IleCzasu.Infrastructure.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.TagEvent", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.TagEvent", b =>
                 {
                     b.Property<int>("TagEventId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("PublicEventId");
+                    b.Property<int>("EventId");
 
                     b.Property<int>("TagId");
 
                     b.HasKey("TagEventId");
 
-                    b.HasIndex("PublicEventId");
+                    b.HasIndex("EventId");
 
                     b.HasIndex("TagId");
 
                     b.ToTable("TagEvents");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.TagType", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.TagType", b =>
                 {
                     b.Property<int>("TagTypeId")
                         .ValueGeneratedOnAdd()
@@ -493,99 +460,115 @@ namespace IleCzasu.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.Category", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.PrivateEvent", b =>
                 {
-                    b.HasOne("IleCzasu.Domain.Entities.Category", "ParentCategory")
+                    b.HasBaseType("IleCzasu.Data.Entities.Event");
+
+                    b.Property<int>("Repeatable");
+
+                    b.HasIndex("UserId");
+
+                    b.HasDiscriminator().HasValue("PrivateEvent");
+                });
+
+            modelBuilder.Entity("IleCzasu.Data.Entities.PublicEvent", b =>
+                {
+                    b.HasBaseType("IleCzasu.Data.Entities.Event");
+
+                    b.Property<int>("CategoryId");
+
+                    b.Property<int>("Follows");
+
+                    b.Property<double>("TicketPrice");
+
+                    b.Property<string>("Url");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId")
+                        .HasName("IX_Events_UserId1");
+
+                    b.HasDiscriminator().HasValue("PublicEvent");
+                });
+
+            modelBuilder.Entity("IleCzasu.Data.Entities.Category", b =>
+                {
+                    b.HasOne("IleCzasu.Data.Entities.Category", "ParentCategory")
                         .WithMany("SubCategories")
                         .HasForeignKey("ParentCategoryId");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.Comment", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.Comment", b =>
                 {
-                    b.HasOne("IleCzasu.Domain.Entities.PublicEvent", "Event")
+                    b.HasOne("IleCzasu.Data.Entities.PublicEvent", "Event")
                         .WithMany("Comments")
-                        .HasForeignKey("PublicEventId")
+                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("IleCzasu.Domain.Entities.Comment")
+                    b.HasOne("IleCzasu.Data.Entities.Comment")
                         .WithMany("Replies")
                         .HasForeignKey("ReplyToId");
 
-                    b.HasOne("IleCzasu.Domain.Entities.ApplicationUser", "User")
+                    b.HasOne("IleCzasu.Data.Entities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.CommentLike", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.CommentLike", b =>
                 {
-                    b.HasOne("IleCzasu.Domain.Entities.Comment", "Comment")
+                    b.HasOne("IleCzasu.Data.Entities.Comment", "Comment")
                         .WithMany()
                         .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("IleCzasu.Domain.Entities.ApplicationUser", "User")
+                    b.HasOne("IleCzasu.Data.Entities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.Follow", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.Follow", b =>
                 {
-                    b.HasOne("IleCzasu.Domain.Entities.PublicEvent", "Event")
+                    b.HasOne("IleCzasu.Data.Entities.PublicEvent", "Event")
                         .WithMany()
-                        .HasForeignKey("PublicEventId")
+                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("IleCzasu.Domain.Entities.ApplicationUser", "User")
+                    b.HasOne("IleCzasu.Data.Entities.ApplicationUser", "User")
                         .WithMany("UserFollows")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.Note", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.Note", b =>
                 {
-                    b.HasOne("IleCzasu.Domain.Entities.ApplicationUser", "User")
+                    b.HasOne("IleCzasu.Data.Entities.ApplicationUser", "User")
                         .WithMany("UserNotes")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.PrivateEvent", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.Tag", b =>
                 {
-                    b.HasOne("IleCzasu.Domain.Entities.ApplicationUser", "User")
-                        .WithMany("UserEvents")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("IleCzasu.Domain.Entities.PublicEvent", b =>
-                {
-                    b.HasOne("IleCzasu.Domain.Entities.Category", "Category")
-                        .WithMany("Events")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("IleCzasu.Domain.Entities.Tag", b =>
-                {
-                    b.HasOne("IleCzasu.Domain.Entities.TagType", "TagType")
+                    b.HasOne("IleCzasu.Data.Entities.TagType", "TagType")
                         .WithMany("Tags")
                         .HasForeignKey("TagTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.TagEvent", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.TagEvent", b =>
                 {
-                    b.HasOne("IleCzasu.Domain.Entities.PublicEvent", "Event")
-                        .WithMany("TagEvents")
-                        .HasForeignKey("PublicEventId")
+                    b.HasOne("IleCzasu.Data.Entities.PublicEvent", "Event")
+                        .WithMany("Tags")
+                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("IleCzasu.Domain.Entities.Tag", "Tag")
+                    b.HasOne("IleCzasu.Data.Entities.Tag", "Tag")
                         .WithMany()
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("IleCzasu.Domain.Entities.TagType", b =>
+            modelBuilder.Entity("IleCzasu.Data.Entities.TagType", b =>
                 {
-                    b.HasOne("IleCzasu.Domain.Entities.Category")
+                    b.HasOne("IleCzasu.Data.Entities.Category")
                         .WithMany("TagTypes")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -601,7 +584,7 @@ namespace IleCzasu.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("IleCzasu.Domain.Entities.ApplicationUser")
+                    b.HasOne("IleCzasu.Data.Entities.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -609,7 +592,7 @@ namespace IleCzasu.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("IleCzasu.Domain.Entities.ApplicationUser")
+                    b.HasOne("IleCzasu.Data.Entities.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -622,7 +605,7 @@ namespace IleCzasu.Infrastructure.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("IleCzasu.Domain.Entities.ApplicationUser")
+                    b.HasOne("IleCzasu.Data.Entities.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -630,10 +613,30 @@ namespace IleCzasu.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("IleCzasu.Domain.Entities.ApplicationUser")
+                    b.HasOne("IleCzasu.Data.Entities.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("IleCzasu.Data.Entities.PrivateEvent", b =>
+                {
+                    b.HasOne("IleCzasu.Data.Entities.ApplicationUser", "User")
+                        .WithMany("UserEvents")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("IleCzasu.Data.Entities.PublicEvent", b =>
+                {
+                    b.HasOne("IleCzasu.Data.Entities.Category", "Category")
+                        .WithMany("Events")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("IleCzasu.Data.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_Events_AspNetUsers_UserId1");
                 });
 #pragma warning restore 612, 618
         }

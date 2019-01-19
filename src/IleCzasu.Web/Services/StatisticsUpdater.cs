@@ -7,8 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using IleCzasu.Domain.Entities;
+using IleCzasu.Data.Entities;
 using IleCzasu.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace IleCzasu.Services
 {
@@ -30,43 +31,31 @@ namespace IleCzasu.Services
                 StreamReader reader = new StreamReader(response.GetResponseStream());
                 apiResponse = reader.ReadToEnd();
             }
-            var categories = _context.Categories.ToList();
-
-
+            var categories = _context.Categories
+                .Include(c => c.SubCategories)
+                .ToList();
 
             foreach (var c in categories)
             {
-                var categoriesId = from x in _context.Categories
-                          .Where(x => x.CategoryId == c.CategoryId || x.ParentCategoryId == c.CategoryId)
-                                   select x.CategoryId;
-
-                if (_context.Statistics.Where(s => s.Name == c.Name).Count() == 0)
-                {
-                    var stat = new Statistic { Name = c.Name, Value = _context.PublicEvents.Where(e => categoriesId.Contains(e.CategoryId) && e.Date.Date >= DateTime.Now.Date).Count() };
-                    _context.Statistics.Add(stat);
-                    _context.SaveChanges();
-                    if (c.CategoryId == 10)
-                    {
-                        stat = new Statistic { Name = c.Name, Value = _context.PublicEvents.Where(e => e.Date.Date >= DateTime.Now.Date).Count() };
-                        _context.Statistics.Add(stat);
-                    }
-
-                } else if(_context.Statistics.Where(s => s.Name == c.Name).Count() == 1)
-                {
-                    var stat = _context.Statistics.SingleOrDefault(s => s.Name == c.Name);
-                    stat.Value = _context.PublicEvents.Where(e => e.Date.Date >= DateTime.Now.Date && categoriesId.Contains(e.CategoryId)).Count();
-                    _context.Update(stat);
-                    if (c.CategoryId == 10)
-                    {
-                        stat.Value = _context.PublicEvents.Where(e => e.Date.Date >= DateTime.Now.Date).Count();
-                        _context.Update(stat);
-                    }
-                }
-                _context.SaveChanges();
+                c.NumberOfEvents = _context.PublicEvents.Where(e => e.Date.Date >= DateTime.Now.Date && e.CategoryId == c.CategoryId).Count();
+                _context.Update(c);
             }
+            foreach (var c in categories)
+            {
+                if(c.SubCategories != null)
+                {
+                    foreach(var sub in c.SubCategories)
+                    {
+                        c.NumberOfEvents += sub.NumberOfEvents;
+                    }
+                    _context.Update(c);
+                }
+            }
+            _context.SaveChanges();
+        
 
             return Task.CompletedTask;
         }
-  
-    }
+
+}
 }

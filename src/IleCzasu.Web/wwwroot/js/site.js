@@ -4,22 +4,25 @@ let categoryId = '0';
 let sortBy = 'date';
 let pageNumber = '1';
 let pageSize = '25';
+let isBusy = false;
 
 function showEvents() {
    
     $.ajax({
-        url: "PublicEvents/ShowEvents",
+        url: "/PublicEvents/ShowEvents",
         type: 'GET',
         data: {
             sortBy: sortBy, categoryId: categoryId, date: $(".datepickerInput").val(), city: city
         },
         success: function (result) {
             $("#events").html(result);
-            $(".errorLabel").html("");   
+            $(".errorLabel").html("");
+            isBusy = false;
         },
         error: function () {
         },
-        complete: function () {         
+        complete: function () {    
+            $('#loading').hide();
             countdown();                  
         }
     }); 
@@ -40,8 +43,8 @@ function countdown() {
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
         var interval = 1000;       
-        $(this).click(function () {               
-            window.location.href = "https://localhost:44350/" + id + "/" + name;       
+        $(this).click(function () {         
+            window.location.assign(window.location.protocol + '//' + window.location.host + "/wydarzenie/" + id + "/" + name);       
         });
         $(".shop-list").click(function (evnt) {
             evnt.stopPropagation();
@@ -144,7 +147,7 @@ function getCities() {
     var isCity = false;
     var cities = []; 
 
-    $.getJSON("/Home/GetCities", function (data) {
+    $.getJSON("/PublicEvents/GetCities", function (data) {
 
         $.each(data, function (i, city) {
             cities.push({ label: city, value: city });
@@ -157,6 +160,9 @@ function getCities() {
         select: function (event, ui) {    
             city = ui.item.value;
             isCity = true;
+            $("#events").html("");
+            $('#loading').show();
+            isBusy = true;
             showEvents();
             $('#citiesAutocomplete').blur();
         }            
@@ -210,17 +216,15 @@ function datepickerHelper() {
 
 function showNextEvents() {
     pageNumber++;
-    if($(".errorLabel").html() !== "BRAK WYDARZEŃ"){
+    if ($(".errorLabel").html() !== "BRAK WYDARZEŃ" && !isBusy) {
     $.ajax({
         url: "/PublicEvents/ShowEvents/",
         type: 'GET',
         data: {
             sortBy: sortBy, categoryId: categoryId, date: $(".datepickerInput").val(), city: city, pageNumber: pageNumber, pageSize: pageSize
         },
-        success: function (result) {
-           
-                $("#events").append(result);
-       
+        success: function (result) {          
+                $("#events").append(result);   
         },
         error: function () {
          
@@ -251,7 +255,7 @@ function showNextEvents() {
         }
     });
     } else {
-        $('#loading').hide();
+        
     }
  
 }

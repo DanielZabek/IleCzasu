@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IleCzasu.Domain.Entities;
-
+﻿using System.Collections.Generic;
+using IleCzasu.Data.Entities;
 namespace IleCzasu.Models.ViewModels
 {
     public class ShowEventsViewModel

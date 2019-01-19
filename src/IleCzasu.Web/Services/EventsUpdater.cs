@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using IleCzasu.Infrastructure;
-using IleCzasu.Domain.Entities;
+using IleCzasu.Data.Entities;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
