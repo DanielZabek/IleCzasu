@@ -26,13 +26,10 @@ namespace IleCzasu.Controllers
 {
     public class PublicEventsController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IConfiguration Configuration;
         private IPublicEventService _publicEventService;
 
-        public PublicEventsController(ApplicationDbContext context, IPublicEventService publicEventService)
+        public PublicEventsController(IPublicEventService publicEventService)
         {
-            _context = context;
             _publicEventService = publicEventService;
         }
 
@@ -89,24 +86,9 @@ namespace IleCzasu.Controllers
             return ViewComponent("ShowSubcategories", await _publicEventService.GetCategories(categoryId));
         }
       
-        public IActionResult GetSearchResults(string input)
+        public async Task<IActionResult> GetSearchResults(string input)
         {
-            List<PublicEvent> model = new List<PublicEvent>();
-            var events = _context.PublicEvents.ToList();
-            foreach (var e in events)
-            {
-                var words = e.Name.Split(" ");
-
-                foreach (var w in words)
-                {
-                    if (w.ToLower().StartsWith(input.ToLower()))
-                    {
-                        model.Add(e);
-                    }
-                }
-
-            }
-            return ViewComponent("SearchResults", model);
+            return ViewComponent("SearchResults", await _publicEventService.GetPublicEventsByTerm(input));
         }
 
         public async Task<IActionResult> CategoryView(int categoryId, string categoryName)
@@ -135,10 +117,9 @@ namespace IleCzasu.Controllers
             return View(model);
         }     
 
-        public IActionResult ShowCitiesRanking()
+        public async Task<IActionResult> ShowCitiesRanking()
         {
-            var model = _context.Cities.OrderByDescending(c => c.NumberOfEvents).Take(6).ToList();
-            return ViewComponent("CitiesRanking", model);
+            return ViewComponent("CitiesRanking", await _publicEventService.GetCities());
         }
 
         public string GetWeather(double lat, double lon)
@@ -162,32 +143,6 @@ namespace IleCzasu.Controllers
         public IActionResult PolitykaPrywatnosci()
         {
             return View();
-        }
-
-        public bool NameValidation(string name)
-        {
-            var user = _context.Users.SingleOrDefault(u => u.UserName.ToUpper() == name.ToUpper().Trim());
-            if (user != null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        public bool EmailValidation(string email)
-        {
-            var user = _context.Users.SingleOrDefault(u => u.Email.ToUpper() == email.ToUpper().Trim());
-            if (user != null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
         }
    
     }

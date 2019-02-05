@@ -30,10 +30,11 @@ namespace IleCzasu.Application.Services
         public async Task DeletePublicEvent(int publicEventId)
         {
             var eventToRemove = await _context.PublicEvents.SingleOrDefaultAsync(pe => pe.PublicEventId == publicEventId);
-            if(eventToRemove != null){
+            if (eventToRemove != null)
+            {
                 _context.PublicEvents.Remove(await GetPublicEventById(publicEventId));
                 await _context.SaveChangesAsync();
-            }           
+            }
         }
 
         public async Task<PublicEventDTO> GetPublicEvent(int publicEventId, string userId = "")
@@ -135,9 +136,9 @@ namespace IleCzasu.Application.Services
                 if (!string.IsNullOrEmpty(userId))
                     pe.IsFollowed = await IsEventFollowed(pe.PublicEventId, userId);
                 else
-                    pe.IsFollowed = false;                   
+                    pe.IsFollowed = false;
             }
-           
+
             return publicEventsList;
         }
 
@@ -176,19 +177,24 @@ namespace IleCzasu.Application.Services
 
         public async Task<List<Category>> GetCategories(int? categoryId)
         {
-            if(categoryId != 0)
+            if (categoryId != 0)
                 return await _context.Categories.Where(c => c.ParentCategoryId == categoryId).ToListAsync();
             else
-                return await _context.Categories.Include(c => c.SubCategories).ToListAsync();         
+                return await _context.Categories.Include(c => c.SubCategories).ToListAsync();
         }
 
         public async Task<IEnumerable<string>> GetCities()
         {
-            return await _context.Cities.Select(c => c.Name).ToListAsync();         
+            return await _context.Cities.Select(c => c.Name).ToListAsync();
         }
         public async Task<Category> GetCategory(int categoryId)
         {
             return await _context.Categories.SingleOrDefaultAsync(c => c.CategoryId == categoryId);
+        }
+
+        public async Task<List<PublicEvent>> GetPublicEventsByTerm(string term)
+        {
+            return await _context.PublicEvents.Where(e => e.Date >= DateTime.Now && e.Name.Contains(term)).ToListAsync();
         }
 
         public async Task<IEnumerable<Tag>> GetPopularTags(int categoryId)
@@ -212,10 +218,10 @@ namespace IleCzasu.Application.Services
                     if (user.UserFollows.Select(e => e.PublicEventId).Contains(publicEventId))
                         return true;
                     else
-                        return false;                   
+                        return false;
                 }
             }
             return false;
-        } 
+        }
     }
 }

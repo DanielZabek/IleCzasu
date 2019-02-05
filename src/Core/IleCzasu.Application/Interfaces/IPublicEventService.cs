@@ -16,6 +16,7 @@ namespace IleCzasu.Application.Interfaces
         Task UpdatePublicEvent(PublicEvent publicEvent);
         Task DeletePublicEvent(int publicEventId);
         Task<IEnumerable<SimilarEventModel>> GetSimilarEvents(int publicEventId);
+        Task<List<PublicEvent>> GetPublicEventsByTerm(string term);
         Task<List<Category>> GetCategories(int? categoryId = 0);
         Task<Category> GetCategory(int categoryId);
         Task<IEnumerable<string>> GetCities();
