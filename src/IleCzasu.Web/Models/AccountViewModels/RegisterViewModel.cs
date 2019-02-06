@@ -20,11 +20,11 @@ namespace IleCzasu.Models.AccountViewModels
         [Required(ErrorMessage = "Pole Hasło jest wymagane.")]
         [StringLength(20, ErrorMessage = "Hasło musi zawierać minimum {2} i maksimum {1} znaków.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Hasło")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
+        [Display(Name = "Potwierdź hasło")]
         [Compare("Password", ErrorMessage = "Hasło i potwierdzenie muszą się zgadzać.")]
         public string ConfirmPassword { get; set; }
     }

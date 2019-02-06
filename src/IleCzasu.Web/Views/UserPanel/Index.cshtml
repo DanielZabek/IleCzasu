@@ -1,104 +1,83 @@
 ﻿@model IleCzasu.Models.ViewModels.UserPanelViewModel
 <div id="message"></div>
+<div class="row popup-bg">
+    <div class="popup-form">
+        <button class="delete-button" id="closeFormButton" style="position:absolute; right:5px; top:0"><i class="fas fa-times"></i></button>
+        <div class="window-label">Nowe przypomnienie</div>
+        <div style="margin-bottom:15px; margin-top:15px">
+            <label style="margin-top:5px;">KATEGORIA</label>
+            <select class="form-control" id="categoryId" style="width:130px; height:25px; font-size:14px; padding:0px; line-height:25px;  float:right;" asp-items="@(new SelectList(Model.Categories,"CategoryId","Name"))">
+                <option value="10" selected>Wszystkie</option>
+            </select>
+        </div>
+        <div style="margin-bottom:15px;">
+            <label>TYLKO PRYWATNE</label>
+            <input id="privateOnly" type="checkbox" style="float:right; margin-top:5px; margin-right:50px;" />
+        </div>
+        <div style="margin-bottom:15px;">
+            <label>DNI PRZED</label>
+            <div style="width:100%; width:100px; float:right; margin-top:-5px;"><button class="main-button2" style="margin-left:auto; display:inline;" id="dMinus">-</button><d id="numberOfDays">1</d><button id="dPlus" class="main-button2" style=" display:inline;">+</button> </div>
+        </div>
+        <button id="saveSettings" class="create-button">ZAPISZ</button>
+    </div>
+</div>
+
 <div class="row">
     <div class="user-panel-col">
-      
-
         <div class="user-panel-box">
             <div class="row user-panel-label">
                 <i class="fas fa-user-cog"></i>
                 KONFIGURACJA KONTA
             </div>
-            <div class="row" style="position:relative">
-                <div>                
-                    <img id="avatar" src="~/images/avatars/@Model.User.Avatar" width="100" height="100" />                
-
+            <div style="margin-bottom:10px; position:relative;">
+                <div class="user-panel-name" style="width:100%">
+                    <img src="~/images/avatars/@Model.User.Avatar" width="80" height="80" style="margin-right:10px">
+                    <div style="position:absolute; left:90px; top:0">
+                        @User.Identity.Name
+                        <div style="font-size:16px;" class="orange-text">
+                            @Model.User.Email
+                        </div>
+                    </div>
                     <div class="upload-btn-wrapper">
                         <button class="user-panel-avatarBtn"><i class="fas fa-edit"></i></button>
                         <input id="imageInput" name="Image" type="file" style="color:white;" accept="image/*" />
                     </div>
                 </div>
-                <div class="user-panel-name">@User.Identity.Name</div>
-              
+                <div style="position:absolute; right:0; top:0;">
+
+                    <div class="col-md-6" style=" margin: 0 !important; padding: 0 !important;">
+                        <form asp-controller="Account" asp-action="ForgotPassword" style="width:100%;">
+                            <button class="user-panel-option" type="submit">Zmień hasło</button>
+                        </form>
+                    </div>
+                </div>
+                <div>
+
+
+                </div>
             </div>
+
         </div>
         <div class="user-panel-box">
             <div class="row user-panel-label" style="position:relative">
                 <i class="fas fa-user-cog"></i>
-                PRZYPOMNIENIA <div class="user-panel-onof"><button id="remindOnBtn" style="margin-right:2px !important;">WŁ</button><button id="remindOffBtn">WYŁ</button></div>
+                PRZYPOMNIENIA <button class="clear-button" style="position:absolute; right:5px; color:white" id="openFormButton"><i class="fas fa-plus"></i></button>
             </div>
-            <div class="row">
-          
-                <div class="form-group">
-                    <label>KATEGORIA</label>
-                    <select class="form-control" id="categoryId" style="width:120px; margin-left:auto; margin-right:auto" asp-items="@(new SelectList(Model.Categories,"CategoryId","Name"))">
-                        <option value="10" selected>Wszystkie</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>TYLKO PRYWATNE</label>
-                    <input class="form-control" id="privateOnly" asp-for="@Model.Settings.PrivateOnly" type="checkbox" style="margin-top:10px;" />
-                </div>
-                <div class="form-group">
-                    <label>DNI PRZED</label>
-                    @if (Model.Settings != null)
-                    {
-                        <div class="row" style="width:100%; text-align:center;"><button class="main-button2" style="margin-left:auto;" id="dMinus">-</button><div id="numberOfDays">@Model.Settings.DaysBefore</div><button id="dPlus" class="main-button2" style="margin-right:auto">+</button> </div>
-
-                    }
-                    else
-                    {
-                        <div class="row" style="width:100%; text-align:center;"><button class="main-button2" style="margin-left:auto;" id="dMinus">-</button><div id="numberOfDays">1</div><button id="dPlus" class="main-button2" style="margin-right:auto">+</button> </div>
-
-                    }
-
-                </div>
-                
-                <button id="saveSettings"><i class="far fa-save"></i>ZAPISZ</button>
-                </div>
-        </div>
-    </div>
-    <div class="user-panel-col">
-        <div class="user-panel-box" style="position:relative">
-            <div class="row user-panel-label">MOJE WYDARZENIA (@Model.UserEvents.Count)<a asp-route="createEvent" class="table-link"><i class="fas fa-plus" style="position:absolute; right:5px;"></i></a></div>
             <table>
                 <tr>
-                    <th>Nazwa</th>
-                    <th>Data</th>
+                    <th>Kategoria</th>
+                    <th>Dni Przed</th>
                     <th></th>
                 </tr>
-                @foreach (var e in Model.UserEvents)
+                @foreach (var e in Model.Settings)
                 {
                     <tr class="event">
-                        <td style="width:60%;"><a asp-action="Event" asp-controller="Home" asp-route-id="@e.PrivateEventId" asp-route-name="@e.Name" class="table-link">@e.Name</a></td>
-                        <td style="width:20%; color:#827c7c;">@e.StartDate.ToString("dd.MM.yyyy")</td>
+                        <td style="width:60%;">@e.CategoryId</td>
+                        <td style="width:20%; color:#827c7c;">@e.DaysBefore</td>
                         <td style="text-align:right; width:20%">
-                            <a asp-action="Edit" asp-controller="UserPanel" asp-route-eventId="@e.PrivateEventId"><i class="fas fa-edit tEdit"></i></a>
+                            <a asp-action="Edit" asp-controller="UserPanel" asp-route-eventId="@e.CategoryId"><i class="fas fa-edit tEdit"></i></a>
                             <button class="delete-button"><i class="fas fa-trash-alt"></i></button>
-                            <input class="eventId" type="hidden" value="@e.PrivateEventId" />
-                        </td>
-                    </tr>
-
-                }
-            </table>
-        </div>
-        <div class="user-panel-box" style="position:relative">
-            <div class="row user-panel-label">MOJE NOTATKI (@Model.UserNotes.Count)<a asp-route="createEvent" class="table-link"><i class="fas fa-plus" style="position:absolute; right:5px;"></i></a></div>
-            <table>
-                <tr>
-                    <th>Notatka</th>
-                    <th>Data</th>
-                    <th></th>
-                </tr>
-                @foreach (var e in Model.UserNotes)
-                {
-                    <tr class="event">
-                        <td style="width:60%;">@e.NoteText</td>
-                        <td style="width:20%; color:#827c7c;">@e.Date.ToString("dd.MM.yyyy")</td>
-                        <td style="text-align:right; width:20%">
-                            
-                            <button class="delete-button"><i class="fas fa-trash-alt"></i></button>
-                         
+                            <input class="eventId" type="hidden" value="@e.CategoryId" />
                         </td>
                     </tr>
 
@@ -106,191 +85,235 @@
             </table>
         </div>
     </div>
+
+<div class="user-panel-col">
+    <div class="user-panel-box" style="position:relative">
+        <div class="row user-panel-label">MOJE WYDARZENIA (@Model.UserEvents.Count)<a asp-route="createEvent" class="table-link"><i class="fas fa-plus" style="position:absolute; right:5px;"></i></a></div>
+        <table>
+            <tr>
+                <th>Nazwa</th>
+                <th>Data</th>
+                <th></th>
+            </tr>
+            @foreach (var e in Model.UserEvents)
+            {
+                <tr class="event">
+                    <td style="width:60%;"><a asp-action="Event" asp-controller="Home" asp-route-id="@e.PrivateEventId" asp-route-name="@e.Name" class="table-link">@e.Name</a></td>
+                    <td style="width:20%; color:#827c7c;">@e.StartDate.ToString("dd.MM.yyyy")</td>
+                    <td style="text-align:right; width:20%">
+                        <a asp-action="Edit" asp-controller="UserPanel" asp-route-eventId="@e.PrivateEventId"><i class="fas fa-edit tEdit"></i></a>
+                        <button class="delete-button"><i class="fas fa-trash-alt"></i></button>
+                        <input class="eventId" type="hidden" value="@e.PrivateEventId" />
+                    </td>
+                </tr>
+
+            }
+        </table>
+    </div>
+    <div class="user-panel-box" style="position:relative">
+        <div class="row user-panel-label">MOJE NOTATKI (@Model.UserNotes.Count)<a asp-route="createEvent" class="table-link"><i class="fas fa-plus" style="position:absolute; right:5px;"></i></a></div>
+        <table>
+            <tr>
+                <th>Notatka</th>
+                <th>Data</th>
+                <th></th>
+            </tr>
+            @foreach (var e in Model.UserNotes)
+            {
+                <tr class="event">
+                    <td style="width:60%;">@e.NoteText</td>
+                    <td style="width:20%; color:#827c7c;">@e.Date.ToString("dd.MM.yyyy")</td>
+                    <td style="text-align:right; width:20%">
+
+                        <button class="delete-button"><i class="fas fa-trash-alt"></i></button>
+
+                    </td>
+                </tr>
+
+            }
+        </table>
+    </div>
+</div>
 </div>
 <div id="croppImage"></div>
 <input type="hidden" id="imageName" />
-<input type="hidden"  id="x" />
-<input type="hidden"  id="y" />
-<input type="hidden"  id="width" />
-<input type="hidden"  id="height" />
+<input type="hidden" id="x" />
+<input type="hidden" id="y" />
+<input type="hidden" id="width" />
+<input type="hidden" id="height" />
 
 @section Scripts {
     <script>
         var privateOnly = true;
         var active = true;
-         var categoryId = 10;
-         var days = parseInt($('#numberOfDays').html());
+        var categoryId = 10;
+    </script>
+    @if (Model.Settings != null)
+    {
+        <script>
+
         </script>
-          @if (Model.Settings != null)
-          {
-             <script>
-              privateOnly = @Json.Serialize(Model.Settings.PrivateOnly);
-              active = @Json.Serialize(Model.Settings.Active);
-              categoryId = @Model.Settings.CategoryId;
-            </script>
+    }
+
+    <script>
+        $('.event').each(function () {
+            var event = $(this);
+            var id = $(this).find('.eventId').val();
+            $(this).find('.delete-button').click(function () {
+                $.ajax({
+                    url: "/UserPanel/DeleteConfirmation/",
+                    type: 'POST',
+                    data: { eventId: id },
+                    success: function (result) {
+                        $('#message').html(result);
+                    },
+                    error: function () {
+                    },
+                    complete: function () {
+                        $('#deleteY').click(function () {
+                            $.ajax({
+                                url: "/UserPanel/Delete/",
+                                type: 'POST',
+                                data: { eventId: $('#deleteId').val() },
+                                success: function (result) {
+                                },
+                                error: function () {
+                                },
+                                complete: function () {
+                                    event.hide();
+                                    $('.message-background').remove();
+                                }
+                            });
+                        });
+
+                        $('#deleteN').click(function () {
+                            $('.message-background').remove();
+                        });
+                    }
+                });
+            });
+        });
+
+        $('#imageInput').change(function () {
+            var formData = new FormData();
+            formData.append('image', $('#imageInput')[0].files[0]); // myFile is the input type="file" control
+            $('#_imagePath').val("a" + $('#imageInput')[0].files[0].name);
+            $.ajax({
+                url: "/UserPanel/SaveAvatar/",
+                type: 'POST',
+                data: formData,
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,  // tell jQuery not to set contentType
+                success: function (result) {
+                    $("#croppImage").show();
+                    $("#croppImage").html(result);
+                },
+                error: function (jqXHR) {
+                },
+                complete: function (jqXHR, status) {
+                    $("#cropButton").click(function (e) {
+                        $("#croppImage").hide();
+                        $.ajax({
+                            url: "/UserPanel/CroppAvatar/",
+                            type: 'POST',
+                            data: { imageName: $("#imageName").val(), x: $("#x").val(), y: $("#y").val(), width: $("#width").val(), height: $("#height").val() },
+                            success: function (result) {
+                                document.getElementById("avatar").src = "/images/avatars/" + result;
+                            },
+                            error: function () {
+                            },
+                            complete: function () {
+
+                            }
+                        });
+
+                    });
+                }
+            });
+        });
+
+        var days = 1;
+        $('#closeFormButton').click(function () {
+            $('.popup-bg').hide();
+        });
+        $('#openFormButton').click(function () {
+            $('.popup-bg').show();
+        });
+        $('#privateOnly').change(function () {
+            if (this.checked) {
+                privateOnly = true;
+            } else {
+                privateOnly = false;
             }
+        });
+        $('#dPlus').click(function () {
+            days += 1;
+            $('#numberOfDays').html(days);
+        });
+        $('#dMinus').click(function () {
+            if (days > 1) {
+                days -= 1;
+                $('#numberOfDays').html(days);
+            }
+        });
+        $('#remindOnBtn').click(function () {
+            $('#remindOnBtn').removeClass("remind-off");
+            $('#remindOffBtn').addClass("remind-off");
 
-<script>
-              $('.event').each(function () {
-                  var event = $(this);
+            $.ajax({
+                url: "/UserPanel/TurnOnReminder/",
+                type: 'POST',
+                data: {},
+                success: function (result) {
 
-                  var id = $(this).find('.eventId').val();
-                  $(this).find('.delete-button').click(function () {
-                      $.ajax({
-                          url: "/UserPanel/DeleteConfirmation/",
-                          type: 'POST',
-                          data: { eventId: id },
-                          success: function (result) {
-                              $('#message').html(result);
-                          },
-                          error: function () {
-                          },
-                          complete: function () {
-                              $('#deleteY').click(function () {
-                                  $.ajax({
-                                      url: "/UserPanel/Delete/",
-                                      type: 'POST',
-                                      data: { eventId: $('#deleteId').val() },
-                                      success: function (result) {
-                                      },
-                                      error: function () {
-                                      },
-                                      complete: function () {
-                                          event.hide();
-                                          $('.message-background').remove();
-                                      }
-                                  });
-                              });
+                },
+                error: function () {
+                },
+                complete: function () {
 
-                              $('#deleteN').click(function () {
-                                  $('.message-background').remove();
-                              });
-                          }
-                      });
-                  });
-              });
+                }
+            });
+        });
+        $('#remindOffBtn').click(function () {
+            $('#remindOffBtn').removeClass("remind-off");
+            $('#remindOnBtn').addClass("remind-off");
 
-              $('#imageInput').change(function () {
-                  var formData = new FormData();
-                  formData.append('image', $('#imageInput')[0].files[0]); // myFile is the input type="file" control
-                  $('#_imagePath').val("a" + $('#imageInput')[0].files[0].name);
-                  $.ajax({
-                      url: "/UserPanel/SaveAvatar/",
-                      type: 'POST',
-                      data: formData,
-                      processData: false,  // tell jQuery not to process the data
-                      contentType: false,  // tell jQuery not to set contentType
-                      success: function (result) {
-                          $("#croppImage").show();
-                          $("#croppImage").html(result);
-                      },
-                      error: function (jqXHR) {
-                      },
-                      complete: function (jqXHR, status) {
-                          $("#cropButton").click(function (e) {
-                              $("#croppImage").hide();
-                              $.ajax({
-                                  url: "/UserPanel/CroppAvatar/",
-                                  type: 'POST',
-                                  data: { imageName: $("#imageName").val(), x: $("#x").val(), y: $("#y").val(), width: $("#width").val(), height: $("#height").val() },
-                                  success: function (result) {
-                                      document.getElementById("avatar").src = "/images/avatars/" + result;
-                                  },
-                                  error: function () {
-                                  },
-                                  complete: function () {
+            $.ajax({
+                url: "/UserPanel/TurnOffReminder/",
+                type: 'POST',
+                data: {},
+                success: function (result) {
 
-                                  }
-                              });
+                },
+                error: function () {
+                },
+                complete: function () {
 
-                          });
-                      }
-                  });
-              });
+                }
+            });
 
-              if (active) {
-                  $('#remindOffBtn').addClass("remind-off");
-              } else {
-                  $('#remindOnBtn').addClass("remind-off");
-              }
+        });
 
-              $('#categoryId').val(categoryId);
+        $('#categoryId').change(function () {
+            categoryId = $('#categoryId').val();
+        });
 
-              $('#privateOnly').change(function () {
-                  if (this.checked) {
-                      privateOnly = true;
-                  } else {
-                      privateOnly = false;
-                  }
-              });
-              $('#dPlus').click(function () {
-                  days += 1;
-                  $('#numberOfDays').html(days);
-              });
-              $('#dMinus').click(function () {
-                  if (days > 1) {
-                      days -= 1;
-                      $('#numberOfDays').html(days);
-                  }
-              });
-              $('#remindOnBtn').click(function () {
-                  $('#remindOnBtn').removeClass("remind-off");
-                  $('#remindOffBtn').addClass("remind-off");
+        $('#saveSettings').click(function () {
+            $.ajax({
+                url: "/UserPanel/SaveReminderSettings/",
+                type: 'POST',
+                data: { catId: categoryId, privateOnly: privateOnly, daysBefore: days },
+                success: function (result) {
 
-                  $.ajax({
-                      url: "/UserPanel/TurnOnReminder/",
-                      type: 'POST',
-                      data: {},
-                      success: function (result) {
+                },
+                error: function () {
+                },
+                complete: function () {
 
-                      },
-                      error: function () {
-                      },
-                      complete: function () {
-
-                      }
-                  });
-              });
-              $('#remindOffBtn').click(function () {
-                  $('#remindOffBtn').removeClass("remind-off");
-                  $('#remindOnBtn').addClass("remind-off");
-
-                  $.ajax({
-                      url: "/UserPanel/TurnOffReminder/",
-                      type: 'POST',
-                      data: {},
-                      success: function (result) {
-
-                      },
-                      error: function () {
-                      },
-                      complete: function () {
-
-                      }
-                  });
-
-              });
-
-              $('#categoryId').change(function () {
-                  categoryId = $('#categoryId').val();
-              });
-
-              $('#saveSettings').click(function () {
-                  $.ajax({
-                      url: "/UserPanel/SaveReminderSettings/",
-                      type: 'POST',
-                      data: { catId: categoryId, privateOnly: privateOnly, daysBefore: days },
-                      success: function (result) {
-
-                      },
-                      error: function () {
-                      },
-                      complete: function () {
-
-                      }
-                  });
+                }
+            });
 
 
-              });
-</script>
+        });
+    </script>
 }

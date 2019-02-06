@@ -10,10 +10,11 @@ namespace IleCzasu.Models.ViewModels
         public List<Note> UserNotes { get; set; }
         public List<Category> Categories { get; set; }
         public DateTime Today { get; set; }
-        public ReminderSetting Settings { get; set; }
+        public List<ReminderSetting> Settings { get; set; }
         public ApplicationUser User { get; set; }
         public UserPanelViewModel()
         {
+            Settings = new List<ReminderSetting>();
             Today = DateTime.Now;
         }
 

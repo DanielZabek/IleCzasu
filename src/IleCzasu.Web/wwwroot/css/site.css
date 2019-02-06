@@ -49,8 +49,12 @@
     /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
-
-
+.orange-text {
+    color: #E0A22F;
+}
+.grey-text {
+    color: #b2b2b2;
+}
 .icon-emo-laugh:before {
     content: '\e812';
 }
@@ -594,12 +598,46 @@ mark {
     z-index: 99;
     padding: 5px;
 }
-
+.user-panel-col form {
+    margin: 0;
+    padding: 0;
+}
 .user-panel-box .form-group {
     text-align: center;
     border-right: 1px solid #231d1d;
     padding-right: 15px;
     width: 180px;
+    margin:0;
+}
+.user-panel-option {
+    background-color: transparent;
+    color: #E0A22F;
+    border: none;
+    padding: 10px;
+    width: 120px;
+    font-size: 14px;
+    cursor: pointer;
+}
+    .user-panel-option:hover {
+        background-color: #3a3131;
+    }
+.popup-bg {
+    display:none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(35, 29, 29,0.7);
+    z-index: 3;
+}
+.popup-form {
+    position:relative;
+    padding:15px;
+    margin: auto;
+    width: 300px;
+    height: 280px;
+    background-color: #332B2B;
+    color: white;
+    margin-top: 10%;
 }
 .category d {
     position: absolute;
@@ -611,18 +649,7 @@ mark {
     color: #b2b2b2;
 }
 #saveSettings {
-    cursor: pointer;
-    position: absolute;
-    right: 30px;
-    bottom: 0;
-    height: 40px;
-    top: 25px;
-    margin: auto;
-    border: 1px solid #E0A22F;
-    font-size: 20px;
-    background-color: transparent;
-    color: #E0A22F;
-    padding-left: 11px;
+
 }
 
     #saveSettings d {
@@ -2127,8 +2154,10 @@ line-height: 18px !important;
     display: inline-block;
     position: absolute;
     left: 0px;
-    top: -2px;
+    top: 0px;
     width: 30px;
+    font-size:0;
+    cursor:pointer;
 }
 
 
@@ -2139,6 +2168,7 @@ line-height: 18px !important;
         left: 0;
         top: 0;
         opacity: 0;
+        cursor: pointer;
     }
 .categories-box {
     font-size: 0;
@@ -3199,9 +3229,9 @@ button {
 }
 
 .user-panel-name {
-    font-size: 30px;
+    font-size: 20px;
     color: #E4572E;
-    margin-left: 10px;
+ 
 }
 
 .user-panel-score {

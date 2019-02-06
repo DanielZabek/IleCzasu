@@ -42,7 +42,7 @@ namespace IleCzasu.Controllers
             model.UserNotes = _context.Notes.Where(e => e.UserId == this.User.FindFirstValue(ClaimTypes.NameIdentifier)).ToList();
             model.Categories = _context.Categories.ToList();
             model.User = _context.Users.FirstOrDefault(u => u.Id == this.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            model.Settings = _context.ReminderSettings.SingleOrDefault(s => s.UserId == model.User.Id);
+            model.Settings = _context.ReminderSettings.Where(s => s.UserId == model.User.Id).ToList();
             int lvl = 1;
             int points = model.User.Points;
 

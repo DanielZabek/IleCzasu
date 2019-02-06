@@ -183,35 +183,18 @@ function getCities() {
 
 function datepickerHelper() {
     var calHover = false;
-    var myDatepicker = $('.datepicker-here').datepicker({
-        onSelect: function (formattedDate, date, inst) {
+    var myDatepicker = $('.datepicker-here').datepicker({}).data('datepicker');
+   
+    $('#calendarIcon').click(function () {
+        $(".datepickerInput").show();
+        myDatepicker.show();
+        $(".datepicker").append("<button id=" + '"' + "calendarButton" + '"' + ">CLICK ME!</button>");
+        $("#calendarButton").click(function () {
             showEvents();
-        }
-    }).data('datepicker');
-
-    $(".datepickerInput").hover(
-
-        function () {
-            myDatepicker.show();
-        },
-        function () {
-            setTimeout(function () {
-                if (!calHover) {
-                    myDatepicker.hide();
-                }
-            }, 300);
-        }
-    );
-
-    $(".datepicker").hover(
-        function () {
-            calHover = true;
-        },
-        function () {
-            calHover = false;
             myDatepicker.hide();
-        }
-    );
+        });
+
+    });
 }
 
 function showNextEvents() {
@@ -246,16 +229,19 @@ function showNextEvents() {
             //        $(this).find(".event-description").fadeOut("fast");
             //    }
             //);
-            //if ($(window).width() <= 640) {
-            //    $(".events").addClass("list-events");
-            //    $(".events").find(".event").each(function () {
-            //        $(this).addClass("list-event");
-            //    });
-            //}
+            if ($(window).width() <= 640) {
+                $(".events").addClass("list-events");
+                $(".events").find(".event").each(function () {
+                    $(this).addClass("list-event");
+                });
+            }
         }
-    });
-    } else {
-        
+        });
+    } else if (isBusy) {
+        $('#loading').show();
+    }
+    else {
+        return;
     }
  
 }

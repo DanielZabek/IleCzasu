@@ -39,6 +39,8 @@ namespace IleCzasu.Services
             {
                 c.NumberOfEvents = _context.PublicEvents.Where(e => e.Date.Date >= DateTime.Now.Date && e.CategoryId == c.CategoryId).Count();
                 _context.Update(c);
+                if(c.CategoryId == 10)
+                    c.NumberOfEvents = _context.PublicEvents.Where(e => e.Date.Date >= DateTime.Now.Date).Count();
             }
             foreach (var c in categories)
             {

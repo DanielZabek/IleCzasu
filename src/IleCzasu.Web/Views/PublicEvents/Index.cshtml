@@ -71,7 +71,7 @@
 <div id="categoryName" class="row"><p><i class="fas fa-archive"></i><d> WSZYSTKIE</d></p></div>
 <div class="sort-bar row">  
     <div class="datepickerRow">
-        <i class="far fa-calendar-alt"></i><input type='text' placeholder="Przedział czasowy.." class="datepicker-here datepickerInput" data-language='pl' data-range="true" data-multiple-dates-separator=" - " data-toggleSelected="true" data-time-format='hh:ii' data-position="bottom right" />
+        <i class="far fa-calendar-alt" id="calendarIcon"><input class=" datepicker-here datepickerInput" data-language='pl' data-range="true" data-multiple-dates-separator=" - " data-toggleSelected="true" data-time-format='hh:ii' data-position="bottom right" style="display:none; margin-left:10px;"  /></i>
         <i class="fas fa-map-marker-alt"></i><input id="citiesAutocomplete" placeholder="Miasto..">
     </div>
     <div class="view-bar">
@@ -93,7 +93,7 @@
     <script>
       
         //sort();
-        jQuery(document).ready(function () { showEvents(); });
+        jQuery(document).ready(function () { showEvents(); datepickerHelper(); });
         getCities();
         //datepickerHelper(catId);
 
