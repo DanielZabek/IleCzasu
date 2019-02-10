@@ -188,12 +188,13 @@ function datepickerHelper() {
     $('#calendarIcon').click(function () {
         $(".datepickerInput").show();
         myDatepicker.show();
-        $(".datepicker").append("<button id=" + '"' + "calendarButton" + '"' + ">CLICK ME!</button>");
-        $("#calendarButton").click(function () {
-            showEvents();
-            myDatepicker.hide();
-        });
-
+        if (document.getElementById("calendarButton") == null) {
+            $(".datepicker").append("<button class=" + '"' + "calendar-button" + '"' + " id=" + '"' + "calendarButton" + '"' + ">Ok</button><button class=" + '"' + "calendar-button2" + '"' + " id=" + '"' + "calendarButton2" + '"' + ">Anuluj</button>");
+            $("#calendarButton").click(function () {
+                showEvents();
+                myDatepicker.hide();
+            });
+        }
     });
 }
 
