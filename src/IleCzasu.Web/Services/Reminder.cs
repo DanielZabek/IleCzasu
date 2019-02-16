@@ -29,7 +29,7 @@ namespace IleCzasu.Services
             SmtpClient client = new SmtpClient("smtp.webio.pl");
             client.UseDefaultCredentials = false;
             client.Credentials = new NetworkCredential("powiadomienia@ileczasu.pl", "VeV<j2Q");
-            var settingsList = _context.ReminderSettings.Where(s => s.Active == true).ToList();
+            var settingsList = _context.ReminderSettings.ToList();
             var users = _context.Users
                .Include(f => f.UserFollows)
                .ThenInclude(f => f.Event)

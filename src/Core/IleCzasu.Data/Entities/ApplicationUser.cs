@@ -11,5 +11,6 @@ namespace IleCzasu.Data.Entities
         public List<Follow> UserFollows { get; set; }
         public List<PrivateEvent> UserEvents { get; set; }
         public List<Note> UserNotes { get; set; }
+        public List<ReminderSetting> UserReminderSettings { get; set; }
     }
 }

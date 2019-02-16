@@ -36,55 +36,14 @@
             {
                 if (e.Event.Date.Date == Model.FirstDayOfWeek.Date)
                 {
-                    @switch (e.Event.CategoryId)
-                    {
-                        case 1:
-                        case 12:
-                        case 13:
-                        case 14:
-                            <i class="fas fa-film"></i>
-                        break;
-                        case 2:
-                            <i class="fas fa-theater-masks"></i>
-                        break;
-                        case 3:
-                        case 15:
-                        case 16:
-                            <i class="fas fa-music"></i>
-                        break;
-                        case 4:
-                            <i class="far fa-grin-squint-tears"></i>
-                        break;
-                        case 5:
-                            <i class="fas fa-book"></i>
-                        break;
-                        case 6:
-                            <i class="fas fa-futbol"></i>
-                        break;
-                        case 7:
-                        case 19:
-                        case 20:
-                        case 21:
-                        case 22:
-                            <i class="fas fa-laptop"></i>
-                        break;
-                        case 8:
-                            <i class="fas fa-certificate"></i>
-                        break;
-                        case 9:
-                            <i class="fas fa-archive"></i>
-                        break;
-                        default:
-                            <i class="fas fa-archive"></i>
-                        break;
-                    }
-                }
+                    <i class="@e.Event.Category.IconClass"></i>
+                }         
             }
             @foreach (var e in Model.User.UserEvents)
             {
                 if (e.StartDate.Date == Model.FirstDayOfWeek.Date)
                 {
-                    <i class="fas fa-calendar"  style="color:#E4572E"></i>
+                    <i class="fas fa-calendar" style="color:#E4572E"></i>
                 }
             }
             @foreach (var e in Model.User.UserNotes)
@@ -97,20 +56,18 @@
         </div>
         <input type="hidden" class="currentDay" id="selectedDay" value="@Model.FirstDayOfWeek" />
 
-    </div>     
+    </div>
 
     Model.FirstDayOfWeek = Model.FirstDayOfWeek.AddDays(1);
 }
-    <div class="select-day-label window-label" style="padding-top:10px;"></div>
+<div class="select-day-label window-label" style="padding-top:10px;"></div>
 
-    <script>
-        jQuery(document).ready(function () {
-            $(".user-day").click(function (e) {
-                calDate = $(this).find("#selectedDay").value;
-                $(".select-day-label").html(date);
-            });
+<script>
+    jQuery(document).ready(function () {
+        $(".user-day").click(function (e) {
+            calDate = $(this).find("#selectedDay").value;
+            $(".select-day-label").html(date);
         });
+    });
 
-
-
-    </script>
+</script>

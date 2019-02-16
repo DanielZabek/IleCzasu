@@ -2995,6 +2995,7 @@ line-height: 18px !important;
     left: 20px !important;
 }
 
+
 .calendar-box {
     padding-top: 5px;
     text-align: left;
@@ -3250,8 +3251,21 @@ button {
             border-top: 1px solid #332B2B;
         }
 
-
-
+.user-calendar-hour {
+    height: 40px;
+    border: 1px solid #332B2B;
+    width: 100%;
+}
+.hour-label {
+    background-color: #E0A22F;
+    color: #332B2B;
+    line-height: 40px;
+    vertical-align: central;
+    text-align: center;
+    border-right: 1px solid #332B2B;
+    width: 30px;
+    font-weight:500;
+}
 .user-calendar {
     width: 100%;
 }
@@ -3264,7 +3278,6 @@ button {
 .user-panel-name {
     font-size: 20px;
     color: #E4572E;
- 
 }
 
 .user-panel-score {

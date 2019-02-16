@@ -26,7 +26,7 @@
 
     <script>
        var monthsToAdd = 0;
-        $("#calendarDays").load("/UserPanel/ShowCalendar/", { monthsToAdd: monthsToAdd }, function () {
+        $("#calendarDays").load("/User/ShowCalendar/", { monthsToAdd: monthsToAdd }, function () {
             var widgetDate = $('#widgetDate').val();
             if (widgetDate != "") {
                 var curDate = $('#widgetDate').val();
@@ -44,14 +44,14 @@
 
         $("#prevMonth").click(function (e) {
             monthsToAdd -= 1;
-            $("#calendarDays").load("/UserPanel/ShowCalendar/", { monthsToAdd: monthsToAdd }, function () {
+            $("#calendarDays").load("/User/ShowCalendar/", { monthsToAdd: monthsToAdd }, function () {
 
                 UserDayClick();
             });
         });
         $("#nextMonth").click(function (e) {
             monthsToAdd += 1;
-            $("#calendarDays").load("/UserPanel/ShowCalendar/", { monthsToAdd: monthsToAdd }, function () {
+            $("#calendarDays").load("/User/ShowCalendar/", { monthsToAdd: monthsToAdd }, function () {
 
                 UserDayClick();
             });
@@ -63,14 +63,15 @@
                 $(this).addClass("selected-day");
                 calDate = $(this).find('#selectedDay').val();
                 $(".select-day-label").html(calDate.substring(0, 10));
+                showCalendarDay(calDate);
                 showUserEvents(calDate);
-                showUserPrivateEvents(calDate);
+                showUserPrivateEvents(calDate);                
             });
 
         }
         function showUserEvents(calDate) {
             $.ajax({
-                url: "/UserPanel/ShowUserEvents/",
+                url: "/User/ShowUserEvents/",
                 type: 'POST',
                 data: { date: calDate.substring(0, 10) },
                 success: function (result) {
@@ -83,9 +84,24 @@
                 }
             });
         }
+        function showCalendarDay(calDate) {
+            $.ajax({
+                url: "/User/ShowCalendarDay/",
+                type: 'POST',
+                data: { date: calDate.substring(0, 10) },
+                success: function (result) {
+                    $("#events").html(result);
+                },
+                error: function () {
+                },
+                complete: function () {
+                   
+                }
+            });
+        }
         function showUserPrivateEvents(calDate) {
             $.ajax({
-                url: "/UserPanel/ShowUserPrivateEvents/",
+                url: "/User/ShowUserPrivateEvents/",
                 type: 'POST',
                 data: { date: calDate.substring(0, 10) },
                 success: function (result) {

@@ -91,11 +91,21 @@ namespace IleCzasu
             services.AddScoped<IEventsUpdater, EventsUpdater>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IPublicEventService, PublicEventService>();
-
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IStatisticsUpdater statisticsUpdater, IReminder reminder, IInfoService infoService, IEventsUpdater eventsUpdater, IEmailSender emailSender, IPublicEventService publicEventService)
+        public void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            IStatisticsUpdater statisticsUpdater, 
+            IReminder reminder, 
+            IInfoService infoService, 
+            IEventsUpdater eventsUpdater, 
+            IEmailSender emailSender, 
+            IPublicEventService publicEventService,
+            IUserService userService
+            )
         {
             var options = new RewriteOptions()
             .AddRedirectToHttps();
@@ -143,17 +153,17 @@ namespace IleCzasu
                 routes.MapRoute(
                 name: "userPanel",
                 template: "Panel",
-                 defaults: new { controller = "UserPanel", action = "Index" });
+                 defaults: new { controller = "User", action = "Index" });
 
                 routes.MapRoute(
                name: "calendar",
                template: "Kalendarz",
-                defaults: new { controller = "UserPanel", action = "Calendar" });
+                defaults: new { controller = "User", action = "Calendar" });
 
                 routes.MapRoute(
                name: "create",
                template: "Dodaj",
-                defaults: new { controller = "UserPanel", action = "Create" });
+                defaults: new { controller = "User", action = "Create" });
 
                routes.MapRoute(
                name: "timezones",

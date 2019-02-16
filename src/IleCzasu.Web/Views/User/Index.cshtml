@@ -69,7 +69,7 @@
                     <th>Dni Przed</th>
                     <th></th>
                 </tr>
-                @foreach (var e in Model.Settings)
+                @foreach (var e in Model.User.UserReminderSettings)
                 {
                     <tr class="event">
                         <td style="width:60%;">@e.CategoryId</td>
@@ -88,14 +88,14 @@
 
 <div class="user-panel-col">
     <div class="user-panel-box" style="position:relative">
-        <div class="row user-panel-label">MOJE WYDARZENIA (@Model.UserEvents.Count)<a asp-route="createEvent" class="table-link"><i class="fas fa-plus" style="position:absolute; right:5px;"></i></a></div>
+        <div class="row user-panel-label">MOJE WYDARZENIA (@Model.User.UserEvents.Count)<a asp-route="createEvent" class="table-link"><i class="fas fa-plus" style="position:absolute; right:5px;"></i></a></div>
         <table>
             <tr>
                 <th>Nazwa</th>
                 <th>Data</th>
                 <th></th>
             </tr>
-            @foreach (var e in Model.UserEvents)
+            @foreach (var e in Model.User.UserEvents)
             {
                 <tr class="event">
                     <td style="width:60%;"><a asp-action="Event" asp-controller="Home" asp-route-id="@e.PrivateEventId" asp-route-name="@e.Name" class="table-link">@e.Name</a></td>
@@ -111,14 +111,14 @@
         </table>
     </div>
     <div class="user-panel-box" style="position:relative">
-        <div class="row user-panel-label">MOJE NOTATKI (@Model.UserNotes.Count)<a asp-route="createEvent" class="table-link"><i class="fas fa-plus" style="position:absolute; right:5px;"></i></a></div>
+        <div class="row user-panel-label">MOJE NOTATKI (@Model.User.UserNotes.Count)<a asp-route="createEvent" class="table-link"><i class="fas fa-plus" style="position:absolute; right:5px;"></i></a></div>
         <table>
             <tr>
                 <th>Notatka</th>
                 <th>Data</th>
                 <th></th>
             </tr>
-            @foreach (var e in Model.UserNotes)
+            @foreach (var e in Model.User.UserNotes)
             {
                 <tr class="event">
                     <td style="width:60%;">@e.NoteText</td>
@@ -148,7 +148,7 @@
         var active = true;
         var categoryId = 10;
     </script>
-    @if (Model.Settings != null)
+    @if (Model.User.UserReminderSettings != null)
     {
         <script>
 

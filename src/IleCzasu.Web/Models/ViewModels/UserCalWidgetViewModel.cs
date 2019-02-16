@@ -6,10 +6,8 @@ namespace IleCzasu.Models.ViewModels
 {
     public class UserCalWidgetViewModel
     {
-        public List<PublicEvent> UserEvents { get; set; }
-        public DateTime Today { get; set; }
-        public ReminderSetting Settings { get; set; }
         public ApplicationUser User { get; set; }
+        public DateTime Today { get; set; }  
        
         public UserCalWidgetViewModel()
         {

@@ -12,6 +12,6 @@ namespace IleCzasu.Data.Entities
         public int CategoryId { get; set; }
         public int DaysBefore { get; set; }
         public bool PrivateOnly { get; set; }
-        public bool Active { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }

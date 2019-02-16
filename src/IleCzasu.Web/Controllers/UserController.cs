@@ -18,141 +18,53 @@ using SixLabors.ImageSharp.Processing;
 using MediatR;
 using IleCzasu.Application.Events.Queries;
 using IleCzasu.Data;
+using IleCzasu.Application.Interfaces;
+using IleCzasu.Models;
+using IleCzasu.Web.Models.ViewModels;
 
 namespace IleCzasu.Controllers
 {
     [Authorize]
-    public class UserPanelController : Controller
+    public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
         private IHostingEnvironment _enviroment;
         private IMediator _mediator;
+        private readonly IUserService _userService;
+        private readonly IPublicEventService _publicEventService;
+        private string _userId { get { return User.FindFirstValue(ClaimTypes.NameIdentifier); } }
 
-        public UserPanelController(ApplicationDbContext context, IHostingEnvironment env, IMediator mediator)
+        public UserController(IUserService userService, IPublicEventService publicEventService, ApplicationDbContext context, IHostingEnvironment env, IMediator mediator)
         {
+            _publicEventService = publicEventService;
+            _userService = userService;
             _context = context;
             _enviroment = env;
             _mediator = mediator;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var model = new UserPanelViewModel();
-            model.UserEvents = _context.PrivateEvents.Where(e => e.UserId == this.User.FindFirstValue(ClaimTypes.NameIdentifier)).ToList();
-            model.UserNotes = _context.Notes.Where(e => e.UserId == this.User.FindFirstValue(ClaimTypes.NameIdentifier)).ToList();
-            model.Categories = _context.Categories.ToList();
-            model.User = _context.Users.FirstOrDefault(u => u.Id == this.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            model.Settings = _context.ReminderSettings.Where(s => s.UserId == model.User.Id).ToList();
-            int lvl = 1;
-            int points = model.User.Points;
-
-            while (points > 40 + (10 * lvl))
+            var model = new UserPanelViewModel()
             {
-                points = points - (40 + (10 * lvl));
-                lvl += 1;
-            }
-            
-            var users = from u in _context.Users
-                        select u;       
-            List<ApplicationUser> us = users.ToList();       
-
+                User = await _userService.GetUserWithItems(_userId),
+                Categories = await _publicEventService.GetCategories()
+            };
             return View(model);
         }
 
         public async Task<IActionResult> ModeratorIndex(int id)
-
-        {
-            //var date = DateTime.Now;
-            //var outputString = "";
-            //for (int i = 1; i < 5; i++)
-            //{
-            //    Console.WriteLine(outputString);
-            //    Console.WriteLine(date.ToString("yyyy-MM-dd"));
-            //    try
-            //    {
-            //        date = date.AddDays(1);
-
-            //        HttpWebRequest apiRequest = WebRequest.Create("http://www.sport.pl/sport/0,65027,,,,,d,p," + date.ToString("yyyy-MM-dd") + ".html#wyniki") as HttpWebRequest;
-
-            //        string apiResponse = "";
-            //        using (HttpWebResponse response = apiRequest.GetResponse() as HttpWebResponse)
-            //        {
-            //            StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding("ISO-8859-2"));
-            //            apiResponse = reader.ReadToEnd();
-            //        }
-            //        HtmlDocument pageDocument = new HtmlDocument();
-            //        pageDocument.LoadHtml(apiResponse);
-
-            //        var divs = pageDocument.DocumentNode.SelectNodes("//div[starts-with(@class,'entry')]").ToList();
-
-            //        foreach (var d in divs)
-            //        {
-            //            try
-            //            {
-            //                var pathLi = d.SelectNodes(".//ul[contains(@class,'path')]/li").ToList();
-            //                foreach (var li in pathLi)
-            //                {
-            //                    outputString += li.SelectSingleNode(".//a | .//span").InnerText + " / ";
-            //                }
-            //                var eventsA = d.SelectNodes(".//ul[contains(@class,'events')]/li").ToList();
-            //                foreach (var a in eventsA)
-            //                {
-
-            //                    outputString += a.SelectSingleNode(".//span[1]/span").InnerText + " / ";
-
-            //                    var eventTeams = a.SelectNodes(".//span[2]/span").ToList();
-            //                    foreach(var team in eventTeams)
-            //                    {
-            //                        if (team.SelectSingleNode(".//span") != null){
-            //                            continue;
-            //                        }
-            //                        {
-            //                            outputString += team.InnerText + " / ";
-            //                        }
-            //                        outputString += team.InnerText + " / ";
-            //                    }
-
-            //                }
-            //                outputString += "</br>";
-            //            }
-            //            catch (NullReferenceException)
-            //            {
-            //                continue;
-            //            }
-            //        }
-            //    }
-            //    catch
-            //    {
-            //        continue;
-            //    }
-            //}
-
-
-            //ViewData["res"] = outputString;
-
-            
-              var publicEvent = await _mediator.Send(new GetPublicEventByIdQuery { PublicEventId = id });
-
-            return View(publicEvent);
+        {          
+            return View();
         }
 
-        public IActionResult ShowUserNavWidget()
-        {
-            var model = new UserNavWidgetViewModel();           
-            model.User = _context.Users.SingleOrDefault(u => u.Id == this.User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-            return ViewComponent("UserNavWidget", model);
+        public async Task<IActionResult> ShowUserNavWidget()
+        {       
+            return ViewComponent("UserNavWidget", await _userService.GetUserById(_userId));
         }
-        public IActionResult ShowUserCalWidget()
+        public async Task<IActionResult>  ShowUserCalWidget()
         {
-            var model = new UserCalWidgetViewModel();
-            model.User = _context.Users
-                .Include(f => f.UserFollows)
-                .ThenInclude(e => e.Event)
-                .SingleOrDefault(u => u.Id == this.User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-
-            return ViewComponent("UserCalWidget", model);
+            return ViewComponent("UserCalWidget", await _userService.GetUserWithItems(_userId));
         }
 
         public IActionResult Calendar(string date = "")
@@ -161,87 +73,43 @@ namespace IleCzasu.Controllers
             return View();
         }
 
-        public IActionResult ShowCalendar(int monthsToAdd)
+        public async Task<IActionResult> ShowCalendar(int monthsToAdd)
         {
-            return ViewComponent("Calendar", monthsToAdd);
+            CalendarViewModel model = new CalendarViewModel();
+            model.User = await _userService.GetUserWithItems(_userId);
+            model.FirstDayOfWeek = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            model.FirstDayOfWeek = model.FirstDayOfWeek.AddMonths(monthsToAdd);
+            model.Current = model.FirstDayOfWeek;
+            int diff = (7 + (model.FirstDayOfWeek.DayOfWeek - DayOfWeek.Monday)) % 7;
+            model.FirstDayOfWeek = model.FirstDayOfWeek.AddDays(-1 * diff);
+
+            return ViewComponent("Calendar", model);
         }
-        public IActionResult ShowUserPrivateEvents(string date = "")
-        {
-            List<PrivateEvent> privateEvents = new List<PrivateEvent>();
-            try
-            {
-                privateEvents = _context.PrivateEvents
-               .Where(e => e.UserId == this.User.FindFirstValue(ClaimTypes.NameIdentifier) && (e.StartDate.ToString("dd'.'MM'.'yyyy") == date || e.StartDate.ToString("yyyy-MM-dd") == date)).ToList();
-            }
-            catch (NullReferenceException)
-            {
-            }
 
-            return ViewComponent("ShowPrivateEvents", privateEvents);
+        public async Task<IActionResult> ShowCalendarDay(string date = "")
+        {
+            var model = new CalendarDayViewModel();
+
+            return ViewComponent("CalendarDay", model);
         }
-        public IActionResult ShowUserEvents(string date = "")
+        public async Task<IActionResult> ShowUserItems(string date = "")
         {
-            var model = new ShowEventsViewModel();
-            var user = _context.Users
-               .Include(f => f.UserFollows).ThenInclude(f => f.Event).ThenInclude(c => c.Category).ThenInclude(tt => tt.TagTypes)
-                .Include(f => f.UserFollows).ThenInclude(f => f.Event).ThenInclude(c => c.Category).ThenInclude(pc => pc.ParentCategory).ThenInclude(tt => tt.TagTypes)
-               .Include(f => f.UserFollows).ThenInclude(f => f.Event).ThenInclude(e => e.TagEvents).ThenInclude(t => t.Tag)
-                .Include(f => f.UserFollows).ThenInclude(f => f.Event)
-               .Where(u => u.Id == this.User.FindFirstValue(ClaimTypes.NameIdentifier)).Single();
-
-            model.Follows = _context.Follows.Where(f => f.UserId == user.Id).ToList();
-            var events = user.UserFollows.Select(e => e.Event);
-
-            if (!String.IsNullOrEmpty(date))
-            {
-                model.Events = events.Where(e => e.Date.ToString("dd'.'MM'.'yyyy") == date || e.Date.ToString("yyyy-MM-dd") == date).ToList();
-            }
-
-            return ViewComponent("ShowEvents", model);
+            var model = new UserItemsViewModel();
+            model.UserEvents = await _userService.GetUserEvents(_userId, date);
+            model.UserFollows = await _userService.GetUserFollows(_userId, date);
+            model.UserNotes = await _userService.GetUserNotes(_userId, date);
+            return ViewComponent("ShowUserItems", model);
         }
 
 
-        public int FollowEvent(int eventId)
-        {
-            var user = _context.Users.FirstOrDefault(u => u.Id == this.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var e = _context.PublicEvents.FirstOrDefault(a => a.PublicEventId == eventId);
-            var followModel = new Follow { PublicEventId = eventId, UserId = user.Id };
-           
-
-            try
-            {
-                e.Follows += 1;
-                _context.SaveChanges();
-                _context.Follows.Add(followModel);
-                _context.SaveChanges();
-
-            }
-            catch (DbUpdateException /* ex */)
-            {
-
-            }
-
-            return e.Follows;
+        public async Task<int> FollowEvent(int eventId)
+        { 
+            return await _userService.FollowEvent(_userId, eventId);
         }
 
-        public int UnfollowEvent(int eventId)
+        public async Task<int> UnfollowEvent(int eventId)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == this.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var e = _context.PublicEvents.FirstOrDefault(a => a.PublicEventId == eventId);
-            var followModel = _context.Follows.FirstOrDefault(f => f.PublicEventId == eventId && f.UserId == user.Id);
-      
-            try
-            {
-                e.Follows -= 1;
-                _context.Follows.Remove(followModel);
-                _context.SaveChanges();
-            }
-            catch (DbUpdateException /* ex */)
-            {
-
-            }
-
-            return e.Follows;
+            return await _userService.UnfollowEvent(_userId, eventId);
         }
 
         // GET: /Dodaj
@@ -306,7 +174,6 @@ namespace IleCzasu.Controllers
         {
             if (ModelState.IsValid)
             {
-                
                 model.Note.UserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _context.Notes.Add(model.Note);              
                 _context.SaveChanges();
@@ -330,12 +197,14 @@ namespace IleCzasu.Controllers
 
             return Json(tagTypes);
         }
+
         public JsonResult GetTags(int tagTypeId, string input)
         {
             var tags = _context.Tags.Where(t => t.TagTypeId == tagTypeId && t.Value.ToLower().Contains(input)).Select(t => t.Value).ToList();
 
             return Json(tags);
         }
+
         public IActionResult DeleteConfirmation(int eventId)
         {
             var evnt = _context.PublicEvents.SingleOrDefault(e => e.PublicEventId == eventId);
@@ -462,40 +331,7 @@ namespace IleCzasu.Controllers
             _context.SaveChanges();
 
             return imageName;
-        }
-
-        public bool TurnOnReminder()
-        {
-            var user = _context.Users.FirstOrDefault(u => u.Id == this.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var settings = _context.ReminderSettings.SingleOrDefault(s => s.UserId == user.Id);
-
-            if (settings == null)
-            {
-                settings = new ReminderSetting { UserId = user.Id, PrivateOnly = false, Active = true, CategoryId = 10, DaysBefore = 1 };
-                _context.ReminderSettings.Add(settings);
-            }
-            else
-            {
-                settings.Active = true;
-                _context.Update(settings);
-            }
-
-            _context.SaveChanges();
-
-            return true;
-        }
-
-        public bool TurnOffReminder()
-        {
-            var user = _context.Users.FirstOrDefault(u => u.Id == this.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var settings = _context.ReminderSettings.SingleOrDefault(s => s.UserId == user.Id);
-
-            settings.Active = false;
-            _context.Update(settings);
-            _context.SaveChanges();
-
-            return true;
-        }
+        }      
 
         public bool SaveReminderSettings(int catId, bool privateOnly, int daysBefore)
         {
