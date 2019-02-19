@@ -1,4 +1,5 @@
-﻿using IleCzasu.Data.Entities;
+﻿using IleCzasu.Application.Models;
+using IleCzasu.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,8 +13,7 @@ namespace IleCzasu.Application.Interfaces
         Task<ApplicationUser> GetUserWithItems(string userId);
         Task<int> FollowEvent(string userId, int eventId);
         Task<int> UnfollowEvent(string userId, int eventId);
-        Task<List<Note>> GetUserNotes(string userId, string date = "");
-        Task<List<PrivateEvent>> GetUserEvents(string userId, string date = "");
-        Task<List<PublicEvent>> GetUserFollows(string userId, string date = ""); 
+        Task<UserEventsModel> GetUserEventsByDate(string userId, string date = "");
+      
     }
 }

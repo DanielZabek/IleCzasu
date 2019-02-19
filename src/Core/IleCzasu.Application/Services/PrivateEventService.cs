@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IleCzasu.Application.Interfaces;
 using IleCzasu.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace IleCzasu.Application.Services
 {
@@ -34,6 +35,14 @@ namespace IleCzasu.Application.Services
         public async Task<PrivateEvent> GetPrivateEventById(int privateEventId)
         {
             return await _context.PrivateEvents.SingleOrDefaultAsync(x => x.PrivateEventId == privateEventId);
+        }
+
+        public async Task<List<PrivateEvent>> GetUserPrivateEvents(string userId, string date = "")
+        {
+            if (!String.IsNullOrEmpty(date))
+                return await _context.PrivateEvents.Where(e => e.UserId == userId && e.StartDate.ToString("dd'.'MM'.'yyyy") == date || e.StartDate.ToString("yyyy-MM-dd") == date).ToListAsync();
+
+            return await _context.PrivateEvents.Where(x => x.UserId == userId).ToListAsync();
         }
     }
 }

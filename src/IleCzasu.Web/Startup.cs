@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,14 +6,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using IleCzasu.Data;
-using IleCzasu.Models;
 using IleCzasu.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Hangfire;
-using IleCzasu.Controllers;
 using IleCzasu.Data.Entities;
-using IleCzasu.Infrastructure;
 using MediatR;
 using System.Reflection;
 using IleCzasu.Application.Events.Queries;
@@ -92,19 +86,25 @@ namespace IleCzasu
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IPublicEventService, PublicEventService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<INoteService, NoteService>();
+            services.AddScoped<IPrivateEventService, PrivateEventService>();
+            services.AddScoped<IReminderSettingService, ReminderSettingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
-            IApplicationBuilder app, 
-            IHostingEnvironment env, 
-            IStatisticsUpdater statisticsUpdater, 
-            IReminder reminder, 
-            IInfoService infoService, 
-            IEventsUpdater eventsUpdater, 
-            IEmailSender emailSender, 
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            IStatisticsUpdater statisticsUpdater,
+            IReminder reminder,
+            IInfoService infoService,
+            IEventsUpdater eventsUpdater,
+            IEmailSender emailSender,
             IPublicEventService publicEventService,
-            IUserService userService
+            IUserService userService,
+            IPrivateEventService privateEventService,
+            INoteService noteService,
+            IReminderSettingService reminderSettingService
             )
         {
             var options = new RewriteOptions()

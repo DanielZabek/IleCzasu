@@ -9,7 +9,7 @@ namespace IleCzasu.Application.Interfaces
     public interface IPrivateEventService
     {
         Task<PrivateEvent> GetPrivateEventById(int privateEventId);
-        Task<List<PrivateEvent>> GetUserPrivateEvents(string userId);
+        Task<List<PrivateEvent>> GetUserPrivateEvents(string userId, string date = "");
         Task AddPrivateEvent(PrivateEvent privateEvent);
         Task DeletePrivateEvent(int privateEventId);
     }

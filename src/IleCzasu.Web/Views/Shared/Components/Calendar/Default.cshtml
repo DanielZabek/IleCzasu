@@ -1,5 +1,6 @@
 ﻿
 @{
+    @using IleCzasu.Application.Models;
     System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("pl-PL");
     @model IleCzasu.Models.CalendarViewModel;
     var dayClass = "";
@@ -14,6 +15,7 @@
 <div class="user-day-label">ND</div>
 @for (int i = 0; i < 42; i++)
 {
+    var dayModel = new UserEventsModel();
     if (Model.FirstDayOfWeek == DateTime.Now.Date)
     {
         dayClass = "day-today";
@@ -27,37 +29,43 @@
         dayClass = "";
     }
 
-    <div class="user-day @dayClass">
-        <div class="day-number">
-            @Model.FirstDayOfWeek.Day
-        </div>
-        <div class="day-events">
-            @foreach (var e in Model.User.UserFollows)
-            {
-                if (e.Event.Date.Date == Model.FirstDayOfWeek.Date)
-                {
-                    <i class="@e.Event.Category.IconClass"></i>
-                }         
-            }
-            @foreach (var e in Model.User.UserEvents)
-            {
-                if (e.StartDate.Date == Model.FirstDayOfWeek.Date)
-                {
-                    <i class="fas fa-calendar" style="color:#E4572E"></i>
-                }
-            }
-            @foreach (var e in Model.User.UserNotes)
-            {
-                if (e.Date.Date == Model.FirstDayOfWeek.Date)
-                {
-                    <i class="fas fa-sticky-note" style="color:#E0A22F"></i>
-                }
-            }
-        </div>
-        <input type="hidden" class="currentDay" id="selectedDay" value="@Model.FirstDayOfWeek" />
-
+<div class="user-day @dayClass">
+    <div class="day-number">
+        @Model.FirstDayOfWeek.Day
     </div>
+    <div class="day-events">
+        @foreach (var e in Model.User.UserFollows)
+        {
+            if (e.Event.Date.Date == Model.FirstDayOfWeek.Date)
+            {
+                dayModel.PublicEvents.Add(e.Event);
+                <i class="@e.Event.Category.IconClass"></i>
 
+            }
+        }
+        @foreach (var e in Model.User.UserEvents)
+        {
+            if (e.StartDate.Date == Model.FirstDayOfWeek.Date)
+            {
+                dayModel.PrivateEvents.Add(e);
+                <i class="fas fa-calendar" style="color:#E4572E"></i>
+            }
+        }
+        @foreach (var e in Model.User.UserNotes)
+        {
+            if (e.Date.Date == Model.FirstDayOfWeek.Date)
+            {
+                dayModel.Notes.Add(e);
+                <i class="fas fa-sticky-note" style="color:#E0A22F"></i>
+            }
+        }
+    </div>
+    <input type="hidden" class="currentDay" id="selectedDay" value="@Model.FirstDayOfWeek" />
+    <div style="display:none" id="calendarDayPartial">
+        @await Html.PartialAsync("_CalendarDayPartial", dayModel);
+    </div>
+</div>
+  
     Model.FirstDayOfWeek = Model.FirstDayOfWeek.AddDays(1);
 }
 <div class="select-day-label window-label" style="padding-top:10px;"></div>

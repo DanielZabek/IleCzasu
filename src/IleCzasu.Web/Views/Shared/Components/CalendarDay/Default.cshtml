@@ -1,7 +1,7 @@
 ﻿
 @{
     System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("pl-PL");
-    // @model IleCzasu.Models.CalendarDayViewModel;
+    @model IleCzasu.Application.Models.UserEventsModel;
 
 }
 @for (int i = 0; i < 24; i++)
@@ -11,6 +11,13 @@
         @if (i < 10)
         {
             <div class="hour-label">@("0" + i.ToString())</div>
+            <div>
+                @foreach (var pe in Model.PrivateEvents)
+                {
+                  <d>@pe.Name</d>  
+                }
+
+            </div>
         }
         else
         {

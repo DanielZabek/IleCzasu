@@ -1,0 +1,39 @@
+﻿
+@{
+    @model IleCzasu.Application.Models.UserEventsModel;
+
+}
+@for (int i = 0; i < 24; i++)
+{
+    <div class="user-calendar-hour row">
+
+        @if (i < 10)
+        {
+            <div class="hour-label">@("0" + i.ToString())</div>
+        }
+        else
+        {
+            <div class="hour-label">@i</div>
+        }
+        @foreach (var pe in Model.PublicEvents)
+        {
+            if (pe.Date.Hour == i)
+            {
+                <div class="user-calendar-event" style="background-color:#332B2B">
+                    <i class="@pe.Category.IconClass" />
+                    <d class="orange-text"> @pe.Name</d>
+                </div>
+            }
+        }
+
+    </div>
+}
+
+
+
+
+
+<script>
+
+
+</script>

@@ -52,7 +52,7 @@ function countdown() {
         $(this).find(".follow-button").click(function (evnt) {
             evnt.stopPropagation();
             $.ajax({
-                url: "/UserPanel/FollowEvent/",
+                url: "/User/FollowEvent/",
                 type: 'POST',
                 data: { eventId: id },
                 success: function (result) {
@@ -72,7 +72,7 @@ function countdown() {
         $(this).find(".unfollow-button").click(function (evnt) {
             evnt.stopPropagation();
             $.ajax({
-                url: "/UserPanel/UnfollowEvent/",
+                url: "/Panel/UnfollowEvent/",
                 type: 'POST',
                 data: { eventId: id },
                 success: function (result) {

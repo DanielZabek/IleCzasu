@@ -88,16 +88,14 @@ namespace IleCzasu.Controllers
 
         public async Task<IActionResult> ShowCalendarDay(string date = "")
         {
-            var model = new CalendarDayViewModel();
-
-            return ViewComponent("CalendarDay", model);
+            return ViewComponent("CalendarDay", await _userService.GetUserEventsByDate(_userId, date));
         }
         public async Task<IActionResult> ShowUserItems(string date = "")
         {
             var model = new UserItemsViewModel();
-            model.UserEvents = await _userService.GetUserEvents(_userId, date);
-            model.UserFollows = await _userService.GetUserFollows(_userId, date);
-            model.UserNotes = await _userService.GetUserNotes(_userId, date);
+            //model.UserEvents = await _userService.GetUserEvents(_userId, date);
+            //model.UserFollows = await _userService.GetUserFollows(_userId, date);
+            //model.UserNotes = await _userService.GetUserNotes(_userId, date);
             return ViewComponent("ShowUserItems", model);
         }
 

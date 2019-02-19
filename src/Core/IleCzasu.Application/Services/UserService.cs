@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using IleCzasu.Data;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using IleCzasu.Application.Models;
 
 namespace IleCzasu.Application.Services
 {
@@ -14,9 +15,16 @@ namespace IleCzasu.Application.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IPublicEventService _publicEventService;
+        private readonly IPrivateEventService _privateEventService;
+        private readonly INoteService _noteService;
 
-        public UserService(ApplicationDbContext context, IPublicEventService publicEventService)
+        public UserService( ApplicationDbContext context, 
+                            IPublicEventService publicEventService,
+                            IPrivateEventService privateEventService, 
+                            INoteService noteService)
         {
+            _noteService = noteService;
+            _privateEventService = privateEventService;
             _context = context;
             _publicEventService = publicEventService;
         }
@@ -102,15 +110,16 @@ namespace IleCzasu.Application.Services
             return await privateEvents.ToListAsync();
         }
 
-        public async Task<List<Note>> GetUserNotes(string userId, string date = "")
+        public async Task<UserEventsModel> GetUserEventsByDate(string userId, string date = "")
         {
-            var notes = _context.Notes
-                .Where(uf => uf.UserId == userId);
+            var model = new UserEventsModel()
+            {
+              //  PublicEvents = await _publicEventService.GetPublicEvents(date: date, userId: userId),
+                PrivateEvents = await _privateEventService.GetUserPrivateEvents(userId, date),
+                Notes = await _noteService.GetUserNotes(userId, date)
+            };
 
-            if (!String.IsNullOrEmpty(date))
-                notes = notes.Where(e => e.Date.ToString("dd'.'MM'.'yyyy") == date || e.Date.ToString("yyyy-MM-dd") == date);
-
-            return await notes.ToListAsync();
+            return model;
         }
 
         public async Task AddNote(Note note)

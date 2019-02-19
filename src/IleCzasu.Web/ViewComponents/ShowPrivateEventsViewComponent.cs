@@ -13,8 +13,6 @@ namespace IleCzasu.ViewComponents
     {
         public IViewComponentResult Invoke(List<PrivateEvent> privateEvents)
         {
-
-
             return View(privateEvents);
         }
 

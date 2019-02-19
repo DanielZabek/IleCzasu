@@ -9,7 +9,7 @@ namespace IleCzasu.Application.Interfaces
     public interface INoteService
     {
         Task<Note> GetNoteById(int noteId);
-        Task<List<Note>> GetUserNotes(string userId);
+        Task<List<Note>> GetUserNotes(string userId, string date = "");
         Task AddNote(Note note);
         Task DeleteNote(int noteId);
     }

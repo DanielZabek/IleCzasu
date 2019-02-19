@@ -57,8 +57,7 @@ namespace IleCzasu.Services
                 if (e.Artist_name != null && e.Event_date != null && e.Event_time != null && e.Event_title != null && e.Event_text != null && e.Event_type != null && e.Hall_city != null && e.Hall_address != null && e.Jpg_link != null)
                 {
                     try
-                    {
-
+                    {                       
                         var kpe = new PublicEvent();
                         kpe.Name = e.Artist_name;
                         kpe.Date = DateTime.Parse(e.Event_date + " " + e.Event_time);

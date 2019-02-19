@@ -1,4 +1,5 @@
-﻿using IleCzasu.Web.Models.ViewModels;
+﻿using IleCzasu.Application.Models;
+using IleCzasu.Web.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace IleCzasu.Web.ViewComponents
 {
     public class CalendarDayViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke(CalendarDayViewModel model)
+        public IViewComponentResult Invoke(UserEventsModel model)
         {
             return View(model);
         }

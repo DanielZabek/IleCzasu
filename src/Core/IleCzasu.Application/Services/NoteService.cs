@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IleCzasu.Application.Interfaces;
 using IleCzasu.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace IleCzasu.Application.Services
 {
@@ -34,6 +35,14 @@ namespace IleCzasu.Application.Services
         public async Task<Note> GetNoteById(int noteId)
         {
             return await _context.Notes.SingleOrDefaultAsync(x => x.NoteId == noteId);
+        }
+
+        public async Task<List<Note>> GetUserNotes(string userId, string date)
+        {
+            if (!String.IsNullOrEmpty(date))
+                return await _context.Notes.Where(e => e.UserId == userId && e.Date.ToString("dd'.'MM'.'yyyy") == date || e.Date.ToString("yyyy-MM-dd") == date).ToListAsync();
+
+            return await _context.Notes.Where(x => x.UserId == userId).ToListAsync();
         }
     }
 }
